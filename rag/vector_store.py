@@ -20,7 +20,16 @@ def get_client():
 
 def get_attack_collection():
     client = get_client()
-    return client.get_or_create_collection(name=config.CHROMA_COLLECTION_ATTACK)
+    try:
+        return client.get_or_create_collection(name=config.CHROMA_COLLECTION_ATTACK)
+    except (KeyError, Exception) as e:
+        # Handle corrupted ChromaDB data by recreating the collection
+        print(f"ChromaDB collection error: {e}. Recreating collection...")
+        try:
+            client.delete_collection(name=config.CHROMA_COLLECTION_ATTACK)
+        except:
+            pass
+        return client.create_collection(name=config.CHROMA_COLLECTION_ATTACK)
 
 
 def add_chunks(chunks: list[dict]):

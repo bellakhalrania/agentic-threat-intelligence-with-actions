@@ -12,10 +12,14 @@ load_dotenv()
 
 
 class Config:
-    # ---------------- Groq LLM ----------------
+    # ---------------- Groq LLM (optional after refactor) ----------------
     GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
     GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
     GROQ_TEMPERATURE = float(os.getenv("GROQ_TEMPERATURE", "0.1"))
+
+    # ---------------- Threat Intelligence Providers ----------------
+    ABUSEIPDB_API_KEY = os.getenv("ABUSEIPDB_API_KEY", "")
+    OTX_API_KEY = os.getenv("OTX_API_KEY", "")
 
     # ---------------- ChromaDB ----------------
     CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./data/chroma_store")

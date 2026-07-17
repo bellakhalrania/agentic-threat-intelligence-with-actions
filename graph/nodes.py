@@ -12,9 +12,27 @@ from agents.correlation_agent import CorrelationAgent
 from agents.prediction_agent import PredictionAgent
 from agents.reporting_agent import ReportingAgent
 from agents.response_agent import ResponseAgent
+from intelligence.threat_intel.registry import ProviderRegistry
+
+# Initialize provider registry with available threat intelligence sources
+provider_registry = ProviderRegistry()
+
+# Register AbuseIPDB provider (requests is a dependency)
+try:
+    from intelligence.threat_intel.abuseipdb_provider import AbuseIPDBProvider
+    provider_registry.register(AbuseIPDBProvider())
+except ImportError:
+    pass
+
+# Register OTX provider (OTXv2 is an optional dependency)
+try:
+    from intelligence.threat_intel.otx_provider import OTXProvider
+    provider_registry.register(OTXProvider())
+except ImportError:
+    pass
 
 collection_agent = CollectionAgent()
-enrichment_agent = EnrichmentAgent()
+enrichment_agent = EnrichmentAgent(registry=provider_registry)
 mapping_agent = AttackMappingAgent()
 correlation_agent = CorrelationAgent()
 prediction_agent = PredictionAgent()
