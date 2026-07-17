@@ -1,37 +1,220 @@
 """
 agents/collection_agent.py
-Converts raw, heterogeneous telemetry (Sysmon/Suricata/Zeek/Wazuh) into a
-normalized event schema the rest of the pipeline can rely on.
+Converts raw, heterogeneous telemetry (Sysmon/Suricata/Zeek/Wazuh/Windows Event)
+into a normalized event schema using deterministic Python code.
+No LLM calls — every field is extracted via rule-based logic.
 """
 
 import uuid
-from typing import List, Dict
-from llm.groq_client import invoke_llm
-from llm.prompts import COLLECTION_SYSTEM_PROMPT
-from llm.output_parsers import extract_json
+from typing import Any, Dict, List
+
+
+# ── Normalized schema keys ──────────────────────────────────────────────
+# All normalized events use a superset of these keys. Missing keys default
+# to None. The original event dict is always preserved under "raw".
+NORMALIZED_FIELDS = [
+    "event_id",
+    "source",
+    "event_type",
+    "timestamp",
+    "host",
+    "user",
+    "process",
+    "command_line",
+    "src_ip",
+    "dest_ip",
+    "signature",
+    "category",
+    "severity",
+    "rule_description",
+    "rule_level",
+    "rule_groups",
+    "proto",
+    "service",
+    "query",
+    "raw",
+]
+
+
+def _blank() -> Dict[str, Any]:
+    return {k: None for k in NORMALIZED_FIELDS}
+
+
+# ── Source-specific normalizers ─────────────────────────────────────────
+
+
+def _normalize_sysmon(event: dict) -> dict:
+    n = _blank()
+    n["source"] = "sysmon"
+    n["event_type"] = f"sysmon_event_{event.get('EventID', 'unknown')}"
+    n["timestamp"] = event.get("UtcTime") or event.get("timestamp")
+    n["host"] = event.get("Computer") or event.get("host")
+    n["process"] = event.get("Image") or event.get("process")
+    n["command_line"] = event.get("CommandLine")
+    n["user"] = event.get("User")
+    n["src_ip"] = event.get("SourceIp") or event.get("src_ip")
+    n["dest_ip"] = event.get("DestinationIp") or event.get("dest_ip")
+    n["raw"] = event
+    return n
+
+
+def _normalize_suricata(event: dict) -> dict:
+    n = _blank()
+    n["source"] = "suricata"
+    n["event_type"] = event.get("event_type", "alert")
+    n["timestamp"] = event.get("timestamp")
+    n["src_ip"] = event.get("src_ip")
+    n["dest_ip"] = event.get("dest_ip")
+    n["proto"] = event.get("proto")
+    alert = event.get("alert") or {}
+    n["signature"] = alert.get("signature")
+    n["category"] = alert.get("category")
+    n["severity"] = alert.get("severity")
+    n["raw"] = event
+    return n
+
+
+def _normalize_zeek(event: dict) -> dict:
+    n = _blank()
+    n["source"] = "zeek"
+    n["event_type"] = event.get("event_type") or (  # infer from presence of fields
+        "dns" if event.get("query") else "conn"
+    )
+    n["timestamp"] = event.get("ts") or event.get("timestamp")
+    n["src_ip"] = event.get("id.orig_h") or event.get("src_ip")
+    n["dest_ip"] = event.get("id.resp_h") or event.get("dest_ip")
+    n["proto"] = event.get("proto")
+    n["service"] = event.get("service")
+    n["query"] = event.get("query")
+    n["raw"] = event
+    return n
+
+
+def _normalize_wazuh(event: dict) -> dict:
+    n = _blank()
+    n["source"] = "wazuh"
+    n["event_type"] = "wazuh_alert"
+    n["timestamp"] = event.get("timestamp")
+    agent = event.get("agent") or {}
+    n["host"] = agent.get("name")
+    rule = event.get("rule") or {}
+    n["rule_description"] = rule.get("description")
+    n["rule_level"] = rule.get("level")
+    n["rule_groups"] = rule.get("groups")
+    n["severity"] = rule.get("level")
+    n["raw"] = event
+    return n
+
+
+def _normalize_windows_event(event: dict) -> dict:
+    """Normalize Windows Event Log entries (EventID-based, similar to Sysmon)."""
+    n = _blank()
+    n["source"] = "windows_event"
+    n["event_type"] = f"event_{event.get('EventID') or event.get('event_id', 'unknown')}"
+    n["timestamp"] = event.get("TimeCreated") or event.get("UtcTime") or event.get("timestamp")
+    n["host"] = event.get("Computer") or event.get("host")
+    n["user"] = event.get("User") or event.get("user")
+    n["process"] = event.get("Image") or event.get("process")
+    n["command_line"] = event.get("CommandLine")
+    n["src_ip"] = event.get("SourceIp") or event.get("src_ip")
+    n["dest_ip"] = event.get("DestinationIp") or event.get("dest_ip")
+    n["raw"] = event
+    return n
+
+
+# ── Heuristic source detection ──────────────────────────────────────────
+
+
+def _detect_source(event: dict) -> str:
+    """Determine log source heuristically from available fields."""
+    # If an explicit source is already set, trust it.
+    explicit = event.get("source")
+    if explicit in ("sysmon", "suricata", "zeek", "wazuh", "windows_event"):
+        return explicit
+
+    # Windows Event Log: has TimeCreated (or Provider) along with EventID
+    if event.get("TimeCreated") is not None or event.get("Provider") is not None:
+        return "windows_event"
+
+    # Sysmon: has EventID (integer or string) but NOT TimeCreated/Provider
+    if event.get("EventID") is not None:
+        return "sysmon"
+
+    # Suricata: has event_type field (typically "alert" / "flow" / "dns" / "http")
+    if "event_type" in event and event.get("event_type") in (
+        "alert",
+        "flow",
+        "dns",
+        "http",
+        "tls",
+        "smb",
+    ):
+        return "suricata"
+
+    # Zeek JSON logs: have dotted id.orig_h / id.resp_h or ts + proto + service
+    if "ts" in event or "id.orig_h" in event or "id.resp_h" in event:
+        return "zeek"
+
+    # Wazuh: has rule dict with groups/description
+    if "rule" in event and isinstance(event["rule"], dict):
+        return "wazuh"
+
+    # Fallback: check for generic Windows Event fields (TimeCreated, Provider)
+    if event.get("TimeCreated") or event.get("Provider"):
+        return "windows_event"
+
+    # Default to sysmon for anything with EventID-like numeric field
+    if event.get("event_id") and isinstance(event.get("event_id"), (int, str)):
+        return "sysmon"
+
+    # Last resort — treat as sysmon-like
+    return "sysmon"
+
+
+# ── Router ──────────────────────────────────────────────────────────────
+
+
+_NORMALIZER_DISPATCH = {
+    "sysmon": _normalize_sysmon,
+    "suricata": _normalize_suricata,
+    "zeek": _normalize_zeek,
+    "wazuh": _normalize_wazuh,
+    "windows_event": _normalize_windows_event,
+}
+
+
+def normalize_event(event: dict) -> dict:
+    """Normalize a single raw event dict into the common schema.
+
+    Preserves all original fields via the ``raw`` key.
+    Generates an ``event_id`` only when one is not already present.
+    Never infers or modifies values.
+    """
+    source = _detect_source(event)
+    normalizer = _NORMALIZER_DISPATCH.get(source, _normalize_sysmon)
+    normalized = normalizer(event)
+
+    # Assign event_id only if missing
+    if not normalized.get("event_id") and not event.get("event_id"):
+        normalized["event_id"] = str(uuid.uuid4())
+    elif event.get("event_id"):
+        normalized["event_id"] = str(event["event_id"])
+
+    return normalized
+
+
+# ── Public API (same interface as before) ───────────────────────────────
 
 
 class CollectionAgent:
+    """Agent that normalizes raw security events using deterministic rules.
+
+    This replaces the previous LLM-based approach with purely rule-based,
+    source-aware normalization. Every original field is preserved under
+    the ``raw`` key.
+    """
+
     def run(self, raw_events: List[Dict]) -> List[Dict]:
         if not raw_events:
             return []
-
-        normalized = []
-        # Batch in chunks to stay within context limits for large telemetry dumps
-        batch_size = 20
-        for i in range(0, len(raw_events), batch_size):
-            batch = raw_events[i : i + batch_size]
-            response = invoke_llm(
-                system_prompt=COLLECTION_SYSTEM_PROMPT,
-                user_prompt=str(batch),
-            )
-            try:
-                parsed_batch = extract_json(response)
-            except ValueError:
-                parsed_batch = batch  # fall back to raw passthrough on parse failure
-
-            for event in parsed_batch:
-                event.setdefault("event_id", str(uuid.uuid4()))
-                normalized.append(event)
-
-        return normalized
+        return [normalize_event(event) for event in raw_events]
