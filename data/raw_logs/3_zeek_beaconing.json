@@ -1,0 +1,4 @@
+{"ts": 1782134522.224, "id.orig_h": "10.0.4.55", "id.resp_h": "45.137.22.9", "proto": "tcp", "service": "ssl", "query": null}
+{"ts": 1782134582.118, "id.orig_h": "10.0.4.55", "id.resp_h": "45.137.22.9", "proto": "tcp", "service": "ssl", "query": null}
+{"ts": 1782134642.501, "id.orig_h": "10.0.4.55", "id.resp_h": "45.137.22.9", "proto": "tcp", "service": "ssl", "query": null}
+{"ts": 1782134701.337, "id.orig_h": "10.0.4.55", "id.resp_h": "8.8.4.4", "proto": "udp", "service": "dns", "query": "a1f9c3e7b2.update-cdn-sync.com"}

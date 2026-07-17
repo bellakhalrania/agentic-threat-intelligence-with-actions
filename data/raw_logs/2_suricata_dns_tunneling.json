@@ -1,0 +1,4 @@
+{"timestamp": "2026-06-25T14:35:02.110Z", "event_type": "alert", "src_ip": "10.0.3.18", "dest_ip": "8.8.8.8", "alert": {"signature": "ET INFO Excessive Amount of DNS TXT Queries - Possible DNS Tunneling", "category": "Potentially Bad Traffic", "severity": 2}}
+{"timestamp": "2026-06-25T14:35:09.440Z", "event_type": "alert", "src_ip": "10.0.3.18", "dest_ip": "91.219.236.18", "alert": {"signature": "ET EXPLOIT_KIT RIG EK Landing Page", "category": "Web Application Attack", "severity": 1}}
+{"timestamp": "2026-06-25T14:36:55.902Z", "event_type": "alert", "src_ip": "10.0.3.18", "dest_ip": "91.219.236.18", "alert": {"signature": "ET MALWARE Generic gzip Trojan Download", "category": "A Network Trojan was Detected", "severity": 1}}
+{"timestamp": "2026-06-25T14:40:12.005Z", "event_type": "flow", "src_ip": "10.0.3.18", "dest_ip": "91.219.236.18", "proto": "TCP"}
