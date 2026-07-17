@@ -17,14 +17,17 @@ class EnrichmentAgent:
         if not iocs:
             return []
 
+        # Convert IOCModel instances to dicts for LLM processing
+        ioc_dicts = [ioc.model_dump() for ioc in iocs]
+        
         response = invoke_llm(
             system_prompt=ENRICHMENT_SYSTEM_PROMPT,
-            user_prompt=str(iocs),
+            user_prompt=str(ioc_dicts),
         )
         try:
             enriched = extract_json(response)
         except ValueError:
             # Fall back to unenriched IOCs rather than dropping them
-            enriched = [{**ioc, "verdict": "unknown"} for ioc in iocs]
+            enriched = [{**ioc_dict, "verdict": "unknown"} for ioc_dict in ioc_dicts]
 
         return enriched

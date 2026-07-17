@@ -44,3 +44,19 @@ class Campaign(BaseModel):
 class Prediction(BaseModel):
     likely_next_techniques: List[str] = []
     rationale: str = ""
+
+
+class IOCModel(BaseModel):
+    """Structured IOC extracted deterministically from security events.
+
+    Attributes:
+        type: The IOC type — one of "ipv4", "ipv6", "domain", "url",
+              "email", "md5", "sha1", "sha256".
+        value: The raw IOC string.
+        source_event_id: The event_id of the event this IOC came from.
+        confidence: Always 1.0 for deterministic extraction (no LLM).
+    """
+    type: str
+    value: str
+    source_event_id: Optional[str] = None
+    confidence: float = 1.0
