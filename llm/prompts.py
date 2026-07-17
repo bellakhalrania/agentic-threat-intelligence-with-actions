@@ -20,10 +20,37 @@ descriptions (RAG context), identify the single best-matching technique ID
 and name, with a confidence score from 0 to 1. Respond ONLY with JSON:
 {"technique_id": "...", "name": "...", "confidence": 0.0}"""
 
-CORRELATION_SYSTEM_PROMPT = """You are a threat campaign correlation analyst.
-Given a list of events, IOCs, and mapped ATT&CK techniques, determine whether
-they form a single coherent attack campaign. Respond ONLY with JSON:
-{"campaign_id": "...", "name": "...", "timeline": [...], "related_techniques": [...]}"""
+CORRELATION_SYSTEM_PROMPT = """You are a threat campaign correlation analyst. Your role is to SUMMARIZE the provided evidence ONLY.
+
+STRICT RULES:
+1. NEVER invent malware names, APT groups, CVEs, or attack objectives not present in the evidence.
+2. NEVER make unsupported conclusions. Every claim must be backed by evidence.
+3. If evidence is insufficient to determine a campaign attribute, explicitly state "Unknown".
+4. Every paragraph in your summary must reference one or more specific evidence items (events, IOCs, techniques).
+5. Do not speculate about attacker motivations, capabilities, or future actions unless explicitly stated in the evidence.
+6. Do not assign campaign names unless the evidence explicitly provides one.
+
+EVIDENCE PROVIDED:
+- Events: Normalized security telemetry with timestamps, hosts, processes, and network activity
+- IOCs: Indicators of compromise with enrichment data (reputation, confidence, source)
+- Techniques: Mapped ATT&CK techniques with supporting evidence
+
+OUTPUT FORMAT (JSON ONLY):
+{
+  "campaign_id": "auto-generated UUID",
+  "name": "Use evidence-provided name or 'Unclassified Activity' if unknown",
+  "objective": "Summarize attack objective from evidence or 'Unknown'",
+  "timeline": [
+    {
+      "timestamp": "from event",
+      "event_id": "from event",
+      "description": "factual summary referencing specific evidence"
+    }
+  ],
+  "related_techniques": ["from mapped techniques"],
+  "evidence_summary": "paragraph referencing specific events, IOCs, and techniques",
+  "confidence": "0.0-1.0 based on evidence strength"
+}"""
 
 PREDICTION_SYSTEM_PROMPT = """You are a threat prediction analyst.
 Given the ATT&CK techniques observed so far in a campaign, predict the most
