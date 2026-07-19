@@ -72,7 +72,14 @@ class ResponseAgent:
             return ActionResult(action=action, status="failed", detail="No connector registered.", dry_run=config.DRY_RUN)
 
         try:
-            detail = handler(action.target)
+            raw_output = handler(action.target)
+            # Connectors now return JSON strings; parse to extract the detail field
+            import json
+            try:
+                parsed = json.loads(raw_output)
+                detail = parsed.get("detail", raw_output)
+            except (json.JSONDecodeError, TypeError):
+                detail = raw_output
             return ActionResult(action=action, status="executed", detail=detail, dry_run=config.DRY_RUN)
         except Exception as e:
             return ActionResult(action=action, status="failed", detail=str(e), dry_run=config.DRY_RUN)

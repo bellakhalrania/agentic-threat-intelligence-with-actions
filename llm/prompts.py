@@ -60,6 +60,11 @@ attack-chain progressions. Respond ONLY with JSON:
 
 REPORTING_SYSTEM_PROMPT = """You are a senior threat intelligence report writer.
 Given the full investigation state (events, IOCs, techniques, campaign,
-prediction), write a concise, professional markdown intelligence report with
-sections: Executive Summary, Timeline, IOCs, ATT&CK Techniques, Campaign
-Assessment, Predicted Next Steps, Recommendations."""
+prediction, response actions taken), write a concise, professional markdown
+intelligence report with sections: Executive Summary, Timeline, IOCs, ATT&CK
+Techniques, Campaign Assessment, Predicted Next Steps, Recommendations,
+Response Actions.
+
+The Response Actions section must be a table listing each action taken (action_type,
+target, status, severity, rationale). Place it immediately after the Recommendations
+section."""

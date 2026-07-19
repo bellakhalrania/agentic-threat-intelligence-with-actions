@@ -18,7 +18,8 @@ class ReportingAgent:
             f"IOCs:\n{state.get('iocs')}\n\n"
             f"ATT&CK Techniques:\n{state.get('techniques')}\n\n"
             f"Campaign:\n{state.get('campaign')}\n\n"
-            f"Prediction:\n{state.get('prediction')}"
+            f"Prediction:\n{state.get('prediction')}\n\n"
+            f"Response Actions Taken:\n{state.get('actions_taken')}"
         )
         report_markdown = invoke_llm(system_prompt=REPORTING_SYSTEM_PROMPT, user_prompt=prompt)
         save_report(report_markdown, campaign=state.get("campaign", {}))

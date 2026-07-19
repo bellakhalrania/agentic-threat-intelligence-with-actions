@@ -85,8 +85,8 @@ async def run_investigation(events: List[Dict[str, Any]]) -> Dict[str, Any]:
         return {
             "success": True,
             "report": final_state.get("report"),
-            "response_actions": final_state.get("response_actions"),
-            "campaign_id": final_state.get("campaign_id"),
+            "response_actions": final_state.get("actions_taken"),
+            "campaign_id": final_state.get("campaign", {}).get("campaign_id"),
             "events_processed": len(events)
         }
     except Exception as e:

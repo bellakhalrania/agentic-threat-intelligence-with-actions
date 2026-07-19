@@ -1,8 +1,11 @@
 """
 graph/workflow.py
-Wires the six agents into a single linear LangGraph pipeline:
+Wires the seven agents into a single linear LangGraph pipeline:
 
-START -> Collection -> Enrichment -> Mapping -> Correlation -> Prediction -> Reporting -> END
+START -> Collection -> Enrichment -> Mapping -> Correlation -> Prediction -> Response -> Reporting -> END
+
+Response runs BEFORE Reporting so that response actions are available
+to include in the generated report.
 """
 
 from langgraph.graph import StateGraph, START, END
@@ -34,9 +37,9 @@ def build_workflow():
     graph.add_edge("enrichment", "mapping")
     graph.add_edge("mapping", "correlation")
     graph.add_edge("correlation", "prediction")
-    graph.add_edge("prediction", "reporting")
-    graph.add_edge("reporting", "response")
-    graph.add_edge("response", END)
+    graph.add_edge("prediction", "response")
+    graph.add_edge("response", "reporting")
+    graph.add_edge("reporting", END)
 
     return graph.compile()
 
