@@ -1,0 +1,12 @@
+[
+  {
+    "event_id": "test-002",
+    "timestamp": "2026-07-18T10:15:00Z",
+    "source": "wazuh",
+    "host": "WORKSTATION-07",
+    "rule_description": "PowerShell execution",
+    "process": "powershell.exe",
+    "command_line": "powershell.exe -enc SQBFAFgA...",
+    "full_log": "Outbound connection to 185.44.12.7:443"
+  }
+]

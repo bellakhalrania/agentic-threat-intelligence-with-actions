@@ -17,6 +17,35 @@ TACTIC_ORDER = [
 ]
 
 
+def calculate_confidence(events: List[Dict], iocs: List[Dict], techniques: List[Dict]) -> float:
+    """Calculate campaign confidence deterministically from evidence strength.
+    
+    Weights are heuristic starting points, not statistically calibrated.
+    
+    Args:
+        events: Normalized security events
+        iocs: Enriched indicators of compromise
+        techniques: Mapped ATT&CK techniques with confidence scores
+        
+    Returns:
+        Confidence score between 0.0 and 1.0
+    """
+    if not events:
+        return 0.0
+    
+    # Technique score: sum of technique confidences, capped at 0.5
+    technique_score = min(sum(t.get("confidence", 0.0) for t in techniques) * 0.15, 0.5)
+    
+    # IOC score: count of malicious IOCs from real threat intel sources
+    malicious_iocs = sum(1 for ioc in iocs if ioc.get("reputation") == "malicious" and ioc.get("source"))
+    ioc_score = min(malicious_iocs * 0.15, 0.3)
+    
+    # Event score: number of events, capped at 0.2
+    event_score = min(len(events) * 0.05, 0.2)
+    
+    return round(min(technique_score + ioc_score + event_score, 1.0), 2)
+
+
 def build_storyline(techniques: List[Dict]) -> List[Dict]:
     from intelligence.mitre_mapper import get_tactic
 

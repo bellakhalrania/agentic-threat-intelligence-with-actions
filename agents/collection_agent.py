@@ -96,12 +96,16 @@ def _normalize_wazuh(event: dict) -> dict:
     n["event_type"] = "wazuh_alert"
     n["timestamp"] = event.get("timestamp")
     agent = event.get("agent") or {}
-    n["host"] = agent.get("name")
+    n["host"] = agent.get("name") or event.get("host")
     rule = event.get("rule") or {}
-    n["rule_description"] = rule.get("description")
+    n["rule_description"] = rule.get("description") or event.get("rule_description")
     n["rule_level"] = rule.get("level")
     n["rule_groups"] = rule.get("groups")
     n["severity"] = rule.get("level")
+    n["process"] = event.get("process")
+    n["command_line"] = event.get("command_line")
+    n["src_ip"] = event.get("src_ip")
+    n["dest_ip"] = event.get("dest_ip")
     n["raw"] = event
     return n
 

@@ -16,6 +16,7 @@ from llm.groq_client import invoke_llm
 from llm.prompts import CORRELATION_SYSTEM_PROMPT
 from llm.output_parsers import extract_json
 from knowledge_graph.graph_builder import persist_campaign
+from intelligence.campaign_builder import calculate_confidence
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +60,8 @@ class CorrelationAgent:
             logger.warning("LLM did not return valid JSON for correlation: %s", e)
             campaign = self._fallback_campaign(events, iocs, techniques)
 
+        # Overwrite LLM confidence with deterministic calculation
+        campaign["confidence"] = calculate_confidence(events, iocs, techniques)
         campaign.setdefault("campaign_id", str(uuid.uuid4()))
 
         try:
@@ -142,7 +145,7 @@ class CorrelationAgent:
             ],
             "related_techniques": [t.get("attack_id") for t in techniques],
             "evidence_summary": f"Based on {len(events)} events, {len(iocs)} IOCs, and {len(techniques)} techniques. Insufficient evidence to determine campaign objective or attribution.",
-            "confidence": 0.0,
+            "confidence": calculate_confidence(events, iocs, techniques),
         }
 
     def _empty_campaign(self) -> Dict:
@@ -154,5 +157,5 @@ class CorrelationAgent:
             "timeline": [],
             "related_techniques": [],
             "evidence_summary": "No events provided for correlation.",
-            "confidence": 0.0,
+            "confidence": calculate_confidence([], [], []),
         }

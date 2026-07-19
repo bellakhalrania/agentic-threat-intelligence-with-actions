@@ -45,6 +45,9 @@ from llm.prompts import ATTACK_MAPPING_SYSTEM_PROMPT
 
 logger = logging.getLogger(__name__)
 
+# Minimum confidence threshold for LLM-based technique mappings
+LLM_MIN_CONFIDENCE = 0.4
+
 
 class AttackMappingAgent:
     """Maps normalized telemetry events to MITRE ATT&CK techniques.
@@ -185,6 +188,15 @@ class AttackMappingAgent:
         """
         description = self._event_to_text(event)
         context_results = self._gather_context(event, description)
+        
+        # Skip LLM fallback if no grounding context is available to avoid hallucination risk.
+        if not context_results:
+            logger.debug(
+                "No grounding context available for event %s; skipping LLM fallback to avoid ungrounded hallucination risk",
+                event.get("event_id"),
+            )
+            return None
+        
         context_text = self._format_context(context_results)
 
         prompt = f"Event:\n{description}\n\nRetrieved ATT&CK context:\n{context_text}"
@@ -217,11 +229,45 @@ class AttackMappingAgent:
             logger.exception("Knowledge layer error validating attack_id %r", attack_id)
             return None
 
+        # Candidate-set constraint: verify the LLM selected an attack_id
+        # that was present in the retrieved context.
+        context_attack_ids = {result.attack_id for result in context_results}
+        if context_attack_ids and str(attack_id).strip() not in context_attack_ids:
+            logger.warning(
+                "LLM selected attack_id %r not present in retrieved context for event %s; discarding",
+                attack_id,
+                event.get("event_id"),
+            )
+            return None
+
+        # Confidence validation: ensure confidence is a valid float between 0 and 1.
+        confidence = mapped.get("confidence")
+        if confidence is None:
+            confidence = 0.5
+        elif isinstance(confidence, bool) or not isinstance(confidence, (int, float)) or not (0.0 <= confidence <= 1.0):
+            logger.warning(
+                "LLM returned invalid confidence %r for event %s",
+                confidence,
+                event.get("event_id"),
+            )
+            return None
+        else:
+            confidence = float(confidence)
+
+        # Minimum confidence threshold check.
+        if confidence < LLM_MIN_CONFIDENCE:
+            logger.debug(
+                "LLM mapping for event %s below confidence threshold (%.2f); discarding",
+                event.get("event_id"),
+                LLM_MIN_CONFIDENCE,
+            )
+            return None
+
         mapped["attack_id"] = technique.attack_id
         mapped["technique_name"] = technique.name
         mapped["evidence_event_id"] = event.get("event_id")
         mapped["mapping_source"] = "llm"
-        mapped.setdefault("confidence", 0.5)
+        mapped["confidence"] = confidence
 
         self._enrich(mapped, technique.attack_id)
         return mapped
