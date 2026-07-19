@@ -40,7 +40,20 @@ class Config:
     RAW_LOGS_DIR = os.getenv("RAW_LOGS_DIR", "./data/raw_logs")
     SAMPLE_EVENTS_DIR = os.getenv("SAMPLE_EVENTS_DIR", "./data/sample_events")
 
+    # ---------------- Wazuh Connector ----------------
+    WAZUH_API_URL = os.getenv("WAZUH_API_URL", "https://localhost:55000")
+    WAZUH_API_USER = os.getenv("WAZUH_API_USER", "wazuh-wui")
+    WAZUH_API_PASSWORD = os.getenv("WAZUH_API_PASSWORD", "")
+    # Default to Docker volume path in container, fallback to local path
+    WAZUH_ALERTS_PATH = os.getenv("WAZUH_ALERTS_PATH", "/app/data/wazuh_logs/alerts.json")
+    WAZUH_POLL_INTERVAL = int(os.getenv("WAZUH_POLL_INTERVAL", "30"))  # seconds
+    WAZUH_VERIFY_SSL = os.getenv("WAZUH_VERIFY_SSL", "false").lower() == "true"
+
+
+
+
     # ---------------- Reporting ----------------
+
     REPORTS_OUTPUT_DIR = os.getenv("REPORTS_OUTPUT_DIR", "./reports/generated_reports")
 
     # ---------------- Response / Action layer ----------------

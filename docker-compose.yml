@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Agentic Threat Intelligence Platform
+  threat-intel:
+    build: .
+    container_name: threat-intel-platform
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - single-node_wazuh_logs:/app/data/wazuh_logs:ro
+      - ./config.py:/app/config.py:ro
+      - ./.env:/app/.env:ro
+    environment:
+      - WAZUH_ALERTS_PATH=/app/data/wazuh_logs/alerts.json
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - ABUSEIPDB_API_KEY=${ABUSEIPDB_API_KEY}
+      - OTX_API_KEY=${OTX_API_KEY}
+      - NEO4J_URI=${NEO4J_URI:-bolt://neo4j:7687}
+      - NEO4J_USER=${NEO4J_USER:-neo4j}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD:-changeme}
+    depends_on:
+      - neo4j
+    networks:
+      - threat-intel-network
+    restart: unless-stopped
+
+  # Neo4j for knowledge graph
+  neo4j:
+    image: neo4j:5.15
+    container_name: threat-intel-neo4j
+    volumes:
+      - neo4j_data:/data
+    environment:
+      - NEO4J_AUTH=neo4j/changeme
+      - NEO4J_PLUGINS=["apoc"]
+    networks:
+      - threat-intel-network
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    restart: unless-stopped
+
+  # Wazuh Manager (for reference - you already have this)
+  # This service definition is for reference only.
+  # Your existing Wazuh setup should mount the same volume:
+  # wazuh_logs:/var/ossec/logs/alerts
+  # 
+  # Example for your existing Wazuh docker-compose:
+  # wazuh.manager:
+  #   volumes:
+  #     - wazuh_logs:/var/ossec/logs/alerts
+
+volumes:
+  single-node_wazuh_logs:
+    external: true
+  neo4j_data:
+
+networks:
+  threat-intel-network:
+    driver: bridge
