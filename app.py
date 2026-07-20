@@ -111,10 +111,31 @@ async def root():
 @app.get("/health", response_model=HealthResponse)
 async def health():
     """Health check endpoint"""
+    # Check Neo4j connectivity
+    neo4j_ok = False
+    chroma_ok = False
+    try:
+        from databases.neo4j_manager import neo4j_manager
+        neo4j_ok = neo4j_manager.verify_connectivity()
+    except Exception:
+        neo4j_ok = False
+
+    try:
+        from rag.vector_store import get_attack_collection
+        get_attack_collection()
+        chroma_ok = True
+    except Exception:
+        chroma_ok = False
+
+    status = "healthy" if (neo4j_ok or chroma_ok) else "degraded"
     return {
-        "status": "healthy",
+        "status": status,
         "timestamp": datetime.utcnow().isoformat(),
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "checks": {
+            "neo4j": "up" if neo4j_ok else "down",
+            "chromadb": "up" if chroma_ok else "down"
+        }
     }
 
 

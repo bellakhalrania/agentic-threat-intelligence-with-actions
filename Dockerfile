@@ -1,29 +1,57 @@
-FROM python:3.11-slim
+# ============================================================
+# Stage 1: Build stage — install build dependencies & packages
+# ============================================================
+FROM python:3.11-slim AS builder
 
-# Set working directory
-WORKDIR /app
+WORKDIR /build
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# Copy only requirements for layer caching
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies into a local directory
+RUN pip install --no-cache-dir --user -r requirements.txt
+
+# ============================================================
+# Stage 2: Runtime stage — minimal image
+# ============================================================
+FROM python:3.11-slim AS runtime
+
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser -d /app -s /sbin/nologin appuser
+
+WORKDIR /app
+
+# Copy Python packages from builder
+COPY --from=builder /root/.local /home/appuser/.local
 
 # Copy application code
-COPY . .
+COPY --chown=appuser:appuser . .
 
-# Create necessary directories
-RUN mkdir -p /app/data /app/reports /app/data/wazuh_logs
+# Make sure scripts in PATH
+ENV PATH=/home/appuser/.local/bin:$PATH \
+    PYTHONPATH=/app \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
+# Create required directories with correct permissions
+RUN mkdir -p /app/data /app/reports/generated_reports /app/data/chroma_store /app/data/wazuh_logs && \
+    chown -R appuser:appuser /app/data /app/reports
 
-# Default command (can be overridden)
-CMD ["python", "main.py", "--source", "wazuh"]
+# Switch to non-root user
+USER appuser
+
+# Healthcheck — verifies the API is responsive
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+
+# Expose API port
+EXPOSE 8000
+
+# Default: run production ASGI server
+CMD ["python", "-m", "gunicorn", "app:app", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-"]

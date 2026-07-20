@@ -50,3 +50,11 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Production deployment
+backups/
+nginx/ssl/
+nginx/htpasswd/
+
+# Docker
+docker-compose.prod.yml
