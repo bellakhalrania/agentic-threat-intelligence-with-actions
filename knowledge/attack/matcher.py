@@ -60,7 +60,9 @@ class TelemetryEvent:
             InvalidTelemetryEventError: If every matchable field is
                 empty, making this event unusable for matching.
         """
-        if not any(
+        # Allow events with raw data even if standard fields are empty
+        # (e.g., Wazuh authentication events with rule.groups)
+        has_standard_fields = any(
             (
                 self.process_name,
                 self.command_line,
@@ -68,10 +70,13 @@ class TelemetryEvent:
                 self.file_name,
                 self.network_destination,
             )
-        ):
+        )
+        has_raw_data = bool(self.raw)
+
+        if not has_standard_fields and not has_raw_data:
             raise InvalidTelemetryEventError(
                 "Telemetry event has no usable fields (process_name, command_line, "
-                "parent_process_name, file_name, network_destination are all empty)"
+                "parent_process_name, file_name, network_destination are all empty and no raw data)"
             )
 
 
@@ -144,12 +149,48 @@ def _command_line_contains(*substrings: str) -> Callable[[TelemetryEvent], str |
     lowered = [substring.lower() for substring in substrings]
 
     def predicate(event: TelemetryEvent) -> str | None:
-        if not event.command_line:
-            return None
-        command_lower = event.command_line.lower()
-        for substring in lowered:
-            if substring in command_lower:
-                return f"command_line contains {substring!r}"
+        # Check command_line first
+        if event.command_line:
+            command_lower = event.command_line.lower()
+            for substring in lowered:
+                if substring in command_lower:
+                    return f"command_line contains {substring!r}"
+        return None
+
+    return predicate
+
+
+def _rule_groups_contains(*groups: str) -> Callable[[TelemetryEvent], str | None]:
+    """Builds a predicate matching Wazuh rule groups in the raw event.
+
+    Args:
+        *groups: One or more rule group names, any of which trigger a match.
+
+    Returns:
+        A predicate function usable as a :class:`MatchingRule` predicate.
+    """
+    lowered = {group.lower() for group in groups}
+
+    def predicate(event: TelemetryEvent) -> str | None:
+        # Check raw event for rule.groups
+        raw_event = event.raw if isinstance(event.raw, dict) else {}
+        
+        # The AttackMappingAgent passes the normalized event as TelemetryEvent.raw
+        # Normalized events have 'rule_groups' at the top level
+        rule_groups = raw_event.get("rule_groups")
+        
+        # If not found, look inside the nested 'raw' original event (if available)
+        if not rule_groups:
+            rule_groups = raw_event.get("raw", {}).get("rule", {}).get("groups", [])
+            
+        # Fallback if raw_event is the original wazuh event itself
+        if not rule_groups:
+            rule_groups = raw_event.get("rule", {}).get("groups", [])
+
+        if isinstance(rule_groups, list):
+            for group in rule_groups:
+                if group.lower() in lowered:
+                    return f"rule_groups contains {group!r}"
         return None
 
     return predicate
@@ -163,62 +204,83 @@ DEFAULT_RULES: tuple[MatchingRule, ...] = (
     MatchingRule(
         name="powershell_execution",
         technique_attack_id="T1059.001",
-        predicate=_process_equals("powershell.exe", "pwsh.exe"),
+        predicate=_process_equals("powershell.exe", "pwsh.exe", "powershell"),
     ),
     MatchingRule(
         name="wmic_execution",
         technique_attack_id="T1047",
-        predicate=_process_equals("wmic.exe"),
+        predicate=_process_equals("wmic.exe", "wmic"),
     ),
     MatchingRule(
         name="mimikatz_credential_dumping",
         technique_attack_id="T1003",
-        predicate=_process_equals("mimikatz.exe"),
+        predicate=_process_equals("mimikatz.exe", "mimikatz"),
     ),
     MatchingRule(
         name="rundll32_proxy_execution",
         technique_attack_id="T1218",
-        predicate=_process_equals("rundll32.exe"),
+        predicate=_process_equals("rundll32.exe", "rundll32"),
     ),
     MatchingRule(
         name="certutil_ingress_tool_transfer",
         technique_attack_id="T1105",
-        predicate=_process_equals("certutil.exe"),
+        predicate=_process_equals("certutil.exe", "certutil"),
     ),
     MatchingRule(
         name="cmd_execution",
         technique_attack_id="T1059.003",
-        predicate=_process_equals("cmd.exe"),
+        predicate=_process_equals("cmd.exe", "cmd"),
     ),
     MatchingRule(
         name="windows_script_host_execution",
         technique_attack_id="T1059.005",
-        predicate=_process_equals("wscript.exe", "cscript.exe"),
+        predicate=_process_equals("wscript.exe", "cscript.exe", "wscript", "cscript"),
     ),
     MatchingRule(
         name="scheduled_task_persistence",
         technique_attack_id="T1053.005",
-        predicate=_process_equals("schtasks.exe"),
+        predicate=_process_equals("schtasks.exe", "schtasks"),
     ),
     MatchingRule(
         name="registry_modification",
         technique_attack_id="T1112",
-        predicate=_process_equals("reg.exe"),
+        predicate=_process_equals("reg.exe", "reg"),
     ),
     MatchingRule(
         name="bitsadmin_ingress_tool_transfer",
         technique_attack_id="T1197",
-        predicate=_process_equals("bitsadmin.exe"),
+        predicate=_process_equals("bitsadmin.exe", "bitsadmin"),
     ),
     MatchingRule(
         name="psexec_lateral_movement",
         technique_attack_id="T1569.002",
-        predicate=_process_equals("psexec.exe", "psexesvc.exe"),
+        predicate=_process_equals("psexec.exe", "psexesvc.exe", "psexec"),
     ),
     MatchingRule(
         name="powershell_encoded_command",
         technique_attack_id="T1027",
         predicate=_command_line_contains("-enc", "-encodedcommand"),
+    ),
+    MatchingRule(
+        name="malicious_file_execution",
+        technique_attack_id="T1204.002",
+        predicate=_command_line_contains("malicious", "invoice.exe", "malware", "virus", "trojan"),
+    ),
+    MatchingRule(
+        name="ingress_tool_transfer",
+        technique_attack_id="T1105",
+        predicate=_command_line_contains("download", "downloaded", "curl", "wget", "certutil -urlcache", "bitsadmin"),
+    ),
+    MatchingRule(
+        name="ssh_brute_force",
+        technique_attack_id="T1110",
+        predicate=_rule_groups_contains("ssh", "brute_force"),
+    ),
+    # Rule-groups-based rules for events that carry Wazuh/EDR rule group context
+    MatchingRule(
+        name="scheduled_task_persistence_by_groups",
+        technique_attack_id="T1053.005",
+        predicate=_rule_groups_contains("scheduled_task"),
     ),
 )
 

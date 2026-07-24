@@ -88,46 +88,47 @@ class AttackMappingAgent:
                 ``dest_ip``, ``event_id``).
 
         Returns:
-            A list of mapping dicts, one per event that could be
-            confidently mapped. Events that neither a deterministic
-            rule nor a verified LLM call could map are skipped.
+            A list of mapping dicts, potentially multiple per event
+            if multiple techniques match. Events that neither a 
+            deterministic rule nor a verified LLM call could map are 
+            skipped.
         """
         mapped_techniques: List[Dict] = []
         for event in events:
-            mapped = self._map_event(event)
-            if mapped is not None:
-                mapped_techniques.append(mapped)
+            event_techniques = self._map_event(event)
+            if event_techniques:
+                mapped_techniques.extend(event_techniques)
         return mapped_techniques
 
     # ------------------------------------------------------------------
     # Per-event mapping
     # ------------------------------------------------------------------
 
-    def _map_event(self, event: Dict) -> Optional[Dict]:
+    def _map_event(self, event: Dict) -> List[Dict]:
         """Maps a single event, trying the deterministic path first.
 
         Args:
             event: A single normalized event dict.
 
         Returns:
-            A mapping dict, or ``None`` if no confident mapping could
-            be produced.
+            A list of mapping dicts for all matched techniques,
+            or an empty list if no confident mapping could be produced.
         """
         deterministic = self._try_deterministic_match(event)
-        if deterministic is not None:
+        if deterministic:
             return deterministic
-        return self._try_llm_match(event)
+        llm_result = self._try_llm_match(event)
+        return [llm_result] if llm_result else []
 
-    def _try_deterministic_match(self, event: Dict) -> Optional[Dict]:
+    def _try_deterministic_match(self, event: Dict) -> List[Dict]:
         """Attempts to map an event using the rule-based ATT&CK matcher.
 
         Args:
             event: A single normalized event dict.
 
         Returns:
-            A mapping dict built from the highest-confidence rule
-            match, or ``None`` if no rule fired (or the event carried
-            no usable telemetry fields).
+            A list of mapping dicts for ALL matching rules,
+            or an empty list if no rule fired.
         """
         try:
             telemetry_event = TelemetryEvent(
@@ -142,39 +143,42 @@ class AttackMappingAgent:
             # Event had nothing the deterministic matcher can use;
             # fall through to the LLM path, which has richer context
             # (e.g. free-text descriptions) to work with.
-            return None
+            return []
 
         try:
             matches = self.attack_service.match_event(telemetry_event)
         except KnowledgeLayerError:
             logger.exception("Deterministic matcher failed for event %s", event.get("event_id"))
-            return None
+            return []
 
         if not matches:
-            return None
+            return []
 
-        best: MatchResult = max(matches, key=lambda match: match.confidence)
-        try:
-            technique = self.attack_service.get_technique(best.technique_attack_id)
-        except RecordNotFoundError:
-            logger.warning(
-                "Deterministic rule %s referenced unknown technique %s",
-                best.rule_name,
-                best.technique_attack_id,
-            )
-            return None
+        # Return ALL matching techniques, not just the best one
+        mapped_techniques = []
+        for match in matches:
+            try:
+                technique = self.attack_service.get_technique(match.technique_attack_id)
+                mapped = {
+                    "attack_id": technique.attack_id,
+                    "technique_name": technique.name,
+                    "confidence": match.confidence,
+                    "rule_name": match.rule_name,
+                    "matched_on": match.matched_on,
+                    "evidence_event_id": event.get("event_id"),
+                    "mapping_source": "deterministic_rule",
+                }
+                self._enrich(mapped, technique.attack_id)
+                mapped_techniques.append(mapped)
+            except RecordNotFoundError:
+                logger.warning(
+                    "Deterministic rule %s referenced unknown technique %s",
+                    match.rule_name,
+                    match.technique_attack_id,
+                )
+                continue
 
-        mapped = {
-            "attack_id": technique.attack_id,
-            "technique_name": technique.name,
-            "confidence": best.confidence,
-            "rule_name": best.rule_name,
-            "matched_on": best.matched_on,
-            "evidence_event_id": event.get("event_id"),
-            "mapping_source": "deterministic_rule",
-        }
-        self._enrich(mapped, technique.attack_id)
-        return mapped
+        return mapped_techniques
 
     def _try_llm_match(self, event: Dict) -> Optional[Dict]:
         """Attempts to map an event via the LLM, grounded and verified.
@@ -187,6 +191,10 @@ class AttackMappingAgent:
             ATT&CK ID, otherwise ``None``.
         """
         description = self._event_to_text(event)
+        
+        # DEBUG: Log input to MITRE analysis
+        logger.info(f"MITRE INPUT: {description}")
+        
         context_results = self._gather_context(event, description)
         
         # Skip LLM fallback if no grounding context is available to avoid hallucination risk.
@@ -202,16 +210,43 @@ class AttackMappingAgent:
         prompt = f"Event:\n{description}\n\nRetrieved ATT&CK context:\n{context_text}"
         response = invoke_llm(system_prompt=ATTACK_MAPPING_SYSTEM_PROMPT, user_prompt=prompt)
 
+        # DEBUG: Log raw LLM response
+        logger.info(f"MITRE RAW RESPONSE: {response}")
+
         try:
-            mapped = extract_json(response)
+            parsed = extract_json(response)
         except ValueError:
             logger.debug("LLM did not return parseable JSON for event %s", event.get("event_id"))
             return None
 
-        attack_id = mapped.get("attack_id") or mapped.get("technique_id")
-        if not attack_id:
-            logger.debug("LLM response had no attack_id for event %s", event.get("event_id"))
+        # Handle both array and single object responses
+        if isinstance(parsed, list):
+            mappings = parsed
+        elif isinstance(parsed, dict):
+            mappings = [parsed]
+        else:
+            logger.debug("LLM response was not a JSON array or object for event %s", event.get("event_id"))
             return None
+
+        if not mappings:
+            logger.debug("LLM returned empty mappings for event %s", event.get("event_id"))
+            return None
+
+        # Use the first mapping with highest confidence
+        best_mapping = None
+        best_confidence = 0.0
+        for mapped in mappings:
+            attack_id = mapped.get("attack_id") or mapped.get("technique_id")
+            confidence = mapped.get("confidence", 0.0)
+            if attack_id and confidence > best_confidence:
+                best_mapping = mapped
+                best_confidence = confidence
+
+        if not best_mapping:
+            logger.debug("LLM response had no valid attack_id for event %s", event.get("event_id"))
+            return None
+
+        attack_id = best_mapping.get("attack_id") or best_mapping.get("technique_id")
 
         # Ground truth check: never forward an ATT&CK ID the LLM
         # invented. If it doesn't resolve in the knowledge layer, the
@@ -241,7 +276,7 @@ class AttackMappingAgent:
             return None
 
         # Confidence validation: ensure confidence is a valid float between 0 and 1.
-        confidence = mapped.get("confidence")
+        confidence = best_mapping.get("confidence")
         if confidence is None:
             confidence = 0.5
         elif isinstance(confidence, bool) or not isinstance(confidence, (int, float)) or not (0.0 <= confidence <= 1.0):
@@ -263,11 +298,16 @@ class AttackMappingAgent:
             )
             return None
 
-        mapped["attack_id"] = technique.attack_id
-        mapped["technique_name"] = technique.name
-        mapped["evidence_event_id"] = event.get("event_id")
-        mapped["mapping_source"] = "llm"
-        mapped["confidence"] = confidence
+        # DEBUG: Log successful MITRE mapping
+        logger.info(f"MITRE OUTPUT: {attack_id} - {technique.name} (confidence: {confidence})")
+
+        mapped = {
+            "attack_id": technique.attack_id,
+            "technique_name": technique.name,
+            "evidence_event_id": event.get("event_id"),
+            "mapping_source": "llm",
+            "confidence": confidence,
+        }
 
         self._enrich(mapped, technique.attack_id)
         return mapped
@@ -307,6 +347,68 @@ class AttackMappingAgent:
                 continue
             if results:
                 return results
+
+        # Fallback to ChromaDB semantic search if knowledge layer search returns nothing
+        try:
+            from rag.vector_store import query_similar
+            chroma_results = query_similar(description, n_results=self.context_limit)
+            documents = chroma_results.get("documents", [[]])[0]
+            metadatas = chroma_results.get("metadatas", [[]])[0]
+            
+            if documents:
+                # Convert ChromaDB results to SearchResult format
+                from knowledge.attack.models import SearchResult, ObjectType
+                chroma_search_results = []
+                for doc, meta in zip(documents, metadatas):
+                    tech_id = (meta.get("technique_id") or "").upper().strip()
+                    name = meta.get("name", "")
+                    if tech_id:
+                        chroma_search_results.append(
+                            SearchResult(
+                                attack_id=tech_id,
+                                name=name,
+                                description=doc,
+                                object_type=ObjectType.TECHNIQUE
+                            )
+                        )
+                # Log candidate IDs for debugging
+                candidate_ids = [r.attack_id for r in chroma_search_results]
+                logger.info("ATTACK_MAPPING: Using ChromaDB semantic search fallback (%d results)", len(chroma_search_results))
+                logger.info("ATTACK_MAPPING: ChromaDB candidate IDs: %s", candidate_ids)
+                logger.info("ATTACK_MAPPING: ChromaDB contains T1041? %s", "T1041" in candidate_ids)
+                logger.info("ATTACK_MAPPING: ChromaDB contains T1567? %s", "T1567" in candidate_ids)
+                
+                # Keyword-based augmentation for exfiltration-related queries
+                # If semantic search misses known exfiltration techniques, add them explicitly
+                exfiltration_keywords = ["exfiltration", "outbound", "data transfer", "exfil"]
+                if any(keyword in description.lower() for keyword in exfiltration_keywords):
+                    exfil_ids = {"T1041", "T1567", "T1020", "T1011", "T1052"}
+                    missing_exfil = exfil_ids - set(candidate_ids)
+                    if missing_exfil:
+                        logger.info("ATTACK_MAPPING: Adding missing exfiltration techniques from keyword match: %s", missing_exfil)
+                        # Try to fetch these techniques from ChromaDB by ID
+                        try:
+                            import chromadb
+                            from config import config
+                            client = chromadb.PersistentClient(path=config.CHROMA_PERSIST_DIR)
+                            collection = client.get_collection(name=config.CHROMA_COLLECTION_ATTACK)
+                            for tech_id in missing_exfil:
+                                tech_results = collection.get(where={"technique_id": tech_id})
+                                if tech_results['ids']:
+                                    chroma_search_results.append(
+                                        SearchResult(
+                                            attack_id=tech_id,
+                                            name=tech_results['metadatas'][0].get('name', ''),
+                                            description=tech_results['documents'][0] if tech_results['documents'] else '',
+                                            object_type=ObjectType.TECHNIQUE
+                                        )
+                                    )
+                        except Exception as e:
+                            logger.debug("ATTACK_MAPPING: Failed to augment with exfiltration techniques: %s", e)
+                
+                return chroma_search_results
+        except Exception as e:
+            logger.debug("ChromaDB fallback failed: %s", e)
 
         return []
 
@@ -376,5 +478,14 @@ class AttackMappingAgent:
             f"user={event.get('user')}",
             f"src_ip={event.get('src_ip')}",
             f"dest_ip={event.get('dest_ip')}",
+            f"rule_description={event.get('rule_description')}",
+            f"rule_level={event.get('rule_level')}",
+            f"rule_groups={event.get('rule_groups')}",
         ]
+        
+        # Include full_log if present in raw event
+        raw = event.get("raw", {})
+        if isinstance(raw, dict) and raw.get("full_log"):
+            parts.append(f"full_log={raw.get('full_log')}")
+        
         return ", ".join(p for p in parts if "None" not in p)

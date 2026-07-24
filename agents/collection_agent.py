@@ -107,6 +107,36 @@ def _normalize_wazuh(event: dict) -> dict:
     n["src_ip"] = event.get("src_ip")
     n["dest_ip"] = event.get("dest_ip")
     n["raw"] = event
+    
+    # If process/command_line not at top level, try to extract from full_log
+    if not n["process"] or not n["command_line"]:
+        full_log = event.get("full_log", "")
+        if full_log:
+            import re
+            # Strategy 1: Extract process name as the first space-delimited token
+            # (e.g., "schtasks" from "schtasks /create ...", "powershell" from "powershell -enc ...")
+            first_token_match = re.match(r'^"([^"]+)"|^(\S+)', full_log.strip())
+            if first_token_match:
+                first_token = first_token_match.group(1) or first_token_match.group(2)
+                # If the token doesn't already have an extension, try .exe first
+                if "." not in first_token and not n["process"]:
+                    n["process"] = first_token
+                    # command_line is everything after the first token
+                    cmd_start = first_token_match.end()
+                    potential_cmd = full_log[cmd_start:].strip().strip('"')
+                    if potential_cmd and not n["command_line"]:
+                        n["command_line"] = potential_cmd[:500]
+            
+            # Strategy 2: Fallback — extract any .exe file name from full_log
+            if not n["process"]:
+                exe_match = re.search(r'\b([A-Za-z0-9_-]+\.exe)\b', full_log, re.IGNORECASE)
+                if exe_match:
+                    n["process"] = exe_match.group(1)
+                    cmd_start = exe_match.end()
+                    potential_cmd = full_log[cmd_start:].strip()
+                    if potential_cmd and not n["command_line"]:
+                        n["command_line"] = potential_cmd[:500]
+    
     return n
 
 

@@ -41,7 +41,8 @@ def build_workflow():
     graph.add_edge("response", "reporting")
     graph.add_edge("reporting", END)
 
-    return graph.compile()
+    # Compile without checkpointer to avoid schema corruption issues
+    return graph.compile(checkpointer=None)
 
 
 # Singleton compiled graph used by main.py

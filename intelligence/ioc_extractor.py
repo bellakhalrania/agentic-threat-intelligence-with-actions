@@ -23,11 +23,14 @@ IPV4_RE = re.compile(
     r"\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\b"
 )
 
-# IPv6: a loose pattern to catch candidates; full validation via ipaddress lib.
-# Matches sequences containing colons and hex chars, with optional brackets.
-# This is intentionally permissive - validation happens in _is_valid_ipv6()
+# IPv6: stricter pattern to avoid false positives from command-line syntax like "::debug"
+# Matches proper IPv6 structure with word boundaries and minimum length
 IPV6_RE = re.compile(
-    r"\[?[0-9a-fA-F:]{3,}\]?|::[0-9a-fA-F:]+"
+    r"\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b|"  # Full form (8 groups)
+    r"\b(?:[0-9a-fA-F]{1,4}:){1,7}:\b|"  # Leading groups with :: at end
+    r"\b:(?::[0-9a-fA-F]{1,4}){1,7}\b|"  # :: at start with trailing groups
+    r"\b(?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}\b|"  # :: in middle
+    r"\[?[0-9a-fA-F:]{2,}\]?"  # Bracketed form (for URLs)
 )
 
 # MD5: exactly 32 hex chars
@@ -106,6 +109,16 @@ def _is_valid_ipv6(candidate: str) -> bool:
     Allows IPv4-mapped addresses (::ffff:x.x.x.x) as they represent public IPv4.
     """
     clean = candidate.strip("[]")
+    
+    # Additional validation: reject obviously invalid patterns
+    # Reject single-letter or very short segments that are likely command-line syntax
+    if "::" in clean:
+        parts = clean.split("::")
+        # If any segment is a single hex char, it's likely command syntax like "e::debug"
+        for part in parts:
+            if part and len(part) == 1 and part in "0123456789abcdefABCDEF":
+                return False
+    
     try:
         addr = ipaddress.IPv6Address(clean)
     except (ipaddress.AddressValueError, ValueError):

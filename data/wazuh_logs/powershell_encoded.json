@@ -1,0 +1,21 @@
+[
+  {
+    "version": 1,
+    "timestamp": "2026-07-20T10:17:10Z",
+    "rule": {
+      "level": 9,
+      "description": "PowerShell encoded command execution",
+      "groups": [
+        "windows",
+        "powershell",
+        "execution"
+      ]
+    },
+    "agent": {
+      "id": "002",
+      "name": "WORKSTATION-15"
+    },
+    "id": "powershell-001",
+    "full_log": "powershell.exe -EncodedCommand JABXAGkAbgBkAG8AdwBzACAAPQAg..."
+  }
+]

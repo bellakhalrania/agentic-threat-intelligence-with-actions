@@ -30,8 +30,14 @@ from connectors.wazuh_connector import WazuhConnector
 import config
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
+
+# Ensure threat_intel provider logs are visible
+logging.getLogger("intelligence.threat_intel").setLevel(logging.INFO)
 
 # Create FastAPI app
 app = FastAPI(
@@ -73,6 +79,35 @@ class HealthResponse(BaseModel):
     status: str
     timestamp: str
     version: str
+
+
+class CollectionsResponse(BaseModel):
+    """ChromaDB collections response"""
+    count: int
+    collections: List[str]
+    timestamp: str
+
+
+class AttackDbResponse(BaseModel):
+    """Attack database response"""
+    databases: List[str]
+    count: int
+    details: Dict[str, Dict[str, int]]
+    timestamp: str
+
+
+class SearchRequest(BaseModel):
+    """Search request for ATT&CK knowledge"""
+    keyword: str = Field(..., description="Keyword or phrase to search for")
+    limit: Optional[int] = Field(None, description="Maximum number of results (default: 25, max: 200)")
+
+
+class SearchResponse(BaseModel):
+    """Search response from ATT&CK knowledge"""
+    keyword: str
+    results: List[Dict[str, Any]]
+    count: int
+    timestamp: str
 
 
 # Background task for async investigation
@@ -284,6 +319,121 @@ async def get_config():
             "groq_configured": bool(config.GROQ_API_KEY)
         }
     }
+
+
+@app.get("/chroma/collections", response_model=CollectionsResponse)
+async def list_chroma_collections():
+    """
+    List all ChromaDB collections
+    
+    Returns the count and names of all collections in the ChromaDB instance.
+    """
+    try:
+        from rag.vector_store import get_client
+        client = get_client()
+        collections = client.list_collections()
+        collection_names = [col.name for col in collections]
+        
+        return CollectionsResponse(
+            count=len(collection_names),
+            collections=collection_names,
+            timestamp=datetime.utcnow().isoformat()
+        )
+    except Exception as e:
+        logger.error(f"Error listing ChromaDB collections: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/db", response_model=AttackDbResponse)
+async def list_databases():
+    """
+    List all SQLite databases in the knowledge/attack/data directory
+    
+    Returns a list of all .db files found in the attack data directory,
+    along with table names and row counts for each database.
+    """
+    try:
+        import sqlite3
+        from pathlib import Path
+        from knowledge.attack.config import _DATA_DIR
+        
+        data_dir = Path(_DATA_DIR)
+        
+        # Find all .db files in the data directory
+        db_files = list(data_dir.glob("*.db"))
+        db_names = [db.name for db in db_files]
+        
+        # Get table details for each database
+        details = {}
+        for db_file in db_files:
+            try:
+                tables = {}
+                conn = sqlite3.connect(str(db_file))
+                cursor = conn.cursor()
+                
+                # Get all table names
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
+                table_names = [row[0] for row in cursor.fetchall()]
+                
+                # Count rows in each table
+                for table_name in table_names:
+                    cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
+                    count = cursor.fetchone()[0]
+                    tables[table_name] = count
+                
+                conn.close()
+                details[db_file.name] = tables
+            except Exception as e:
+                logger.error(f"Error reading database {db_file.name}: {e}")
+                details[db_file.name] = {"error": str(e)}
+        
+        return AttackDbResponse(
+            databases=db_names,
+            count=len(db_names),
+            details=details,
+            timestamp=datetime.utcnow().isoformat()
+        )
+    except Exception as e:
+        logger.error(f"Error listing databases: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/attack/search", response_model=SearchResponse)
+async def search_attack_knowledge(request: SearchRequest):
+    """
+    Search the MITRE ATT&CK knowledge base
+    
+    Searches across all ATT&CK object types (techniques, tactics, software, groups, mitigations)
+    for the given keyword.
+    
+    - **keyword**: Keyword or phrase to search for
+    - **limit**: Maximum number of results (default: 25, max: 200)
+    """
+    try:
+        from knowledge.attack.service import AttackService
+        
+        with AttackService.create() as service:
+            results = service.search(request.keyword, limit=request.limit)
+            
+            # Convert SearchResult objects to dictionaries
+            results_dict = []
+            for result in results:
+                results_dict.append({
+                    "attack_id": result.attack_id,
+                    "name": result.name,
+                    "object_type": result.object_type,
+                    "description": result.description
+                })
+            
+            return SearchResponse(
+                keyword=request.keyword,
+                results=results_dict,
+                count=len(results_dict),
+                timestamp=datetime.utcnow().isoformat()
+            )
+    except Exception as e:
+        logger.error(f"Error searching ATT&CK knowledge: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":

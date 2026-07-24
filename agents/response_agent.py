@@ -25,22 +25,41 @@ response actions. For each action, output:
  "technique_id": "...", "confidence": 0.0}
 Respond ONLY with a JSON array of action objects. Be conservative: only
 propose disruptive actions (isolate_host, disable_account) when evidence is
-strong. Always include at least one notify_analyst action summarizing the
-situation."""
+strong. Thresholds:
+- block_ip: when IOC confidence >= 0.8 AND reputation == malicious
+- isolate_host: when IOC confidence >= 0.9 OR multiple high-confidence techniques observed
+- notify_analyst: ALWAYS include at least one notify_analyst action summarizing the situation."""
 
 
 class ResponseAgent:
+    # Confidence threshold above which a malicious IOC automatically triggers
+    # a block_ip proposal without waiting for the LLM.
+    BLOCK_IP_AUTO_THRESHOLD = 0.8
+
     def run(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict]) -> List[ActionResult]:
+        # --- Deterministic pre-check: auto-propose block_ip for high-confidence malicious IOCs ---
+        # This ensures critical threats are never missed because the LLM was overly conservative.
+        pre_proposals = self._auto_propose_high_confidence_actions(iocs)
+
         prompt = f"Campaign:\n{campaign}\n\nTechniques:\n{techniques}\n\nIOCs:\n{iocs}"
         response = invoke_llm(system_prompt=RESPONSE_SYSTEM_PROMPT, user_prompt=prompt)
 
         try:
-            proposals = extract_json(response)
+            llm_proposals = extract_json(response)
         except ValueError:
-            proposals = []
+            llm_proposals = []
+
+        # Merge: pre_proposals first so deterministic actions take priority
+        # De-duplicate: skip LLM proposals that duplicate an auto-proposed action
+        all_proposals = list(pre_proposals)
+        auto_targets = {p["target"] + p["action_type"] for p in pre_proposals}
+        for raw in llm_proposals:
+            dedup_key = raw.get("target", "") + raw.get("action_type", "")
+            if dedup_key not in auto_targets:
+                all_proposals.append(raw)
 
         results = []
-        for raw in proposals:
+        for raw in all_proposals:
             try:
                 action = ProposedAction(**raw)
             except Exception:
@@ -52,6 +71,44 @@ class ResponseAgent:
             results.append(result)
 
         return results
+
+    def _auto_propose_high_confidence_actions(self, iocs: List[Dict]) -> List[Dict]:
+        """Deterministically proposes block_ip for high-confidence malicious IOCs.
+
+        This runs BEFORE the LLM so critical blocking actions are never omitted
+        due to LLM conservatism. Only fires when:
+        - IOC reputation == 'malicious'
+        - IOC confidence >= BLOCK_IP_AUTO_THRESHOLD (default 0.8)
+        - IOC type is 'ip' or 'ipv4'
+
+        Returns a list of raw proposal dicts suitable for ProposedAction(**raw).
+        """
+        proposals = []
+        for ioc in iocs:
+            reputation = ioc.get("reputation", "")
+            confidence = float(ioc.get("confidence", 0.0))
+            ioc_type = ioc.get("ioc_type") or ioc.get("type", "")
+            value = ioc.get("value", "")
+
+            if (
+                reputation == "malicious"
+                and confidence >= self.BLOCK_IP_AUTO_THRESHOLD
+                and ioc_type.lower() in ("ip", "ipv4", "ip_address")
+                and value
+            ):
+                proposals.append({
+                    "action_type": "block_ip",
+                    "target": value,
+                    "severity": "high" if confidence >= 0.9 else "medium",
+                    "rationale": (
+                        f"IP {value} has AbuseIPDB confidence {confidence:.2f} with "
+                        f"reputation '{reputation}'. Automatic block proposed per "
+                        f"policy threshold (>= {self.BLOCK_IP_AUTO_THRESHOLD})."
+                    ),
+                    "technique_id": "",
+                    "confidence": confidence,
+                })
+        return proposals
 
     @staticmethod
     def _handle_decision(action: ProposedAction, decision: str) -> ActionResult:

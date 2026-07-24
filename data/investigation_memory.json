@@ -10365,5 +10365,3016 @@
     ],
     "errors": [],
     "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "version": 1,
+        "timestamp": "2026-07-20T10:15:00Z",
+        "rule": {
+          "level": 8,
+          "description": "Multiple failed SSH login attempts detected",
+          "groups": [
+            "authentication_failed",
+            "ssh",
+            "brute_force"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "LINUX-SERVER-01"
+        },
+        "id": "ssh-001",
+        "full_log": "Failed password for root from 45.155.205.233 port 52314 ssh2"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "d3df0546-fbcd-4bd3-8f53-b019cf675669",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-20T10:15:00Z",
+        "host": "LINUX-SERVER-01",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 8,
+        "rule_description": "Multiple failed SSH login attempts detected",
+        "rule_level": 8,
+        "rule_groups": [
+          "authentication_failed",
+          "ssh",
+          "brute_force"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-20T10:15:00Z",
+          "rule": {
+            "level": 8,
+            "description": "Multiple failed SSH login attempts detected",
+            "groups": [
+              "authentication_failed",
+              "ssh",
+              "brute_force"
+            ]
+          },
+          "agent": {
+            "id": "001",
+            "name": "LINUX-SERVER-01"
+          },
+          "id": "ssh-001",
+          "full_log": "Failed password for root from 45.155.205.233 port 52314 ssh2"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "45.155.205.233",
+        "ioc_type": "ip",
+        "reputation": "suspicious",
+        "confidence": 0.0,
+        "tags": [
+          "country:RU",
+          "data_center/web_hosting/transit",
+          "domain:cloud.ru",
+          "isp:Cloud Technologies LLC trading as Cloud.ru"
+        ],
+        "first_seen": null,
+        "last_seen": "2026-06-08T23:32:04+00:00",
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "45.155.205.233",
+              "isPublic": true,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": "RU",
+              "usageType": "Data Center/Web Hosting/Transit",
+              "isp": "Cloud Technologies LLC trading as Cloud.ru",
+              "domain": "cloud.ru",
+              "hostnames": [],
+              "isTor": false,
+              "countryName": "Russian Federation",
+              "totalReports": 2,
+              "numDistinctUsers": 2,
+              "lastReportedAt": "2026-06-08T23:32:04+00:00",
+              "reports": [
+                {
+                  "reportedAt": "2026-06-08T23:32:04+00:00",
+                  "comment": "",
+                  "categories": [
+                    14,
+                    15
+                  ],
+                  "reporterId": 43413,
+                  "reporterCountryCode": "CA",
+                  "reporterCountryName": "Canada"
+                },
+                {
+                  "reportedAt": "2026-05-03T12:55:16+00:00",
+                  "comment": "[ZapChat Honeypot] Threats: credential-harvest, login_attempt. Path: /admin/login",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 296761,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                }
+              ]
+            },
+            "queried_at": "2026-07-21 09:15:33.598074"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "45.155.205.233",
+          "source_event_id": "d3df0546-fbcd-4bd3-8f53-b019cf675669",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 1.0,
+        "rule_name": "ssh_brute_force",
+        "matched_on": "rule_groups contains 'ssh'",
+        "evidence_event_id": "d3df0546-fbcd-4bd3-8f53-b019cf675669",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "e7f3c2a1-4b9d-4f6e-9c2a-1a2b3c4d5e6f",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "2026-07-21T00:00:00Z",
+          "event_id": "d3df0546-fbcd-4bd3-8f53-b019cf675669",
+          "description": "A wazuh_alert was generated on host LINUX-SERVER-01 with no process or command line information, indicating a generic alert event."
+        }
+      ],
+      "related_techniques": [
+        "T1110"
+      ],
+      "evidence_summary": "The campaign is evidenced by a single wazuh_alert event (ID d3df0546-fbcd-4bd3-8f53-b019cf675669) on host LINUX-SERVER-01, which is mapped to ATT&CK technique T1110 (Brute Force) with deterministic rule confidence 1.0. An associated IOC is the IP address 45.155.205.233, classified as suspicious by AbuseIPDB with confidence 0.0. No additional attack objectives or host activity are provided in the evidence.",
+      "confidence": 0.2
+    },
+    "prediction": {
+      "likely_next_techniques": [],
+      "rationale": "Insufficient ATT&CK context to predict next techniques safely."
+    },
+    "report": "# Threat Intelligence Report\n\n**Report ID:** `e7f3c2a1-4b9d-4f6e-9c2a-1a2b3c4d5e6f`  \n**Date:** 2026\u201107\u201121  \n**Prepared by:** Senior Threat Intelligence Team  \n\n---\n\n## Executive Summary  \nA single Wazuh alert was generated on **LINUX\u2011SERVER\u201101** at **2026\u201107\u201120\u202f10:15\u202fUTC** indicating multiple failed SSH login attempts originating from IP **45.155.205.233**. The alert maps deterministically to ATT&CK technique **T1110 \u2013 Brute Force** with 100\u202f% confidence. The associated IP is listed as *suspicious* by AbuseIPDB (confidence\u202f0.0). No additional indicators or techniques were observed, resulting in a low\u2011confidence campaign assessment (0.2). The current response action is a pending analyst notification; no disruptive mitigation has been applied.\n\n---\n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Description |\n|-----------------|----------|-------------|\n| 2026\u201107\u201120\u202f10:15:00 | `d3df0546-fbcd-4bd3-8f53-b019cf675669` | Wazuh alert: \u201cMultiple failed SSH login attempts detected\u201d on host **LINUX\u2011SERVER\u201101**. |\n| 2026\u201107\u201121\u202f00:00:00 | `d3df0546-fbcd-4bd3-8f53-b019cf675669` | Campaign timeline entry referencing the same alert. |\n\n---\n\n## IOCs  \n\n| Value | Type | Reputation | Confidence | Tags | First Seen | Last Seen | Source |\n|-------|------|------------|------------|------|------------|-----------|--------|\n| 45.155.205.233 | IP | suspicious | 0.0 | country:RU, data_center/web_hosting/transit, domain:cloud.ru, isp:Cloud Technologies LLC trading as Cloud.ru | None | 2026\u201106\u201108\u202f23:32:04+00:00 | AbuseIPDB |\n\n---\n\n## ATT&CK Techniques  \n\n| ATT&CK ID | Technique | Confidence | Rule | Known Groups | Known Software | Recommended Mitigations |\n|-----------|-----------|------------|------|--------------|----------------|------------------------|\n| T1110 | Brute Force | 1.0 | ssh_brute_force | Fox Kitten, HEXANE, Ember Bear, Turla, DarkVishnya, FIN5, APT41, APT38, OilRig, Agrius, APT39, Dragonfly, VOID MANTICORE, Storm\u20110501, APT28 | Chaos, Caterpillar WebShell, Kinsing, PoshC2, QakBot, Pysa, CrackMapExec | User Account Management, Account Use Policies, Multi\u2011factor Authentication, Password Policies |\n\n---\n\n## Campaign Assessment  \n\n- **Campaign ID:** `e7f3c2a1-4b9d-4f6e-9c2a-1a2b3c4d5e6f`  \n- **Name:** Unclassified Activity  \n- **Objective:** Unknown  \n- **Confidence:** 0.2  \n- **Evidence Summary:** Single Wazuh alert mapped to T1110; associated IOC is a suspicious IP. No additional indicators or techniques are present.  \n\n---\n\n## Predicted Next Steps  \n\nNo probabilistic forecasts are available due to insufficient ATT&CK context. The prediction model returned an empty list of likely next techniques.\n\n---\n\n## Recommendations  \n\n1. **Implement Multi\u2011factor Authentication (MFA)** for all SSH accounts to mitigate brute\u2011force attempts.  \n2. **Enforce strict password policies** (complexity, rotation, lockout thresholds).  \n3. **Review and tighten account use policies** to limit unnecessary privileged access.  \n4. **Monitor SSH logs** for repeated failed login attempts and consider automated blocking of offending IPs.  \n5. **Conduct a manual review** of the alert to confirm whether the activity is legitimate or requires further containment.\n\n---\n\n## Response Actions  \n\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| notify_analyst | LINUX\u2011SERVER\u201101 | pending_approval | low | A single generic Wazuh alert (ID `d3df0546-fbcd-4bd3-8f53-b019cf675669`) indicates potential brute force activity (T1110) on host LINUX\u2011SERVER\u201101. The overall campaign confidence is low (0.2) and no additional high\u2011confidence indicators or multiple techniques are present, so no disruptive actions are warranted at this time. Analyst review is recommended to confirm whether further investigation or mitigation is needed. |\n\n---",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "LINUX-SERVER-01",
+          "severity": "low",
+          "rationale": "A single generic wazuh alert (ID d3df0546-fbcd-4bd3-8f53-b019cf675669) indicates potential brute force activity (T1110) on host LINUX-SERVER-01. The overall campaign confidence is low (0.2) and no additional high\u2011confidence indicators or multiple techniques are present, so no disruptive actions are warranted at this time. Analyst review is recommended to confirm whether further investigation or mitigation is needed.",
+          "technique_id": "T1110",
+          "confidence": 0.2
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "version": 1,
+        "timestamp": "2026-07-20T11:00:00Z",
+        "rule": {
+          "level": 12,
+          "description": "Multiple SSH brute force login attempts detected",
+          "groups": [
+            "ssh",
+            "authentication_failed",
+            "brute_force"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "LINUX-SERVER-01"
+        },
+        "id": "ssh-bruteforce-001",
+        "srcip": "185.220.101.42",
+        "full_log": "Failed password for root from 185.220.101.42 port 22 ssh2"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "12dc01a8-9985-4bf2-9638-9e40c43d71e7",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-20T11:00:00Z",
+        "host": "LINUX-SERVER-01",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 12,
+        "rule_description": "Multiple SSH brute force login attempts detected",
+        "rule_level": 12,
+        "rule_groups": [
+          "ssh",
+          "authentication_failed",
+          "brute_force"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-20T11:00:00Z",
+          "rule": {
+            "level": 12,
+            "description": "Multiple SSH brute force login attempts detected",
+            "groups": [
+              "ssh",
+              "authentication_failed",
+              "brute_force"
+            ]
+          },
+          "agent": {
+            "id": "001",
+            "name": "LINUX-SERVER-01"
+          },
+          "id": "ssh-bruteforce-001",
+          "srcip": "185.220.101.42",
+          "full_log": "Failed password for root from 185.220.101.42 port 22 ssh2"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "185.220.101.42",
+        "ioc_type": "ip",
+        "reputation": "malicious",
+        "confidence": 0.98,
+        "tags": [
+          "country:DE",
+          "domain:for-privacy.net",
+          "fixed_line_isp",
+          "isp:Network for Tor-Exit traffic."
+        ],
+        "first_seen": null,
+        "last_seen": "2026-07-19T18:30:20+00:00",
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "185.220.101.42",
+              "isPublic": true,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 98,
+              "countryCode": "DE",
+              "usageType": "Fixed Line ISP",
+              "isp": "Network for Tor-Exit traffic.",
+              "domain": "for-privacy.net",
+              "hostnames": [
+                "tor-exit-42.for-privacy.net"
+              ],
+              "isTor": true,
+              "countryName": "Germany",
+              "totalReports": 120,
+              "numDistinctUsers": 67,
+              "lastReportedAt": "2026-07-19T18:30:20+00:00",
+              "reports": [
+                {
+                  "reportedAt": "2026-07-19T18:30:20+00:00",
+                  "comment": "http:scan",
+                  "categories": [
+                    18,
+                    21
+                  ],
+                  "reporterId": 168032,
+                  "reporterCountryCode": "SE",
+                  "reporterCountryName": "Sweden"
+                },
+                {
+                  "reportedAt": "2026-07-17T18:48:32+00:00",
+                  "comment": "Auto-blocked by IT Solutions USA security proxy after malicious web-shell/backdoor scanning and attack probes. Requests blocked (403).",
+                  "categories": [
+                    21,
+                    15,
+                    19
+                  ],
+                  "reporterId": 320083,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-14T12:20:38+00:00",
+                  "comment": "Blocked by UFW (TCP on 8947)\nSource port: 28891\nTTL: 46\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-11T03:53:28+00:00",
+                  "comment": "Repeated wp-login/xmlrpc attempts",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 190396,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-07-09T00:17:14+00:00",
+                  "comment": "Automated report / Wordpress Attack Attempt",
+                  "categories": [
+                    15,
+                    21
+                  ],
+                  "reporterId": 111411,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-08T16:57:19+00:00",
+                  "comment": "Try to access /xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-07T14:25:42+00:00",
+                  "comment": "[SQL UNION SELECT] f2b match %{+Q}r for ^.*haproxy\\[[0-9]+\\]: <HOST>:.* (GET |POST ).*\\?.*(UNION%20|union%20|SELECT%20|select%20).* HTTP/1.1$",
+                  "categories": [
+                    16
+                  ],
+                  "reporterId": 147923,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-06T21:30:36+00:00",
+                  "comment": "Knock-Knock honeypot brute-force: proto8 (1 total hits)",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 270949,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-06T08:18:23+00:00",
+                  "comment": "Dyls honeypot brute-force: proto8 (1 total hits)",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 303987,
+                  "reporterCountryCode": "AU",
+                  "reporterCountryName": "Australia"
+                },
+                {
+                  "reportedAt": "2026-07-05T01:02:51+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-04T08:14:06+00:00",
+                  "comment": "The IP 185.220.101.42 tried multiple SSH_BRUTE_FORCE logins",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 140125,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-04T00:03:36+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-03T16:00:06+00:00",
+                  "comment": "Website Scanning / Scraping",
+                  "categories": [
+                    19,
+                    20,
+                    21
+                  ],
+                  "reporterId": 152128,
+                  "reporterCountryCode": "IT",
+                  "reporterCountryName": "Italy"
+                },
+                {
+                  "reportedAt": "2026-07-02T19:47:51+00:00",
+                  "comment": "Spamming contactform",
+                  "categories": [
+                    10
+                  ],
+                  "reporterId": 63294,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-07-02T19:00:45+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-01T23:53:12+00:00",
+                  "comment": "Malicious activity detected: web_attack\n\nServer: commstackbc (185.127.18.66)\nAttack: web_attack\nTimestamp: 2026-07-02 00:53:12 UTC\n\nLog evidence:\n185.220.101.42 - - [02/Jul/2026:00:53:11 +0100] \"GET /index.php?s=/admin/think%5Capp/invokeMethod&method[0]=think%5Cview%5Cdriver%5CPhp&method[1]=display&vars[0]=%3C?php%20echo%20md5(%27a3233a3800f8cba9dd419d1997d27412%27); HTTP/1.1\" 301 162 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0\"\n07/02/2026-00:53:11.276272  [**] [1:2520040:6059] ET TOR Known Tor Exit Node Traffic group 41 [**] [Classification: Misc Attack] [Priority: 2] {TCP} 185.220.101.42:9409 -> 185.127.18.66:80\n07/02/2026-00:53:11.276272  [**] [1:2522040:6059] ET TOR Known Tor Relay/Router (Not Exit) Node Traffic group 41 [**] [Classification: Misc Attack] [Priority: 2] {TCP} 185.220.101.42:9409 -> 185.127.18.66:80",
+                  "categories": [
+                    14,
+                    18
+                  ],
+                  "reporterId": 248737,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-07-01T18:02:33+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-01T14:22:42+00:00",
+                  "comment": "[AUTORAVALT][[01/07/2026 - 11:22:42 -03:00 UTC]\nAttack from [185.220.101.42][tor-exit-42.for-privacy.net]\n Action: BLocKed\n Phishing -> Phishing websites and/or email.\nEmail Spam -> Spam email content, infected attachments, and phishing emails.\nHacking... Unauthorized attempts to access the server.\nSpoofing -> Email sender spoofing.\nBrute-Force -> Credential br]\n...",
+                  "categories": [
+                    18,
+                    11,
+                    17,
+                    7,
+                    15
+                  ],
+                  "reporterId": 86395,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-30T17:06:55+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-29T17:00:58+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-29T15:19:53+00:00",
+                  "comment": "Detected by CrowdSec: crowdsecurity/http-bad-user-agent",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 32042,
+                  "reporterCountryCode": "PL",
+                  "reporterCountryName": "Poland"
+                },
+                {
+                  "reportedAt": "2026-06-29T14:09:02+00:00",
+                  "comment": "Multiple HTTP calls attempting to GET resources using common API calls or formats on port 8080",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 41067,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-29T11:53:13+00:00",
+                  "comment": "2026-06-29T06:53:06.932576 nas.marchenko.net sshd-session[1508804]: Failed password for root from 185.220.101.42 port 33915 ssh2\n2026-06-29T06:53:10.831500 nas.marchenko.net sshd-session[1508850]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42  user=root\n2026-06-29T06:53:13.034891 nas.marchenko.net sshd-session[1508850]: Failed password for root from 185.220.101.42 port 13577 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 171680,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-28T16:01:19+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-28T05:04:14+00:00",
+                  "comment": "(wordpress) Failed wordpress login using wp-login.php or xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 134687,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-27T12:36:22+00:00",
+                  "comment": "[DDoS Attacker] This IP was attacking website anycast.ac and sent 2640 requests on port 443",
+                  "categories": [
+                    4,
+                    21
+                  ],
+                  "reporterId": 300163,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-24T06:56:30+00:00",
+                  "comment": "(From duyuielenryysv@web-library.net)",
+                  "categories": [
+                    7,
+                    10
+                  ],
+                  "reporterId": 18256,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-24T02:54:59+00:00",
+                  "comment": "Blocked by UFW (TCP on 13011)\nSource port: 63383\nTTL: 47\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-23T13:00:59+00:00",
+                  "comment": "Blocked by UFW (TCP on 6881)\nSource port: 44481\nTTL: 47\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-23T10:34:16+00:00",
+                  "comment": "Web attack/malicious scanning detected",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 269267,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-06-23T04:29:11+00:00",
+                  "comment": "IPS: SQL Injection Scanning Attempt.",
+                  "categories": [
+                    16,
+                    14
+                  ],
+                  "reporterId": 263754,
+                  "reporterCountryCode": "BR",
+                  "reporterCountryName": "Brazil"
+                },
+                {
+                  "reportedAt": "2026-06-22T15:48:52+00:00",
+                  "comment": "ICS Labs identified 185.220.101.42 as a malicious indicator from threat intelligence.",
+                  "categories": [
+                    4,
+                    14,
+                    15,
+                    18,
+                    20
+                  ],
+                  "reporterId": 201242,
+                  "reporterCountryCode": "BR",
+                  "reporterCountryName": "Brazil"
+                },
+                {
+                  "reportedAt": "2026-06-22T14:45:37+00:00",
+                  "comment": "fail2ban jail=sshd on canadapaywall.com (automatic report; categories 18,22)",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 273411,
+                  "reporterCountryCode": "CA",
+                  "reporterCountryName": "Canada"
+                },
+                {
+                  "reportedAt": "2026-06-22T06:04:19+00:00",
+                  "comment": "This IP was detected by CrowdSec triggering crowdsecurity/suricata-major-severity(ET TOR Known Tor Exit Node Traffic group 44). Ip 185.220.101.42 performed 'crowdsecurity/suricata-major-severity' (1 events over 0s) at 2026-06-22 06:04:18.068307964 +0000 UTC",
+                  "categories": [
+                    15,
+                    21
+                  ],
+                  "reporterId": 66509,
+                  "reporterCountryCode": "ID",
+                  "reporterCountryName": "Indonesia"
+                },
+                {
+                  "reportedAt": "2026-06-20T14:35:04+00:00",
+                  "comment": "(wordpress) Failed wordpress login using wp-login.php or xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 134687,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-20T07:09:11+00:00",
+                  "comment": "SSH break in attempt\n...",
+                  "categories": [
+                    22
+                  ],
+                  "reporterId": 44288,
+                  "reporterCountryCode": "TH",
+                  "reporterCountryName": "Thailand"
+                },
+                {
+                  "reportedAt": "2026-06-18T17:33:23+00:00",
+                  "comment": "Try to access /xmlrpc.php?rsd",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-18T14:15:16+00:00",
+                  "comment": "Repeated requests on blocked xmlrpc.php, blocked by fail2ban in custom-503-xmlrpc jail",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-17T13:11:12+00:00",
+                  "comment": "Web attack/malicious scanning detected",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 269267,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-06-17T12:30:19+00:00",
+                  "comment": "Repeated requests on blocked xmlrpc.php, blocked by fail2ban in custom-503-xmlrpc jail",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-16T01:01:18+00:00",
+                  "comment": "CrowdSec ban for AbuseIPDB Top List",
+                  "categories": [
+                    18,
+                    21
+                  ],
+                  "reporterId": 256090,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-06-16T00:15:31+00:00",
+                  "comment": "Web attack/malicious scanning detected",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 269267,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-06-15T23:59:05+00:00",
+                  "comment": "Port scan on 32789",
+                  "categories": [
+                    14,
+                    15
+                  ],
+                  "reporterId": 315123,
+                  "reporterCountryCode": "LT",
+                  "reporterCountryName": "Lithuania"
+                },
+                {
+                  "reportedAt": "2026-06-15T23:30:16+00:00",
+                  "comment": "Repeated requests on blocked xmlrpc.php, blocked by fail2ban in custom-503-xmlrpc jail",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-14T06:29:48+00:00",
+                  "comment": "Aggressive web scan",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 116138,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-13T12:57:19+00:00",
+                  "comment": "Blocked by UFW (TCP on 35918)\nSource port: 58255\nTTL: 46\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-12T23:59:38+00:00",
+                  "comment": "Port scan on 49653",
+                  "categories": [
+                    14,
+                    15
+                  ],
+                  "reporterId": 315123,
+                  "reporterCountryCode": "LT",
+                  "reporterCountryName": "Lithuania"
+                },
+                {
+                  "reportedAt": "2026-06-12T17:25:19+00:00",
+                  "comment": "Blocked by UFW (TCP on 51196)\nSource port: 22421\nTTL: 46\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-12T02:04:59+00:00",
+                  "comment": "Try to access /xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-08T23:23:21+00:00",
+                  "comment": "Triggered Cloudflare WAF (firewallCustom) from T1.\nAction: BLOCK | Protocol: HTTP/2 (GET) | Endpoint: / | UA: Mozilla/5.0 (Linux; Android 7.1.1; MI MAX 2 Build/NMF26F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Mobile Safari/537.36 YaApp_Android/10.61 YaSearchBrowser/10.61 \u2022 Generated by: github.com/sefinek/Cloudflare-WAF-To-AbuseIPDB",
+                  "categories": [
+                    19
+                  ],
+                  "reporterId": 158699,
+                  "reporterCountryCode": "PL",
+                  "reporterCountryName": "Poland"
+                },
+                {
+                  "reportedAt": "2026-06-07T16:47:12+00:00",
+                  "comment": "2026-06-07T20:17:00.790593+03:30 digitalogic sshd-session[912368]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42\n2026-06-07T20:17:02.760392+03:30 digitalogic sshd-session[912368]: Failed password for invalid user 1 from 185.220.101.42 port 48645 ssh2\n2026-06-07T20:17:06.450574+03:30 digitalogic sshd-session[912368]: Connection closed by invalid user 1 185.220.101.42 port 48645 [preauth]\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "IR",
+                  "reporterCountryName": "Iran (Islamic Republic of)"
+                },
+                {
+                  "reportedAt": "2026-06-07T14:30:08+00:00",
+                  "comment": "Repeated 403 errors, blocked by Fail2ban in custom-403 jail",
+                  "categories": [
+                    19
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-07T00:20:15+00:00",
+                  "comment": "2026-06-07T03:39:58.886391+03:30 digitalogic sshd-session[850277]: Failed password for ubuntu from 185.220.101.42 port 7159 ssh2\n2026-06-07T03:40:07.467163+03:30 digitalogic sshd-session[850277]: Connection closed by authenticating user ubuntu 185.220.101.42 port 7159 [preauth]\n2026-06-07T03:50:10.993247+03:30 digitalogic sshd-session[850690]: Invalid user 1 from 185.220.101.42 port 31847\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "AZ",
+                  "reporterCountryName": "Azerbaijan"
+                },
+                {
+                  "reportedAt": "2026-06-06T17:11:04+00:00",
+                  "comment": "SSH brute force attack detected via Wazuh SIEM. Multiple authentication failure events targeting SSHD service. IP automatically blocked via active response. Incident: IRP-DEG-20260606-001 \u2014 Phase: Containment.",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 313680,
+                  "reporterCountryCode": "ES",
+                  "reporterCountryName": "Spain"
+                },
+                {
+                  "reportedAt": "2026-06-06T12:45:09+00:00",
+                  "comment": "Repeated requests on blocked xmlrpc.php, blocked by fail2ban in custom-503-xmlrpc jail",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-05T14:02:53+00:00",
+                  "comment": "2026-06-05T17:23:58.511294+03:30 digitalogic sshd-session[715780]: Failed password for root from 185.220.101.42 port 1077 ssh2\n2026-06-05T17:23:59.344793+03:30 digitalogic sshd-session[715780]: Connection closed by authenticating user root 185.220.101.42 port 1077 [preauth]\n2026-06-05T17:32:47.538170+03:30 digitalogic sshd-session[716373]: Invalid user admin from 185.220.101.42 port 18061\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "AZ",
+                  "reporterCountryName": "Azerbaijan"
+                },
+                {
+                  "reportedAt": "2026-06-05T08:07:37+00:00",
+                  "comment": "2026-06-05T11:37:23.132085+03:30 digitalogic sshd-session[685659]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42\n2026-06-05T11:37:24.478414+03:30 digitalogic sshd-session[685659]: Failed password for invalid user 1 from 185.220.101.42 port 56617 ssh2\n2026-06-05T11:37:32.077562+03:30 digitalogic sshd-session[685659]: Connection closed by invalid user 1 185.220.101.42 port 56617 [preauth]\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "AZ",
+                  "reporterCountryName": "Azerbaijan"
+                },
+                {
+                  "reportedAt": "2026-06-04T15:13:59+00:00",
+                  "comment": "2026-06-04T17:56:51.783289+03:30 digitalogic sshd-session[643960]: Failed password for root from 185.220.101.42 port 39179 ssh2\n2026-06-04T17:57:02.740066+03:30 digitalogic sshd-session[643960]: Connection closed by authenticating user root 185.220.101.42 port 39179 [preauth]\n2026-06-04T18:43:53.711474+03:30 digitalogic sshd-session[646343]: Invalid user 1 from 185.220.101.42 port 26809\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "AZ",
+                  "reporterCountryName": "Azerbaijan"
+                },
+                {
+                  "reportedAt": "2026-06-04T02:48:42+00:00",
+                  "comment": "Try to access /xmlrpc.php?rsd",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-02T21:06:19+00:00",
+                  "comment": "Fail2Ban sshd ban on luckymc.gg\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 229570,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-02T05:52:05+00:00",
+                  "comment": "Repeated wp-login/xmlrpc attempts",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 190396,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-05-31T15:57:25+00:00",
+                  "comment": "IP banned by Fail2Ban in jail ah-suss access.log mvfnds\n...",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 179332,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-31T11:48:23+00:00",
+                  "comment": "Triggered Cloudflare WAF (linkMaze) from T1.\nAction taken: LINK_MAZE_INJECTED\nProtocol: HTTP/2 (GET method)\nEndpoint: /\nUA: Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 LightSpeed [FBAN/MessengerLiteForiOS;FBAV/263.1.0.76.121;FBBV/213025676;FBDV/iPhone12,1;FBMD/iPhone;FBSN/iOS;FBSV/13.4.1;FBSS/2;FBCR/;FBID/phone;FBLC/de_AT;FBOP/0]\n\nThis report was generated by:\nhttps://github.com/sefinek/Cloudflare-WAF-To-AbuseIPDB",
+                  "categories": [
+                    19
+                  ],
+                  "reporterId": 90090,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-05-31T10:33:35+00:00",
+                  "comment": "Honeypot hit: Unauthorized traffic (314 bytes of payload); 7443 [1] TCP\nReported by: https://github.com/sefinek/T-Pot-To-AbuseIPDB",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 158699,
+                  "reporterCountryCode": "PL",
+                  "reporterCountryName": "Poland"
+                },
+                {
+                  "reportedAt": "2026-05-31T03:13:13+00:00",
+                  "comment": "Try to access /xmlrpc.php?rsd",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-29T19:34:48+00:00",
+                  "comment": "(From hm7vu94vqljbd7@wshu.net) o3un9v",
+                  "categories": [
+                    7,
+                    10
+                  ],
+                  "reporterId": 18256,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-29T15:29:17+00:00",
+                  "comment": "Attac",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 302032,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-28T07:33:20+00:00",
+                  "comment": "Confirmed malicious by STILWaters CTI platform (score=100, sources=1)",
+                  "categories": [
+                    15,
+                    18,
+                    22
+                  ],
+                  "reporterId": 289699,
+                  "reporterCountryCode": "IN",
+                  "reporterCountryName": "India"
+                },
+                {
+                  "reportedAt": "2026-05-27T15:20:38+00:00",
+                  "comment": "WordPress login brute-force detectado e bloqueado pelo CSF/LFD. Trigger: LF_TRIGGER",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 108967,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-27T12:06:43+00:00",
+                  "comment": "2026-05-27T18:06:40.355166+06:00 zabbix sshd[236167]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42\n2026-05-27T18:06:42.320545+06:00 zabbix sshd[236167]: Failed password for invalid user azure from 185.220.101.42 port 39847 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 235774,
+                  "reporterCountryCode": "BD",
+                  "reporterCountryName": "Bangladesh"
+                },
+                {
+                  "reportedAt": "2026-05-27T11:15:05+00:00",
+                  "comment": "Plesk panel login attempt with forbidden username (root/admin), blocked by Fail2Ban in custom-plesk-login jail",
+                  "categories": [
+                    18,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-27T06:20:02+00:00",
+                  "comment": "WebServer - Attempts to exploit",
+                  "categories": [
+                    15,
+                    18,
+                    21
+                  ],
+                  "reporterId": 52128,
+                  "reporterCountryCode": "IT",
+                  "reporterCountryName": "Italy"
+                },
+                {
+                  "reportedAt": "2026-05-26T00:57:34+00:00",
+                  "comment": "Client attempted to submit spam on a website post.",
+                  "categories": [
+                    12
+                  ],
+                  "reporterId": 14795,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-25T12:05:11+00:00",
+                  "comment": "2026-05-25T15:05:11.373562+03:00 kotiacat.nexus sshd-session[8492]: Invalid user admin from 185.220.101.42 port 57569\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 239134,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-05-25T03:14:21+00:00",
+                  "comment": "IVski WAF | Affiliate/scam landing path scan",
+                  "categories": [
+                    14,
+                    18,
+                    21
+                  ],
+                  "reporterId": 291695,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-24T13:06:32+00:00",
+                  "comment": "Attac",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 302032,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-24T09:55:51+00:00",
+                  "comment": "2026-05-24T12:55:50.191127+03:00 kotiacat.nexus sshd-session[12803]: Invalid user admin1 from 185.220.101.42 port 36957\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 239134,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-05-23T05:49:19+00:00",
+                  "comment": "2026-05-23T08:49:18.762507+03:00 kotiacat.nexus sshd-session[4947]: Invalid user 1 from 185.220.101.42 port 20975\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 239134,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-05-23T04:01:58+00:00",
+                  "comment": "(wordpress) Failed wordpress login using wp-login.php or xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 134687,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-22T18:41:12+00:00",
+                  "comment": "avw-(visforms) : try to access forms...",
+                  "categories": [
+                    15
+                  ],
+                  "reporterId": 33124,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-22T02:06:01+00:00",
+                  "comment": "Blocked by UFW (TCP on 63269)\nSource port: 43869\nTTL: 47\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-21T23:56:34+00:00",
+                  "comment": "ecw-Joomla User : try to access forms...",
+                  "categories": [
+                    15
+                  ],
+                  "reporterId": 33124,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-21T15:51:15+00:00",
+                  "comment": "MatShield L7: blocked on mathost.eu (suspicious behaviour)",
+                  "categories": [
+                    4
+                  ],
+                  "reporterId": 93425,
+                  "reporterCountryCode": "FR",
+                  "reporterCountryName": "France"
+                },
+                {
+                  "reportedAt": "2026-05-21T14:35:10+00:00",
+                  "comment": "Failed login attempt detected by Fail2Ban in plesk-panel jail",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 56119,
+                  "reporterCountryCode": "ES",
+                  "reporterCountryName": "Spain"
+                },
+                {
+                  "reportedAt": "2026-05-18T14:03:03+00:00",
+                  "comment": "Failed attempt detected by Fail2Ban in plesk-panel jail",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 43685,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-18T13:30:41+00:00",
+                  "comment": "Attac",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 302032,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-17T18:03:46+00:00",
+                  "comment": "MatShield L7: blocked on mathost.eu (suspicious behaviour)",
+                  "categories": [
+                    4
+                  ],
+                  "reporterId": 93425,
+                  "reporterCountryCode": "FR",
+                  "reporterCountryName": "France"
+                },
+                {
+                  "reportedAt": "2026-05-17T11:32:13+00:00",
+                  "comment": "",
+                  "categories": [
+                    10
+                  ],
+                  "reporterId": 50814,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-17T10:30:23+00:00",
+                  "comment": "Automatic report from HLK firewall log.",
+                  "categories": [
+                    14,
+                    15,
+                    18
+                  ],
+                  "reporterId": 178046,
+                  "reporterCountryCode": "SK",
+                  "reporterCountryName": "Slovakia"
+                },
+                {
+                  "reportedAt": "2026-05-15T14:07:15+00:00",
+                  "comment": "2026-05-15T22:07:06.847327+08:00 debian sshd[1224318]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42 \n2026-05-15T22:07:08.569457+08:00 debian sshd[1224318]: Failed password for invalid user ubuntu from 185.220.101.42 port 35477 ssh2\n2026-05-15T22:07:13.190303+08:00 debian sshd[1224321]: Invalid user 1 from 185.220.101.42 port 35485\n2026-05-15T22:07:13.634013+08:00 debian sshd[1224321]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42 \n2026-05-15T22:07:15.314149+08:00 debian sshd[1224321]: Failed password for invalid user 1 from 185.220.101.42 port 35485 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 38364,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-05-14T12:59:00+00:00",
+                  "comment": "path traversal attack detected",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 288909,
+                  "reporterCountryCode": "TR",
+                  "reporterCountryName": "Turkey"
+                },
+                {
+                  "reportedAt": "2026-05-14T07:21:07+00:00",
+                  "comment": "Looking for CMS/PHP/SQL vulnerablilities/excessive crawling - 27",
+                  "categories": [
+                    20,
+                    21
+                  ],
+                  "reporterId": 46220,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-14T07:17:32+00:00",
+                  "comment": "Accessed trap at '/admin.php'",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 181586,
+                  "reporterCountryCode": "BE",
+                  "reporterCountryName": "Belgium"
+                },
+                {
+                  "reportedAt": "2026-05-14T01:05:36+00:00",
+                  "comment": "126 querystring crawling (29m59s)",
+                  "categories": [
+                    18,
+                    19
+                  ],
+                  "reporterId": 130025,
+                  "reporterCountryCode": "BE",
+                  "reporterCountryName": "Belgium"
+                },
+                {
+                  "reportedAt": "2026-05-13T07:44:53+00:00",
+                  "comment": "$f2bV_matches",
+                  "categories": [
+                    22
+                  ],
+                  "reporterId": 15074,
+                  "reporterCountryCode": "SE",
+                  "reporterCountryName": "Sweden"
+                },
+                {
+                  "reportedAt": "2026-05-13T05:54:56+00:00",
+                  "comment": "Form spam",
+                  "categories": [
+                    10
+                  ],
+                  "reporterId": 86372,
+                  "reporterCountryCode": "AU",
+                  "reporterCountryName": "Australia"
+                },
+                {
+                  "reportedAt": "2026-05-13T00:44:29+00:00",
+                  "comment": "ThreatBook Intelligence: tor_proxy,Zombie more details on https://threatbook.io/ip/185.220.101.42\n2026-05-12 10:19:54 /\n2026-05-12 10:19:59 /\n2026-05-12 10:20:01 /\n2026-05-12 10:19:58 /",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 56171,
+                  "reporterCountryCode": "CN",
+                  "reporterCountryName": "China"
+                },
+                {
+                  "reportedAt": "2026-05-11T21:28:54+00:00",
+                  "comment": "May 12 00:28:51 mirrors sshd[1220817]: Invalid user db2inst1 from 185.220.101.42 port 43115\nMay 12 00:28:52 mirrors sshd[1220818]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42 \nMay 12 00:28:54 mirrors sshd[1220818]: Failed password for invalid user db2inst1 from 185.220.101.42 port 43137 ssh2\nMay 12 00:28:52 mirrors sshd[1220817]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42 \nMay 12 00:28:54 mirrors sshd[1220817]: Failed password for invalid user db2inst1 from 185.220.101.42 port 43115 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 74063,
+                  "reporterCountryCode": "BG",
+                  "reporterCountryName": "Bulgaria"
+                },
+                {
+                  "reportedAt": "2026-05-11T06:31:27+00:00",
+                  "comment": "Looking for CMS/PHP/SQL vulnerablilities/excessive crawling - 2",
+                  "categories": [
+                    20,
+                    21
+                  ],
+                  "reporterId": 46220,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-09T21:27:38+00:00",
+                  "comment": "2026-05-10T00:27:36.103380+03:00 betelgeuse.mazen.host sshd[947392]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42\n2026-05-10T00:27:37.908871+03:00 betelgeuse.mazen.host sshd[947392]: Failed password for invalid user admin from 185.220.101.42 port 19297 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 52460,
+                  "reporterCountryCode": "BG",
+                  "reporterCountryName": "Bulgaria"
+                }
+              ]
+            },
+            "queried_at": "2026-07-21 09:22:11.087747"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "185.220.101.42",
+          "source_event_id": "12dc01a8-9985-4bf2-9638-9e40c43d71e7",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 1.0,
+        "rule_name": "ssh_brute_force",
+        "matched_on": "rule_groups contains 'ssh'",
+        "evidence_event_id": "12dc01a8-9985-4bf2-9638-9e40c43d71e7",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "e3b0c442-98fc-1c14-9a3b-2f8e5d4a1b2c",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "2026-07-21T00:00:00Z",
+          "event_id": "12dc01a8-9985-4bf2-9638-9e40c43d71e7",
+          "description": "A wazuh_alert was generated on host LINUX-SERVER-01 with no process or command line information, but the alert is mapped to ATT&CK technique T1110 (Brute Force) via a deterministic rule."
+        }
+      ],
+      "related_techniques": [
+        "T1110"
+      ],
+      "evidence_summary": "The single recorded event (ID 12dc01a8-9985-4bf2-9638-9e40c43d71e7) is a wazuh_alert on LINUX-SERVER-01 that is explicitly linked to ATT&CK technique T1110 (Brute Force) by the deterministic_rule mapping. An unrelated IOC (IP 185.220.101.42) is flagged as malicious by AbuseIPDB with 0.98 confidence, but no direct correlation to the event is provided in the evidence. No additional objectives or campaign details are present, so the objective remains unknown.",
+      "confidence": 0.35
+    },
+    "prediction": {
+      "likely_next_techniques": [],
+      "rationale": "Insufficient ATT&CK context to predict next techniques safely."
+    },
+    "report": "# Threat Intelligence Report\n\n## Executive Summary  \nOn **2026\u201107\u201120 11:00:00\u202fZ**, the Wazuh agent on host **LINUX\u2011SERVER\u201101** logged a **multiple SSH brute\u2011force** event originating from the IP address **185.220.101.42**. The source IP is listed as *malicious* in AbuseIPDB with a confidence score of **98\u202f%** and is identified as a Tor exit node. No evidence of successful compromise or lateral movement was observed in the provided logs.  \n\n## Timeline  \n| Timestamp (UTC) | Event | Host | Source IP | Details |\n|-----------------|-------|------|-----------|---------|\n| 2026\u201107\u201120T11:00:00Z | Wazuh alert: Multiple SSH brute\u2011force login attempts detected | LINUX\u2011SERVER\u201101 | 185.220.101.42 | Failed password for root from 185.220.101.42 port 22 ssh2 |\n\n*The last known activity of the IOC was reported on 2026\u201107\u201119T18:30:20+00:00.*\n\n## IOCs  \n| Value | Type | Reputation | Confidence | Tags | First Seen | Last Seen | Source | Evidence |\n|-------|------|------------|------------|------|------------|-----------|--------|----------|\n| 185.220.101.42 | IP | malicious | 0.98 | country:DE, domain:for\u2011privacy.net, fixed_line_isp, isp:Network for Tor\u2011Exit traffic. | None | 2026\u201107\u201119T18:30:20+00:00 | AbuseIPDB | 120 reports (see AbuseIPDB raw response) |\n\n*All evidence is derived from the AbuseIPDB entry provided.*\n\n## ATT&CK Techniques  \nNo ATT&CK techniques were explicitly mapped in the evidence.  \n**Status:** *No data available.*\n\n## Campaign Assessment  \nNo campaign information or attribution is present in the supplied data.  \n**Status:** *Unknown.*\n\n## Predicted Next Steps  \nNo predictive data or forecasts were supplied.  \n**Status:** *Unknown.*\n\n## Recommendations  \nNo confirmed ATT&CK techniques are available to reference, so no technique\u2011specific recommendations can be made.  \n**Status:** *No data available.*\n\n## Response Actions  \n| action_type | target | status | severity | rationale |\n|-------------|--------|--------|----------|-----------|\n| | | | | |\n\n*No response actions were documented in the evidence.*",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "block_ip",
+          "target": "185.220.101.42",
+          "severity": "high",
+          "rationale": "IP 185.220.101.42 has AbuseIPDB confidence 0.98 with reputation 'malicious'. Automatic block proposed per policy threshold (>= 0.8).",
+          "technique_id": "",
+          "confidence": 0.98
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      },
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "security_team",
+          "severity": "medium",
+          "rationale": "A wazuh alert on host LINUX-SERVER-01 was mapped to ATT&CK technique T1110 (Brute Force) via a deterministic rule. The overall confidence of the campaign evidence is 0.35, indicating limited information but warranting analyst review.",
+          "technique_id": "T1110",
+          "confidence": 0.35
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "version": 1,
+        "timestamp": "2026-07-20T11:00:00Z",
+        "rule": {
+          "level": 12,
+          "description": "Multiple SSH brute force login attempts detected",
+          "groups": [
+            "ssh",
+            "authentication_failed",
+            "brute_force"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "LINUX-SERVER-01"
+        },
+        "id": "ssh-bruteforce-001",
+        "srcip": "185.220.101.42",
+        "full_log": "Failed password for root from 185.220.101.42 port 22 ssh2"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "1950df3a-b669-48df-9a8b-5d69ef808543",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-20T11:00:00Z",
+        "host": "LINUX-SERVER-01",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 12,
+        "rule_description": "Multiple SSH brute force login attempts detected",
+        "rule_level": 12,
+        "rule_groups": [
+          "ssh",
+          "authentication_failed",
+          "brute_force"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-20T11:00:00Z",
+          "rule": {
+            "level": 12,
+            "description": "Multiple SSH brute force login attempts detected",
+            "groups": [
+              "ssh",
+              "authentication_failed",
+              "brute_force"
+            ]
+          },
+          "agent": {
+            "id": "001",
+            "name": "LINUX-SERVER-01"
+          },
+          "id": "ssh-bruteforce-001",
+          "srcip": "185.220.101.42",
+          "full_log": "Failed password for root from 185.220.101.42 port 22 ssh2"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "185.220.101.42",
+        "ioc_type": "ip",
+        "reputation": "malicious",
+        "confidence": 0.98,
+        "tags": [
+          "country:DE",
+          "domain:for-privacy.net",
+          "fixed_line_isp",
+          "isp:Network for Tor-Exit traffic."
+        ],
+        "first_seen": null,
+        "last_seen": "2026-07-19T18:30:20+00:00",
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "185.220.101.42",
+              "isPublic": true,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 98,
+              "countryCode": "DE",
+              "usageType": "Fixed Line ISP",
+              "isp": "Network for Tor-Exit traffic.",
+              "domain": "for-privacy.net",
+              "hostnames": [
+                "tor-exit-42.for-privacy.net"
+              ],
+              "isTor": true,
+              "countryName": "Germany",
+              "totalReports": 120,
+              "numDistinctUsers": 67,
+              "lastReportedAt": "2026-07-19T18:30:20+00:00",
+              "reports": [
+                {
+                  "reportedAt": "2026-07-19T18:30:20+00:00",
+                  "comment": "http:scan",
+                  "categories": [
+                    18,
+                    21
+                  ],
+                  "reporterId": 168032,
+                  "reporterCountryCode": "SE",
+                  "reporterCountryName": "Sweden"
+                },
+                {
+                  "reportedAt": "2026-07-17T18:48:32+00:00",
+                  "comment": "Auto-blocked by IT Solutions USA security proxy after malicious web-shell/backdoor scanning and attack probes. Requests blocked (403).",
+                  "categories": [
+                    21,
+                    15,
+                    19
+                  ],
+                  "reporterId": 320083,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-14T12:20:38+00:00",
+                  "comment": "Blocked by UFW (TCP on 8947)\nSource port: 28891\nTTL: 46\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-11T03:53:28+00:00",
+                  "comment": "Repeated wp-login/xmlrpc attempts",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 190396,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-07-09T00:17:14+00:00",
+                  "comment": "Automated report / Wordpress Attack Attempt",
+                  "categories": [
+                    15,
+                    21
+                  ],
+                  "reporterId": 111411,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-08T16:57:19+00:00",
+                  "comment": "Try to access /xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-07T14:25:42+00:00",
+                  "comment": "[SQL UNION SELECT] f2b match %{+Q}r for ^.*haproxy\\[[0-9]+\\]: <HOST>:.* (GET |POST ).*\\?.*(UNION%20|union%20|SELECT%20|select%20).* HTTP/1.1$",
+                  "categories": [
+                    16
+                  ],
+                  "reporterId": 147923,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-06T21:30:36+00:00",
+                  "comment": "Knock-Knock honeypot brute-force: proto8 (1 total hits)",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 270949,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-06T08:18:23+00:00",
+                  "comment": "Dyls honeypot brute-force: proto8 (1 total hits)",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 303987,
+                  "reporterCountryCode": "AU",
+                  "reporterCountryName": "Australia"
+                },
+                {
+                  "reportedAt": "2026-07-05T01:02:51+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-04T08:14:06+00:00",
+                  "comment": "The IP 185.220.101.42 tried multiple SSH_BRUTE_FORCE logins",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 140125,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-07-04T00:03:36+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-03T16:00:06+00:00",
+                  "comment": "Website Scanning / Scraping",
+                  "categories": [
+                    19,
+                    20,
+                    21
+                  ],
+                  "reporterId": 152128,
+                  "reporterCountryCode": "IT",
+                  "reporterCountryName": "Italy"
+                },
+                {
+                  "reportedAt": "2026-07-02T19:47:51+00:00",
+                  "comment": "Spamming contactform",
+                  "categories": [
+                    10
+                  ],
+                  "reporterId": 63294,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-07-02T19:00:45+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-01T23:53:12+00:00",
+                  "comment": "Malicious activity detected: web_attack\n\nServer: commstackbc (185.127.18.66)\nAttack: web_attack\nTimestamp: 2026-07-02 00:53:12 UTC\n\nLog evidence:\n185.220.101.42 - - [02/Jul/2026:00:53:11 +0100] \"GET /index.php?s=/admin/think%5Capp/invokeMethod&method[0]=think%5Cview%5Cdriver%5CPhp&method[1]=display&vars[0]=%3C?php%20echo%20md5(%27a3233a3800f8cba9dd419d1997d27412%27); HTTP/1.1\" 301 162 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0\"\n07/02/2026-00:53:11.276272  [**] [1:2520040:6059] ET TOR Known Tor Exit Node Traffic group 41 [**] [Classification: Misc Attack] [Priority: 2] {TCP} 185.220.101.42:9409 -> 185.127.18.66:80\n07/02/2026-00:53:11.276272  [**] [1:2522040:6059] ET TOR Known Tor Relay/Router (Not Exit) Node Traffic group 41 [**] [Classification: Misc Attack] [Priority: 2] {TCP} 185.220.101.42:9409 -> 185.127.18.66:80",
+                  "categories": [
+                    14,
+                    18
+                  ],
+                  "reporterId": 248737,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-07-01T18:02:33+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-07-01T14:22:42+00:00",
+                  "comment": "[AUTORAVALT][[01/07/2026 - 11:22:42 -03:00 UTC]\nAttack from [185.220.101.42][tor-exit-42.for-privacy.net]\n Action: BLocKed\n Phishing -> Phishing websites and/or email.\nEmail Spam -> Spam email content, infected attachments, and phishing emails.\nHacking... Unauthorized attempts to access the server.\nSpoofing -> Email sender spoofing.\nBrute-Force -> Credential br]\n...",
+                  "categories": [
+                    18,
+                    11,
+                    17,
+                    7,
+                    15
+                  ],
+                  "reporterId": 86395,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-30T17:06:55+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-29T17:00:58+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-29T15:19:53+00:00",
+                  "comment": "Detected by CrowdSec: crowdsecurity/http-bad-user-agent",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 32042,
+                  "reporterCountryCode": "PL",
+                  "reporterCountryName": "Poland"
+                },
+                {
+                  "reportedAt": "2026-06-29T14:09:02+00:00",
+                  "comment": "Multiple HTTP calls attempting to GET resources using common API calls or formats on port 8080",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 41067,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-29T11:53:13+00:00",
+                  "comment": "2026-06-29T06:53:06.932576 nas.marchenko.net sshd-session[1508804]: Failed password for root from 185.220.101.42 port 33915 ssh2\n2026-06-29T06:53:10.831500 nas.marchenko.net sshd-session[1508850]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42  user=root\n2026-06-29T06:53:13.034891 nas.marchenko.net sshd-session[1508850]: Failed password for root from 185.220.101.42 port 13577 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 171680,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-28T16:01:19+00:00",
+                  "comment": "CounterScrape Deception: Bot identified as HONEYTOKEN_HIT (Unauthorized access attempt to leaked honeytoken infrastructure subdomain). Trapped in honeypot. Concurrency hits: 2. Bandwidth drained: 0.0 MB.",
+                  "categories": [
+                    19,
+                    14
+                  ],
+                  "reporterId": 322881,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-28T05:04:14+00:00",
+                  "comment": "(wordpress) Failed wordpress login using wp-login.php or xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 134687,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-27T12:36:22+00:00",
+                  "comment": "[DDoS Attacker] This IP was attacking website anycast.ac and sent 2640 requests on port 443",
+                  "categories": [
+                    4,
+                    21
+                  ],
+                  "reporterId": 300163,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-24T06:56:30+00:00",
+                  "comment": "(From duyuielenryysv@web-library.net)",
+                  "categories": [
+                    7,
+                    10
+                  ],
+                  "reporterId": 18256,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-24T02:54:59+00:00",
+                  "comment": "Blocked by UFW (TCP on 13011)\nSource port: 63383\nTTL: 47\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-23T13:00:59+00:00",
+                  "comment": "Blocked by UFW (TCP on 6881)\nSource port: 44481\nTTL: 47\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-23T10:34:16+00:00",
+                  "comment": "Web attack/malicious scanning detected",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 269267,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-06-23T04:29:11+00:00",
+                  "comment": "IPS: SQL Injection Scanning Attempt.",
+                  "categories": [
+                    16,
+                    14
+                  ],
+                  "reporterId": 263754,
+                  "reporterCountryCode": "BR",
+                  "reporterCountryName": "Brazil"
+                },
+                {
+                  "reportedAt": "2026-06-22T15:48:52+00:00",
+                  "comment": "ICS Labs identified 185.220.101.42 as a malicious indicator from threat intelligence.",
+                  "categories": [
+                    4,
+                    14,
+                    15,
+                    18,
+                    20
+                  ],
+                  "reporterId": 201242,
+                  "reporterCountryCode": "BR",
+                  "reporterCountryName": "Brazil"
+                },
+                {
+                  "reportedAt": "2026-06-22T14:45:37+00:00",
+                  "comment": "fail2ban jail=sshd on canadapaywall.com (automatic report; categories 18,22)",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 273411,
+                  "reporterCountryCode": "CA",
+                  "reporterCountryName": "Canada"
+                },
+                {
+                  "reportedAt": "2026-06-22T06:04:19+00:00",
+                  "comment": "This IP was detected by CrowdSec triggering crowdsecurity/suricata-major-severity(ET TOR Known Tor Exit Node Traffic group 44). Ip 185.220.101.42 performed 'crowdsecurity/suricata-major-severity' (1 events over 0s) at 2026-06-22 06:04:18.068307964 +0000 UTC",
+                  "categories": [
+                    15,
+                    21
+                  ],
+                  "reporterId": 66509,
+                  "reporterCountryCode": "ID",
+                  "reporterCountryName": "Indonesia"
+                },
+                {
+                  "reportedAt": "2026-06-20T14:35:04+00:00",
+                  "comment": "(wordpress) Failed wordpress login using wp-login.php or xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 134687,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-20T07:09:11+00:00",
+                  "comment": "SSH break in attempt\n...",
+                  "categories": [
+                    22
+                  ],
+                  "reporterId": 44288,
+                  "reporterCountryCode": "TH",
+                  "reporterCountryName": "Thailand"
+                },
+                {
+                  "reportedAt": "2026-06-18T17:33:23+00:00",
+                  "comment": "Try to access /xmlrpc.php?rsd",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-18T14:15:16+00:00",
+                  "comment": "Repeated requests on blocked xmlrpc.php, blocked by fail2ban in custom-503-xmlrpc jail",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-17T13:11:12+00:00",
+                  "comment": "Web attack/malicious scanning detected",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 269267,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-06-17T12:30:19+00:00",
+                  "comment": "Repeated requests on blocked xmlrpc.php, blocked by fail2ban in custom-503-xmlrpc jail",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-16T01:01:18+00:00",
+                  "comment": "CrowdSec ban for AbuseIPDB Top List",
+                  "categories": [
+                    18,
+                    21
+                  ],
+                  "reporterId": 256090,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-06-16T00:15:31+00:00",
+                  "comment": "Web attack/malicious scanning detected",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 269267,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-06-15T23:59:05+00:00",
+                  "comment": "Port scan on 32789",
+                  "categories": [
+                    14,
+                    15
+                  ],
+                  "reporterId": 315123,
+                  "reporterCountryCode": "LT",
+                  "reporterCountryName": "Lithuania"
+                },
+                {
+                  "reportedAt": "2026-06-15T23:30:16+00:00",
+                  "comment": "Repeated requests on blocked xmlrpc.php, blocked by fail2ban in custom-503-xmlrpc jail",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-14T06:29:48+00:00",
+                  "comment": "Aggressive web scan",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 116138,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-13T12:57:19+00:00",
+                  "comment": "Blocked by UFW (TCP on 35918)\nSource port: 58255\nTTL: 46\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-12T23:59:38+00:00",
+                  "comment": "Port scan on 49653",
+                  "categories": [
+                    14,
+                    15
+                  ],
+                  "reporterId": 315123,
+                  "reporterCountryCode": "LT",
+                  "reporterCountryName": "Lithuania"
+                },
+                {
+                  "reportedAt": "2026-06-12T17:25:19+00:00",
+                  "comment": "Blocked by UFW (TCP on 51196)\nSource port: 22421\nTTL: 46\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-12T02:04:59+00:00",
+                  "comment": "Try to access /xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-08T23:23:21+00:00",
+                  "comment": "Triggered Cloudflare WAF (firewallCustom) from T1.\nAction: BLOCK | Protocol: HTTP/2 (GET) | Endpoint: / | UA: Mozilla/5.0 (Linux; Android 7.1.1; MI MAX 2 Build/NMF26F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Mobile Safari/537.36 YaApp_Android/10.61 YaSearchBrowser/10.61 \u2022 Generated by: github.com/sefinek/Cloudflare-WAF-To-AbuseIPDB",
+                  "categories": [
+                    19
+                  ],
+                  "reporterId": 158699,
+                  "reporterCountryCode": "PL",
+                  "reporterCountryName": "Poland"
+                },
+                {
+                  "reportedAt": "2026-06-07T16:47:12+00:00",
+                  "comment": "2026-06-07T20:17:00.790593+03:30 digitalogic sshd-session[912368]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42\n2026-06-07T20:17:02.760392+03:30 digitalogic sshd-session[912368]: Failed password for invalid user 1 from 185.220.101.42 port 48645 ssh2\n2026-06-07T20:17:06.450574+03:30 digitalogic sshd-session[912368]: Connection closed by invalid user 1 185.220.101.42 port 48645 [preauth]\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "IR",
+                  "reporterCountryName": "Iran (Islamic Republic of)"
+                },
+                {
+                  "reportedAt": "2026-06-07T14:30:08+00:00",
+                  "comment": "Repeated 403 errors, blocked by Fail2ban in custom-403 jail",
+                  "categories": [
+                    19
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-07T00:20:15+00:00",
+                  "comment": "2026-06-07T03:39:58.886391+03:30 digitalogic sshd-session[850277]: Failed password for ubuntu from 185.220.101.42 port 7159 ssh2\n2026-06-07T03:40:07.467163+03:30 digitalogic sshd-session[850277]: Connection closed by authenticating user ubuntu 185.220.101.42 port 7159 [preauth]\n2026-06-07T03:50:10.993247+03:30 digitalogic sshd-session[850690]: Invalid user 1 from 185.220.101.42 port 31847\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "AZ",
+                  "reporterCountryName": "Azerbaijan"
+                },
+                {
+                  "reportedAt": "2026-06-06T17:11:04+00:00",
+                  "comment": "SSH brute force attack detected via Wazuh SIEM. Multiple authentication failure events targeting SSHD service. IP automatically blocked via active response. Incident: IRP-DEG-20260606-001 \u2014 Phase: Containment.",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 313680,
+                  "reporterCountryCode": "ES",
+                  "reporterCountryName": "Spain"
+                },
+                {
+                  "reportedAt": "2026-06-06T12:45:09+00:00",
+                  "comment": "Repeated requests on blocked xmlrpc.php, blocked by fail2ban in custom-503-xmlrpc jail",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-05T14:02:53+00:00",
+                  "comment": "2026-06-05T17:23:58.511294+03:30 digitalogic sshd-session[715780]: Failed password for root from 185.220.101.42 port 1077 ssh2\n2026-06-05T17:23:59.344793+03:30 digitalogic sshd-session[715780]: Connection closed by authenticating user root 185.220.101.42 port 1077 [preauth]\n2026-06-05T17:32:47.538170+03:30 digitalogic sshd-session[716373]: Invalid user admin from 185.220.101.42 port 18061\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "AZ",
+                  "reporterCountryName": "Azerbaijan"
+                },
+                {
+                  "reportedAt": "2026-06-05T08:07:37+00:00",
+                  "comment": "2026-06-05T11:37:23.132085+03:30 digitalogic sshd-session[685659]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42\n2026-06-05T11:37:24.478414+03:30 digitalogic sshd-session[685659]: Failed password for invalid user 1 from 185.220.101.42 port 56617 ssh2\n2026-06-05T11:37:32.077562+03:30 digitalogic sshd-session[685659]: Connection closed by invalid user 1 185.220.101.42 port 56617 [preauth]\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "AZ",
+                  "reporterCountryName": "Azerbaijan"
+                },
+                {
+                  "reportedAt": "2026-06-04T15:13:59+00:00",
+                  "comment": "2026-06-04T17:56:51.783289+03:30 digitalogic sshd-session[643960]: Failed password for root from 185.220.101.42 port 39179 ssh2\n2026-06-04T17:57:02.740066+03:30 digitalogic sshd-session[643960]: Connection closed by authenticating user root 185.220.101.42 port 39179 [preauth]\n2026-06-04T18:43:53.711474+03:30 digitalogic sshd-session[646343]: Invalid user 1 from 185.220.101.42 port 26809\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 77767,
+                  "reporterCountryCode": "AZ",
+                  "reporterCountryName": "Azerbaijan"
+                },
+                {
+                  "reportedAt": "2026-06-04T02:48:42+00:00",
+                  "comment": "Try to access /xmlrpc.php?rsd",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-06-02T21:06:19+00:00",
+                  "comment": "Fail2Ban sshd ban on luckymc.gg\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 229570,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-06-02T05:52:05+00:00",
+                  "comment": "Repeated wp-login/xmlrpc attempts",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 190396,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-05-31T15:57:25+00:00",
+                  "comment": "IP banned by Fail2Ban in jail ah-suss access.log mvfnds\n...",
+                  "categories": [
+                    19,
+                    21
+                  ],
+                  "reporterId": 179332,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-31T11:48:23+00:00",
+                  "comment": "Triggered Cloudflare WAF (linkMaze) from T1.\nAction taken: LINK_MAZE_INJECTED\nProtocol: HTTP/2 (GET method)\nEndpoint: /\nUA: Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 LightSpeed [FBAN/MessengerLiteForiOS;FBAV/263.1.0.76.121;FBBV/213025676;FBDV/iPhone12,1;FBMD/iPhone;FBSN/iOS;FBSV/13.4.1;FBSS/2;FBCR/;FBID/phone;FBLC/de_AT;FBOP/0]\n\nThis report was generated by:\nhttps://github.com/sefinek/Cloudflare-WAF-To-AbuseIPDB",
+                  "categories": [
+                    19
+                  ],
+                  "reporterId": 90090,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-05-31T10:33:35+00:00",
+                  "comment": "Honeypot hit: Unauthorized traffic (314 bytes of payload); 7443 [1] TCP\nReported by: https://github.com/sefinek/T-Pot-To-AbuseIPDB",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 158699,
+                  "reporterCountryCode": "PL",
+                  "reporterCountryName": "Poland"
+                },
+                {
+                  "reportedAt": "2026-05-31T03:13:13+00:00",
+                  "comment": "Try to access /xmlrpc.php?rsd",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 25736,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-29T19:34:48+00:00",
+                  "comment": "(From hm7vu94vqljbd7@wshu.net) o3un9v",
+                  "categories": [
+                    7,
+                    10
+                  ],
+                  "reporterId": 18256,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-29T15:29:17+00:00",
+                  "comment": "Attac",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 302032,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-28T07:33:20+00:00",
+                  "comment": "Confirmed malicious by STILWaters CTI platform (score=100, sources=1)",
+                  "categories": [
+                    15,
+                    18,
+                    22
+                  ],
+                  "reporterId": 289699,
+                  "reporterCountryCode": "IN",
+                  "reporterCountryName": "India"
+                },
+                {
+                  "reportedAt": "2026-05-27T15:20:38+00:00",
+                  "comment": "WordPress login brute-force detectado e bloqueado pelo CSF/LFD. Trigger: LF_TRIGGER",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 108967,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-27T12:06:43+00:00",
+                  "comment": "2026-05-27T18:06:40.355166+06:00 zabbix sshd[236167]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42\n2026-05-27T18:06:42.320545+06:00 zabbix sshd[236167]: Failed password for invalid user azure from 185.220.101.42 port 39847 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 235774,
+                  "reporterCountryCode": "BD",
+                  "reporterCountryName": "Bangladesh"
+                },
+                {
+                  "reportedAt": "2026-05-27T11:15:05+00:00",
+                  "comment": "Plesk panel login attempt with forbidden username (root/admin), blocked by Fail2Ban in custom-plesk-login jail",
+                  "categories": [
+                    18,
+                    21
+                  ],
+                  "reporterId": 169612,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-27T06:20:02+00:00",
+                  "comment": "WebServer - Attempts to exploit",
+                  "categories": [
+                    15,
+                    18,
+                    21
+                  ],
+                  "reporterId": 52128,
+                  "reporterCountryCode": "IT",
+                  "reporterCountryName": "Italy"
+                },
+                {
+                  "reportedAt": "2026-05-26T00:57:34+00:00",
+                  "comment": "Client attempted to submit spam on a website post.",
+                  "categories": [
+                    12
+                  ],
+                  "reporterId": 14795,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-25T12:05:11+00:00",
+                  "comment": "2026-05-25T15:05:11.373562+03:00 kotiacat.nexus sshd-session[8492]: Invalid user admin from 185.220.101.42 port 57569\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 239134,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-05-25T03:14:21+00:00",
+                  "comment": "IVski WAF | Affiliate/scam landing path scan",
+                  "categories": [
+                    14,
+                    18,
+                    21
+                  ],
+                  "reporterId": 291695,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-24T13:06:32+00:00",
+                  "comment": "Attac",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 302032,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-24T09:55:51+00:00",
+                  "comment": "2026-05-24T12:55:50.191127+03:00 kotiacat.nexus sshd-session[12803]: Invalid user admin1 from 185.220.101.42 port 36957\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 239134,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-05-23T05:49:19+00:00",
+                  "comment": "2026-05-23T08:49:18.762507+03:00 kotiacat.nexus sshd-session[4947]: Invalid user 1 from 185.220.101.42 port 20975\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 239134,
+                  "reporterCountryCode": "NL",
+                  "reporterCountryName": "Netherlands"
+                },
+                {
+                  "reportedAt": "2026-05-23T04:01:58+00:00",
+                  "comment": "(wordpress) Failed wordpress login using wp-login.php or xmlrpc.php",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 134687,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-22T18:41:12+00:00",
+                  "comment": "avw-(visforms) : try to access forms...",
+                  "categories": [
+                    15
+                  ],
+                  "reporterId": 33124,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-22T02:06:01+00:00",
+                  "comment": "Blocked by UFW (TCP on 63269)\nSource port: 43869\nTTL: 47\nPacket length: 60\nTOS: 0x08\n\nThis report (for 185.220.101.42) was generated by:\nhttps://github.com/sefinek/UFW-AbuseIPDB-Reporter",
+                  "categories": [
+                    14
+                  ],
+                  "reporterId": 209271,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-21T23:56:34+00:00",
+                  "comment": "ecw-Joomla User : try to access forms...",
+                  "categories": [
+                    15
+                  ],
+                  "reporterId": 33124,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-21T15:51:15+00:00",
+                  "comment": "MatShield L7: blocked on mathost.eu (suspicious behaviour)",
+                  "categories": [
+                    4
+                  ],
+                  "reporterId": 93425,
+                  "reporterCountryCode": "FR",
+                  "reporterCountryName": "France"
+                },
+                {
+                  "reportedAt": "2026-05-21T14:35:10+00:00",
+                  "comment": "Failed login attempt detected by Fail2Ban in plesk-panel jail",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 56119,
+                  "reporterCountryCode": "ES",
+                  "reporterCountryName": "Spain"
+                },
+                {
+                  "reportedAt": "2026-05-18T14:03:03+00:00",
+                  "comment": "Failed attempt detected by Fail2Ban in plesk-panel jail",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 43685,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-18T13:30:41+00:00",
+                  "comment": "Attac",
+                  "categories": [
+                    18
+                  ],
+                  "reporterId": 302032,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-17T18:03:46+00:00",
+                  "comment": "MatShield L7: blocked on mathost.eu (suspicious behaviour)",
+                  "categories": [
+                    4
+                  ],
+                  "reporterId": 93425,
+                  "reporterCountryCode": "FR",
+                  "reporterCountryName": "France"
+                },
+                {
+                  "reportedAt": "2026-05-17T11:32:13+00:00",
+                  "comment": "",
+                  "categories": [
+                    10
+                  ],
+                  "reporterId": 50814,
+                  "reporterCountryCode": "US",
+                  "reporterCountryName": "United States of America"
+                },
+                {
+                  "reportedAt": "2026-05-17T10:30:23+00:00",
+                  "comment": "Automatic report from HLK firewall log.",
+                  "categories": [
+                    14,
+                    15,
+                    18
+                  ],
+                  "reporterId": 178046,
+                  "reporterCountryCode": "SK",
+                  "reporterCountryName": "Slovakia"
+                },
+                {
+                  "reportedAt": "2026-05-15T14:07:15+00:00",
+                  "comment": "2026-05-15T22:07:06.847327+08:00 debian sshd[1224318]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42 \n2026-05-15T22:07:08.569457+08:00 debian sshd[1224318]: Failed password for invalid user ubuntu from 185.220.101.42 port 35477 ssh2\n2026-05-15T22:07:13.190303+08:00 debian sshd[1224321]: Invalid user 1 from 185.220.101.42 port 35485\n2026-05-15T22:07:13.634013+08:00 debian sshd[1224321]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42 \n2026-05-15T22:07:15.314149+08:00 debian sshd[1224321]: Failed password for invalid user 1 from 185.220.101.42 port 35485 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 38364,
+                  "reporterCountryCode": "GB",
+                  "reporterCountryName": "United Kingdom of Great Britain and Northern Ireland"
+                },
+                {
+                  "reportedAt": "2026-05-14T12:59:00+00:00",
+                  "comment": "path traversal attack detected",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 288909,
+                  "reporterCountryCode": "TR",
+                  "reporterCountryName": "Turkey"
+                },
+                {
+                  "reportedAt": "2026-05-14T07:21:07+00:00",
+                  "comment": "Looking for CMS/PHP/SQL vulnerablilities/excessive crawling - 27",
+                  "categories": [
+                    20,
+                    21
+                  ],
+                  "reporterId": 46220,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-14T07:17:32+00:00",
+                  "comment": "Accessed trap at '/admin.php'",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 181586,
+                  "reporterCountryCode": "BE",
+                  "reporterCountryName": "Belgium"
+                },
+                {
+                  "reportedAt": "2026-05-14T01:05:36+00:00",
+                  "comment": "126 querystring crawling (29m59s)",
+                  "categories": [
+                    18,
+                    19
+                  ],
+                  "reporterId": 130025,
+                  "reporterCountryCode": "BE",
+                  "reporterCountryName": "Belgium"
+                },
+                {
+                  "reportedAt": "2026-05-13T07:44:53+00:00",
+                  "comment": "$f2bV_matches",
+                  "categories": [
+                    22
+                  ],
+                  "reporterId": 15074,
+                  "reporterCountryCode": "SE",
+                  "reporterCountryName": "Sweden"
+                },
+                {
+                  "reportedAt": "2026-05-13T05:54:56+00:00",
+                  "comment": "Form spam",
+                  "categories": [
+                    10
+                  ],
+                  "reporterId": 86372,
+                  "reporterCountryCode": "AU",
+                  "reporterCountryName": "Australia"
+                },
+                {
+                  "reportedAt": "2026-05-13T00:44:29+00:00",
+                  "comment": "ThreatBook Intelligence: tor_proxy,Zombie more details on https://threatbook.io/ip/185.220.101.42\n2026-05-12 10:19:54 /\n2026-05-12 10:19:59 /\n2026-05-12 10:20:01 /\n2026-05-12 10:19:58 /",
+                  "categories": [
+                    21
+                  ],
+                  "reporterId": 56171,
+                  "reporterCountryCode": "CN",
+                  "reporterCountryName": "China"
+                },
+                {
+                  "reportedAt": "2026-05-11T21:28:54+00:00",
+                  "comment": "May 12 00:28:51 mirrors sshd[1220817]: Invalid user db2inst1 from 185.220.101.42 port 43115\nMay 12 00:28:52 mirrors sshd[1220818]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42 \nMay 12 00:28:54 mirrors sshd[1220818]: Failed password for invalid user db2inst1 from 185.220.101.42 port 43137 ssh2\nMay 12 00:28:52 mirrors sshd[1220817]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42 \nMay 12 00:28:54 mirrors sshd[1220817]: Failed password for invalid user db2inst1 from 185.220.101.42 port 43115 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 74063,
+                  "reporterCountryCode": "BG",
+                  "reporterCountryName": "Bulgaria"
+                },
+                {
+                  "reportedAt": "2026-05-11T06:31:27+00:00",
+                  "comment": "Looking for CMS/PHP/SQL vulnerablilities/excessive crawling - 2",
+                  "categories": [
+                    20,
+                    21
+                  ],
+                  "reporterId": 46220,
+                  "reporterCountryCode": "DE",
+                  "reporterCountryName": "Germany"
+                },
+                {
+                  "reportedAt": "2026-05-09T21:27:38+00:00",
+                  "comment": "2026-05-10T00:27:36.103380+03:00 betelgeuse.mazen.host sshd[947392]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=185.220.101.42\n2026-05-10T00:27:37.908871+03:00 betelgeuse.mazen.host sshd[947392]: Failed password for invalid user admin from 185.220.101.42 port 19297 ssh2\n...",
+                  "categories": [
+                    18,
+                    22
+                  ],
+                  "reporterId": 52460,
+                  "reporterCountryCode": "BG",
+                  "reporterCountryName": "Bulgaria"
+                }
+              ]
+            },
+            "queried_at": "2026-07-21 09:25:30.935154"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "185.220.101.42",
+          "source_event_id": "1950df3a-b669-48df-9a8b-5d69ef808543",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 1.0,
+        "rule_name": "ssh_brute_force",
+        "matched_on": "rule_groups contains 'ssh'",
+        "evidence_event_id": "1950df3a-b669-48df-9a8b-5d69ef808543",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "e7b8c3d4-5f6a-7b8c-9d0e-1f2a3b4c5d6e",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "1950df3a-b669-48df-9a8b-5d69ef808543",
+          "description": "A wazuh_alert was generated on host LINUX-SERVER-01 with no process or command line information, indicating a potential brute force attempt linked to the malicious IP 185.220.101.42."
+        }
+      ],
+      "related_techniques": [
+        "T1110"
+      ],
+      "evidence_summary": "The single wazuh_alert event (ID 1950df3a-b669-48df-9a8b-5d69ef808543) on LINUX-SERVER-01, combined with the malicious IP 185.220.101.42 identified by AbuseIPDB, supports the use of ATT&CK technique T1110 (Brute Force). No additional objectives or campaign identifiers are present in the evidence.",
+      "confidence": 0.35
+    },
+    "prediction": {
+      "likely_next_techniques": [],
+      "rationale": "Prediction skipped: No suitable follow-on techniques were found in the knowledge base."
+    },
+    "report": "# Threat Intelligence Report\n\n**Report ID:** 2026-07-20-SSH-BruteForce  \n**Prepared by:** Senior Threat Intelligence Analyst  \n**Date:** 2026-07-21  \n\n---\n\n## Executive Summary  \nOn 20\u202fJuly\u202f2026 at 11:00\u202fUTC, Wazuh generated an alert for multiple SSH brute\u2011force login attempts against **LINUX\u2011SERVER\u201101**. The source IP **185.220.101.42** is a known Tor exit node with a high abuse confidence score (98\u202f%) and has been reported for a wide range of malicious activity, including SSH brute force, web\u2011scanning, and SQL injection attempts. No successful authentication was recorded in the provided logs.  \n\n---\n\n## Timeline  \n\n| Timestamp (UTC) | Event | Source | Details |\n|-----------------|-------|--------|---------|\n| 2026\u201107\u201120T11:00:00Z | Wazuh alert: SSH brute\u2011force detected | Wazuh | Host: LINUX\u2011SERVER\u201101, Src IP: 185.220.101.42, Rule: `ssh-bruteforce-001` |\n| 2026\u201107\u201119T18:30:20+00:00 | Last reported activity for IP 185.220.101.42 | AbuseIPDB | Multiple reports of malicious activity (see IOC section) |\n\n---\n\n## IOCs  \n\n| Value | Type | Reputation | Confidence | Tags | First Seen | Last Seen | Source |\n|-------|------|------------|------------|------|------------|-----------|--------|\n| 185.220.101.42 | IP | malicious | 0.98 | country:DE, domain:for\u2011privacy.net, fixed_line_isp, isp:Network for Tor\u2011Exit traffic. | None | 2026\u201107\u201119T18:30:20+00:00 | AbuseIPDB |\n\n*AbuseIPDB evidence:* 120 total reports, 67 distinct users, 98\u202f% abuse confidence score, identified as a Tor exit node.\n\n---\n\n## ATT&CK Techniques  \nNo ATT&CK techniques were explicitly identified in the provided evidence.  \n\n---\n\n## Campaign Assessment  \nThe activity originates from a Tor exit node that has been repeatedly reported for:\n\n* SSH brute\u2011force attempts (multiple failed logins for `root`).\n* Web\u2011scanning and exploitation attempts (e.g., SQL injection, XML\u2011RPC brute force).\n* General malicious scanning and DDoS\u2011style traffic.\n\nThe repeated detection across multiple security platforms (Fail2Ban, CrowdSec, UFW, etc.) indicates a persistent threat actor or automated botnet targeting exposed services. The IP\u2019s high abuse score and association with a Tor exit node suggest anonymity and potential for further malicious operations.\n\n---\n\n## Predicted Next Steps  \nNo probabilistic forecasts are available in the evidence.  \n\n---\n\n## Recommendations  \n\n1. **SSH Hardening**  \n   * Disable root login via SSH (`PermitRootLogin no`).  \n   * Enforce key\u2011based authentication and disable password authentication.  \n   * Implement account lockout or rate\u2011limiting mechanisms (e.g., Fail2Ban, CrowdSec).  \n\n2. **Network Segmentation & Monitoring**  \n   * Restrict SSH access to known IP ranges or VPN endpoints.  \n   * Deploy IDS/IPS rules to detect and block repeated failed login attempts.  \n\n3. **Web Application Protection**  \n   * Harden WordPress installations: disable XML\u2011RPC if not needed, enforce strong passwords, and apply the latest security patches.  \n   * Use web\u2011application firewalls (WAF) to mitigate SQL injection and other web\u2011based attacks.  \n\n4. **Threat Intelligence Sharing**  \n   * Continue to ingest and correlate external threat feeds (AbuseIPDB, CrowdSec, etc.) to maintain up\u2011to\u2011date blocking lists.  \n\n5. **Incident Response Preparedness**  \n   * Verify that incident response playbooks cover brute\u2011force and scanning events, including escalation procedures and forensic data collection.  \n\n---\n\n## Response Actions  \n\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| None | N/A | N/A | N/A | No response actions recorded in the evidence. |\n\n---",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "block_ip",
+          "target": "185.220.101.42",
+          "severity": "high",
+          "rationale": "IP 185.220.101.42 has AbuseIPDB confidence 0.98 with reputation 'malicious'. Automatic block proposed per policy threshold (>= 0.8).",
+          "technique_id": "",
+          "confidence": 0.98
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      },
+      {
+        "action": {
+          "action_type": "isolate_host",
+          "target": "LINUX-SERVER-01",
+          "severity": "high",
+          "rationale": "The host received a brute force alert from a high\u2011confidence malicious IP. Isolating the host mitigates the risk of compromise and allows for forensic analysis without affecting other network assets.",
+          "technique_id": "T1110",
+          "confidence": 0.98
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      },
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "Security Operations Center",
+          "severity": "medium",
+          "rationale": "Alert: LINUX-SERVER-01 experienced a brute force attempt from IP 185.220.101.42. IP blocked and host isolated. Further investigation recommended to confirm no compromise.",
+          "technique_id": "",
+          "confidence": 1.0
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "version": 1,
+        "timestamp": "2026-07-20T11:00:00Z",
+        "rule": {
+          "level": 12,
+          "description": "Multiple SSH brute force login attempts detected",
+          "groups": [
+            "ssh",
+            "authentication_failed",
+            "brute_force"
+          ]
+        },
+        "agent": {
+          "id": "001",
+          "name": "LINUX-SERVER-01"
+        },
+        "id": "ssh-bruteforce-001",
+        "srcip": "185.220.101.42",
+        "full_log": "Failed password for root from 185.220.101.42 port 22 ssh2"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "bb132a83-14a0-45b7-973a-c99c7f76dff3",
+        "source": "wazuh",
+        "event_type": "wazuh_alert",
+        "timestamp": "2026-07-20T11:00:00Z",
+        "host": "LINUX-SERVER-01",
+        "user": null,
+        "process": null,
+        "command_line": null,
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 12,
+        "rule_description": "Multiple SSH brute force login attempts detected",
+        "rule_level": 12,
+        "rule_groups": [
+          "ssh",
+          "authentication_failed",
+          "brute_force"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "version": 1,
+          "timestamp": "2026-07-20T11:00:00Z",
+          "rule": {
+            "level": 12,
+            "description": "Multiple SSH brute force login attempts detected",
+            "groups": [
+              "ssh",
+              "authentication_failed",
+              "brute_force"
+            ]
+          },
+          "agent": {
+            "id": "001",
+            "name": "LINUX-SERVER-01"
+          },
+          "id": "ssh-bruteforce-001",
+          "srcip": "185.220.101.42",
+          "full_log": "Failed password for root from 185.220.101.42 port 22 ssh2"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "185.220.101.42",
+        "ioc_type": "ip",
+        "reputation": "malicious",
+        "confidence": 0.98,
+        "tags": [
+          "country:DE",
+          "domain:for-privacy.net",
+          "fixed_line_isp",
+          "isp:Network for Tor-Exit traffic."
+        ],
+        "first_seen": null,
+        "last_seen": "2026-07-19T18:30:20+00:00",
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "185.220.101.42",
+              "isPublic": true,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 98,
+              "countryCode": "DE",
+              "usageType": "Fixed Line ISP",
+              "isp": "Network for Tor-Exit traffic.",
+              "domain": "for-privacy.net",
+              "hostnames": [
+                "tor-exit-42.for-privacy.net"
+              ],
+              "isTor": true,
+              "countryName": "Germany",
+              "totalReports": 120,
+              "numDistinctUsers": 67,
+              "lastReportedAt": "2026-07-19T18:30:20+00:00"
+            },
+            "queried_at": "2026-07-21 09:27:06.180090"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "185.220.101.42",
+          "source_event_id": "bb132a83-14a0-45b7-973a-c99c7f76dff3",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 1.0,
+        "rule_name": "ssh_brute_force",
+        "matched_on": "rule_groups contains 'ssh'",
+        "evidence_event_id": "bb132a83-14a0-45b7-973a-c99c7f76dff3",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "e3b0c442-98fc-11eb-8dcd-0242ac130003",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "bb132a83-14a0-45b7-973a-c99c7f76dff3",
+          "description": "A wazuh_alert was generated on host LINUX-SERVER-01 with no process or command line information, indicating a potential brute force activity linked to the malicious IP 185.220.101.42."
+        }
+      ],
+      "related_techniques": [
+        "T1110"
+      ],
+      "evidence_summary": "The single wazuh_alert event (ID bb132a83-14a0-45b7-973a-c99c7f76dff3) on LINUX-SERVER-01, combined with the malicious IP 185.220.101.42 identified by AbuseIPDB, supports the use of ATT&CK technique T1110 (Brute Force). No additional attack objectives or campaign identifiers are present in the evidence.",
+      "confidence": 0.35
+    },
+    "prediction": {
+      "likely_next_techniques": [],
+      "rationale": "Prediction skipped: No suitable follow-on techniques were found in the knowledge base."
+    },
+    "report": "# Threat Intelligence Report\n\n**Report ID:** `e3b0c442-98fc-11eb-8dcd-0242ac130003`  \n**Date:** 2026\u201107\u201121  \n\n---\n\n## Executive Summary  \nA Wazuh alert on host **LINUX\u2011SERVER\u201101** identified multiple SSH brute\u2011force login attempts originating from the IP address **185.220.101.42**. AbuseIPDB classifies this IP as malicious with a confidence score of 98\u202f%. The incident is linked to ATT&CK technique **T1110 \u2013 Brute Force**. Immediate mitigation actions are pending approval.\n\n---\n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Host | Description |\n|-----------------|----------|------|-------------|\n| 2026\u201107\u201120T11:00:00Z | `bb132a83-14a0-45b7-973a-c99c7f76dff3` | LINUX\u2011SERVER\u201101 | Wazuh alert: *Multiple SSH brute force login attempts detected* from 185.220.101.42 |\n\n---\n\n## IOCs  \n\n| Value | Type | Reputation | Confidence | Tags | First Seen | Last Seen | Source | Evidence |\n|-------|------|------------|------------|------|------------|-----------|--------|----------|\n| 185.220.101.42 | IP | malicious | 0.98 | country:DE, domain:for\u2011privacy.net, fixed_line_isp, isp:Network for Tor\u2011Exit traffic. | None | 2026\u201107\u201119T18:30:20+00:00 | AbuseIPDB | AbuseIPDB report (120 total reports, 67 distinct users, isTor\u202f=",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "block_ip",
+          "target": "185.220.101.42",
+          "severity": "high",
+          "rationale": "IP 185.220.101.42 has AbuseIPDB confidence 0.98 with reputation 'malicious'. Automatic block proposed per policy threshold (>= 0.8).",
+          "technique_id": "",
+          "confidence": 0.98
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      },
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "security_team",
+          "severity": "medium",
+          "rationale": "A potential brute force activity was detected on LINUX-SERVER-01 involving the malicious IP 185.220.101.42. The incident should be investigated further to confirm the extent of compromise and to ensure no additional malicious activity is ongoing.",
+          "technique_id": "",
+          "confidence": 1.0
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": true
+      }
+    ],
+    "errors": [],
+    "metadata": {}
   }
 ]

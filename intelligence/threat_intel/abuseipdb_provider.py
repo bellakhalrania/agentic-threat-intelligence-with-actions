@@ -6,6 +6,7 @@ Supports: ipv4
 Returns reputation based on abuseConfidenceScore.
 """
 
+import logging
 from typing import Optional, Set
 
 import requests
@@ -13,6 +14,8 @@ import requests
 from config import config
 from intelligence.threat_intel.base_provider import ThreatIntelProvider
 from intelligence.threat_intel.models import EnrichmentResult
+
+logger = logging.getLogger(__name__)
 
 
 class AbuseIPDBProvider(ThreatIntelProvider):
@@ -37,19 +40,43 @@ class AbuseIPDBProvider(ThreatIntelProvider):
             return None
 
         try:
+            # Debug: Log request details
+            logger.info("="*60)
+            logger.info("[AbuseIPDB] REQUEST")
+            logger.info("="*60)
+            logger.info(f"Endpoint: {self.BASE_URL}")
+            logger.info(f"Parameters: {{'ipAddress': '{value}', 'maxAgeInDays': '90', 'verbose': ''}}")
+            logger.info(f"Headers: {{'Key': '***HIDDEN***', 'Accept': 'application/json'}}")
+            logger.info("="*60)
+            
             response = requests.get(
                 self.BASE_URL,
                 headers={"Key": api_key, "Accept": "application/json"},
                 params={"ipAddress": value, "maxAgeInDays": "90", "verbose": ""},
                 timeout=10,
             )
+            
+            # Debug: Log response details
+            logger.info("")
+            logger.info("="*60)
+            logger.info("[AbuseIPDB] RESPONSE")
+            logger.info("="*60)
+            logger.info(f"HTTP Status Code: {response.status_code}")
+            logger.info(f"Response JSON: {response.json()}")
+            logger.info("="*60)
+            
             response.raise_for_status()
             data = response.json().get("data", {})
-        except requests.RequestException:
+        except requests.RequestException as e:
+            logger.error(f"[AbuseIPDB] Request failed: {e}")
             return None
 
         if not data:
             return None
+
+        # Remove the huge array of individual reports to prevent LLM prompt truncation.
+        # The aggregated 'totalReports' and 'abuseConfidenceScore' are kept.
+        data.pop("reports", None)
 
         abuse_score = data.get("abuseConfidenceScore", 0)
         is_public = data.get("isPublic", True)

@@ -24,6 +24,7 @@ class Config:
     # ---------------- ChromaDB ----------------
     CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./data/chroma_store")
     CHROMA_COLLECTION_ATTACK = os.getenv("CHROMA_COLLECTION_ATTACK", "attack_techniques")
+    CHROMA_COLLECTION_ATTACK_CHAIN = os.getenv("CHROMA_COLLECTION_ATTACK_CHAIN", "attack_chain")
     EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
     # ---------------- Neo4j ----------------
@@ -33,7 +34,7 @@ class Config:
 
     # ---------------- MITRE ATT&CK data ----------------
     ATTACK_DATA_PATH = os.getenv(
-        "ATTACK_DATA_PATH", "./data/attack_data/enterprise_attack.json"
+        "ATTACK_DATA_PATH", "./data/attack_data/enterprise-attack.json"
     )
 
     # ---------------- Telemetry inputs ----------------

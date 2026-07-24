@@ -6,6 +6,7 @@ Supports: ipv4, ipv6, domain, hostname, url, md5, sha1, sha256
 Uses the OTXv2 Python library.
 """
 
+import logging
 from typing import Optional, Set
 
 from OTXv2 import OTXv2
@@ -14,6 +15,8 @@ from OTXv2.exceptions import BadRequest, NotKey
 from config import config
 from intelligence.threat_intel.base_provider import ThreatIntelProvider
 from intelligence.threat_intel.models import EnrichmentResult
+
+logger = logging.getLogger(__name__)
 
 
 class OTXProvider(ThreatIntelProvider):
@@ -38,9 +41,28 @@ class OTXProvider(ThreatIntelProvider):
             return None
 
         try:
+            # Debug: Log request details
+            logger.info("="*60)
+            logger.info("[OTX] REQUEST")
+            logger.info("="*60)
+            logger.info(f"Endpoint: OTX API (get_indicator_details_full)")
+            logger.info(f"Query Indicator Type: {otx_type}")
+            logger.info(f"Query Indicator Value: {value}")
+            logger.info(f"Headers: {{'X-OTX-API-KEY': '***HIDDEN***'}}")
+            logger.info("="*60)
+            
             otx = OTXv2(api_key)
             result = otx.get_indicator_details_full(otx_type, value)
-        except (BadRequest, NotKey, Exception):
+            
+            # Debug: Log response details
+            logger.info("")
+            logger.info("="*60)
+            logger.info("[OTX] RESPONSE")
+            logger.info("="*60)
+            logger.info(f"Response JSON: {result}")
+            logger.info("="*60)
+        except (BadRequest, NotKey, Exception) as e:
+            logger.error(f"[OTX] Request failed: {e}")
             return None
 
         if not result or not result.get("general"):
