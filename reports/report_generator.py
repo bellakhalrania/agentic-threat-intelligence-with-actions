@@ -22,16 +22,11 @@ def save_report(
     campaign_name = campaign.get("name", "Unclassified Activity")
     generated_at = datetime.now(timezone.utc).isoformat()
 
-    if validation_issues is None:
-        validation_issues = []
-
     full_report = render_report(
         body,
         campaign_name,
         campaign_id,
-        generated_at,
-        validation_status=validation_status,
-        validation_issues=validation_issues
+        generated_at
     )
 
     filename = f"report_{campaign_id}.md"

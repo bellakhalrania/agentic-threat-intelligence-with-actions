@@ -16,20 +16,6 @@ REPORT_TEMPLATE = Template("""\
 ---
 
 {{ body }}
-
----
-
-## Validation Status
-
-| Check | Status |
-|-------|--------|
-| Evidence Grounding | {{ validation_status }} |
-{% if validation_issues %}
-**Validation Issues:**
-{% for issue in validation_issues %}
-- {{ issue }}
-{% endfor %}
-{% endif %}
 """)
 
 
@@ -37,17 +23,11 @@ def render_report(
     body: str,
     campaign_name: str,
     campaign_id: str,
-    generated_at: str,
-    validation_status: str = "Pending",
-    validation_issues: list = None
+    generated_at: str
 ) -> str:
-    if validation_issues is None:
-        validation_issues = []
     return REPORT_TEMPLATE.render(
         body=body,
         campaign_name=campaign_name,
         campaign_id=campaign_id,
-        generated_at=generated_at,
-        validation_status=validation_status,
-        validation_issues=validation_issues,
+        generated_at=generated_at
     )

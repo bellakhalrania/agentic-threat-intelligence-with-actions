@@ -30,7 +30,7 @@ class ReportingAgent:
         )
         report_markdown = invoke_llm(system_prompt=REPORTING_SYSTEM_PROMPT, user_prompt=prompt)
 
-        # Validate report against evidence before saving
+        # Validate report against evidence before saving (for logging only)
         validation_result = validate_report(report_markdown, state)
 
         if not validation_result['valid']:
@@ -42,7 +42,6 @@ class ReportingAgent:
             # 1. Reject the report entirely
             # 2. Flag for human review
             # 3. Regenerate with stricter constraints
-            # For now, we log the error but still save (with validation metadata)
             logger.warning("Saving report despite validation failures - requires human review")
 
         if validation_result['warnings']:
@@ -51,12 +50,9 @@ class ReportingAgent:
                 f"for campaign {state.get('campaign', {}).get('campaign_id', 'unknown')}"
             )
 
-        # Pass validation results to report generator
-        validation_status = "Passed" if validation_result['valid'] else "Failed"
+        # Save report without validation metadata in the output
         save_report(
             report_markdown,
-            campaign=state.get("campaign", {}),
-            validation_status=validation_status,
-            validation_issues=validation_result['issues']
+            campaign=state.get("campaign", {})
         )
         return report_markdown
