@@ -110,6 +110,18 @@ CRITICAL EVIDENCE RULES:
     ATT&CK Techniques list (from the 'techniques' input). Do NOT reference technique IDs
     from the Prediction or Predicted Next Steps section in Recommendations.
 
+SSH BRUTE-FORCE DETECTION:
+If the evidence contains T1110 (Brute Force) techniques with the flag "ssh_brute_force_detected": true,
+you MUST:
+1. State "Possible SSH Brute Force Attack (T1110)" in the Executive Summary and Campaign Assessment
+2. Include the number of failed attempts and source IP if available
+3. In the Recommendations section, include these specific actions:
+   - Notify security analyst immediately
+   - Temporarily block the source IP address
+   - Review the compromised account for unauthorized access
+   - Consider implementing SSH key-based authentication
+   - Review SSH logs for additional suspicious activity
+
 The Response Actions section must be a table listing each action taken (action_type,
 target, status, severity, rationale). Place it immediately after the Recommendations
 section."""

@@ -196,6 +196,92 @@ def _rule_groups_contains(*groups: str) -> Callable[[TelemetryEvent], str | None
     return predicate
 
 
+def _signature_contains(*substrings: str) -> Callable[[TelemetryEvent], str | None]:
+    """Builds a predicate matching Suricata signature or category fields.
+
+    Args:
+        *substrings: One or more substrings to match in signature or category.
+
+    Returns:
+        A predicate function usable as a :class:`MatchingRule` predicate.
+    """
+    lowered = [substring.lower() for substring in substrings]
+
+    def predicate(event: TelemetryEvent) -> str | None:
+        raw_event = event.raw if isinstance(event.raw, dict) else {}
+        
+        # Check signature field (Suricata)
+        signature = raw_event.get("signature")
+        if signature and isinstance(signature, str):
+            signature_lower = signature.lower()
+            for substring in lowered:
+                if substring in signature_lower:
+                    return f"signature contains {substring!r}"
+        
+        # Check category field (Suricata)
+        category = raw_event.get("category")
+        if category and isinstance(category, str):
+            category_lower = category.lower()
+            for substring in lowered:
+                if substring in category_lower:
+                    return f"category contains {substring!r}"
+        
+        return None
+
+    return predicate
+
+
+def _rule_description_contains(*substrings: str) -> Callable[[TelemetryEvent], str | None]:
+    """Builds a predicate matching Wazuh rule description field.
+
+    Args:
+        *substrings: One or more substrings to match in rule_description.
+
+    Returns:
+        A predicate function usable as a :class:`MatchingRule` predicate.
+    """
+    lowered = [substring.lower() for substring in substrings]
+
+    def predicate(event: TelemetryEvent) -> str | None:
+        raw_event = event.raw if isinstance(event.raw, dict) else {}
+        
+        # Check rule_description field (Wazuh)
+        rule_description = raw_event.get("rule_description")
+        if rule_description and isinstance(rule_description, str):
+            desc_lower = rule_description.lower()
+            for substring in lowered:
+                if substring in desc_lower:
+                    return f"rule_description contains {substring!r}"
+        
+        return None
+
+    return predicate
+
+
+def _service_and_event_type_equals(service: str, event_type: str) -> Callable[[TelemetryEvent], str | None]:
+    """Builds a predicate matching service and event_type fields.
+
+    Args:
+        service: The service name to match (e.g., "ssh").
+        event_type: The event type to match (e.g., "authentication_failed").
+
+    Returns:
+        A predicate function usable as a :class:`MatchingRule` predicate.
+    """
+    def predicate(event: TelemetryEvent) -> str | None:
+        raw_event = event.raw if isinstance(event.raw, dict) else {}
+        
+        event_service = raw_event.get("service")
+        event_type_val = raw_event.get("event_type")
+        
+        if event_service == service and event_type_val == event_type:
+            return f"service={service!r} and event_type={event_type!r}"
+        
+        return None
+
+    return predicate
+
+
 #: Default, easily-extended rule set covering common living-off-the-land
 #: binaries and techniques. Add new :class:`MatchingRule` entries here
 #: (or supply an alternate list to :class:`AttackMatcher`) to extend
@@ -281,6 +367,27 @@ DEFAULT_RULES: tuple[MatchingRule, ...] = (
         name="scheduled_task_persistence_by_groups",
         technique_attack_id="T1053.005",
         predicate=_rule_groups_contains("scheduled_task"),
+    ),
+    # Suricata C2 beacon detection rules
+    MatchingRule(
+        name="c2_beacon_suricata",
+        technique_attack_id="T1071.001",
+        predicate=_signature_contains("c2", "beacon", "command and control"),
+        confidence=0.9,
+    ),
+    # Wazuh scheduled task detection by rule description
+    MatchingRule(
+        name="scheduled_task_wazuh_description",
+        technique_attack_id="T1053.005",
+        predicate=_rule_description_contains("scheduled task", "task created", "task scheduler"),
+        confidence=0.85,
+    ),
+    # SSH authentication failure (Brute Force)
+    MatchingRule(
+        name="ssh_authentication_failed",
+        technique_attack_id="T1110",
+        predicate=_service_and_event_type_equals("ssh", "authentication_failed"),
+        confidence=0.7,
     ),
 )
 

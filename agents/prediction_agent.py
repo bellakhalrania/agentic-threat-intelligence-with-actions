@@ -26,17 +26,23 @@ logger = logging.getLogger(__name__)
 
 class PredictionAgent:
     def run(self, techniques: List[Dict], campaign: Dict) -> Dict:
+        print("\n========== PREDICTION AGENT ==========\n")
+        
         if not techniques:
             logger.info("PREDICTION_AGENT: No techniques observed - skipping prediction")
+            print("❌ No techniques observed - skipping prediction")
             return {"likely_next_techniques": [], "rationale": "No techniques observed yet."}
 
         technique_names = [t.get("technique_name") or t.get("name", "") for t in techniques if t.get("technique_name") or t.get("name")]
 
+        print(f"Observed Techniques: {technique_names}")
         logger.info("PREDICTION_AGENT: Observed techniques: %s", technique_names)
 
         # Retrieve RAG context and extract the valid candidate IDs from it
         related_context, candidate_ids = retrieve_likely_next_techniques_with_ids(technique_names)
 
+        print(f"RAG Context Length: {len(related_context)} characters")
+        print(f"Candidate IDs from RAG: {sorted(candidate_ids)}")
         logger.info("PREDICTION_AGENT: RAG context length: %d characters", len(related_context))
         logger.info("PREDICTION_AGENT: Candidate IDs from RAG: %s", sorted(candidate_ids))
 
@@ -45,6 +51,7 @@ class PredictionAgent:
             logger.warning(
                 "PREDICTION_AGENT: no RAG context returned — skipping LLM call to avoid hallucination"
             )
+            print("❌ No RAG context - skipping prediction to avoid hallucination")
             return {
                 "likely_next_techniques": [],
                 "rationale": "Prediction skipped: No suitable follow-on techniques were found in the knowledge base.",
@@ -57,9 +64,11 @@ class PredictionAgent:
             f"Valid technique IDs you may predict: {sorted(candidate_ids)}"
         )
         
+        print("Invoking LLM for prediction...")
         logger.info("PREDICTION_AGENT: Invoking LLM with prompt (first 200 chars): %s...", prompt[:200])
         response = invoke_llm(system_prompt=PREDICTION_SYSTEM_PROMPT, user_prompt=prompt)
         
+        print(f"LLM Response (first 200 chars): {response[:200]}...")
         logger.info("PREDICTION_AGENT: LLM response (first 200 chars): %s...", response[:200])
 
         try:
@@ -67,6 +76,7 @@ class PredictionAgent:
             logger.info("PREDICTION_AGENT: Parsed LLM result: %s", result)
         except ValueError as e:
             logger.warning("PREDICTION_AGENT: Failed to parse LLM response as JSON: %s", e)
+            print(f"❌ Failed to parse LLM response: {e}")
             return {
                 "likely_next_techniques": [],
                 "rationale": "Prediction could not be parsed from model output.",
@@ -74,6 +84,7 @@ class PredictionAgent:
 
         # --- Hallucination guard: validate every predicted technique ID ---
         predicted_before = result.get("likely_next_techniques", [])
+        print(f"Predicted Techniques (before validation): {predicted_before}")
         logger.info("PREDICTION_AGENT: Techniques predicted by LLM (before validation): %s", predicted_before)
         
         result["likely_next_techniques"] = self._validate_predicted_techniques(
@@ -81,7 +92,10 @@ class PredictionAgent:
             candidate_ids,
         )
         
+        print(f"Predicted Techniques (after validation): {result['likely_next_techniques']}")
+        print(f"Rationale: {result.get('rationale', 'N/A')}")
         logger.info("PREDICTION_AGENT: Techniques after validation: %s", result["likely_next_techniques"])
+        print("===========================\n")
 
         return result
 

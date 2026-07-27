@@ -19,6 +19,7 @@ NORMALIZED_FIELDS = [
     "timestamp",
     "host",
     "user",
+    "username",
     "process",
     "command_line",
     "src_ip",
@@ -50,7 +51,7 @@ def _normalize_sysmon(event: dict) -> dict:
     n["timestamp"] = event.get("UtcTime") or event.get("timestamp")
     n["host"] = event.get("Computer") or event.get("host")
     n["process"] = event.get("Image") or event.get("process")
-    n["command_line"] = event.get("CommandLine")
+    n["command_line"] = event.get("command_line") or event.get("CommandLine")
     n["user"] = event.get("User")
     n["src_ip"] = event.get("SourceIp") or event.get("src_ip")
     n["dest_ip"] = event.get("DestinationIp") or event.get("dest_ip")
@@ -66,10 +67,11 @@ def _normalize_suricata(event: dict) -> dict:
     n["src_ip"] = event.get("src_ip")
     n["dest_ip"] = event.get("dest_ip")
     n["proto"] = event.get("proto")
+    # Check top-level fields first, then nested alert structure
     alert = event.get("alert") or {}
-    n["signature"] = alert.get("signature")
-    n["category"] = alert.get("category")
-    n["severity"] = alert.get("severity")
+    n["signature"] = event.get("signature") or alert.get("signature")
+    n["category"] = event.get("category") or alert.get("category")
+    n["severity"] = event.get("severity") or alert.get("severity")
     n["raw"] = event
     return n
 
@@ -98,10 +100,11 @@ def _normalize_wazuh(event: dict) -> dict:
     agent = event.get("agent") or {}
     n["host"] = agent.get("name") or event.get("host")
     rule = event.get("rule") or {}
-    n["rule_description"] = rule.get("description") or event.get("rule_description")
-    n["rule_level"] = rule.get("level")
-    n["rule_groups"] = rule.get("groups")
-    n["severity"] = rule.get("level")
+    # Check top-level fields first, then nested rule structure
+    n["rule_description"] = event.get("rule_description") or rule.get("description")
+    n["rule_level"] = event.get("rule_level") or rule.get("level")
+    n["rule_groups"] = event.get("rule_groups") or rule.get("groups")
+    n["severity"] = event.get("rule_level") or rule.get("level")
     n["process"] = event.get("process")
     n["command_line"] = event.get("command_line")
     n["src_ip"] = event.get("src_ip")
@@ -140,6 +143,22 @@ def _normalize_wazuh(event: dict) -> dict:
     return n
 
 
+def _normalize_linux(event: dict) -> dict:
+    """Normalize Linux authentication events (e.g., SSH auth from auth.log)."""
+    n = _blank()
+    n["source"] = "linux"
+    n["event_type"] = event.get("event_type", "authentication")
+    n["timestamp"] = event.get("timestamp")
+    n["host"] = event.get("host")
+    n["username"] = event.get("username") or event.get("user")
+    n["service"] = event.get("service")
+    n["src_ip"] = event.get("src_ip") or event.get("source_ip")
+    n["dest_ip"] = event.get("dest_ip") or event.get("destination_ip")
+    n["proto"] = event.get("proto")
+    n["raw"] = event
+    return n
+
+
 def _normalize_windows_event(event: dict) -> dict:
     """Normalize Windows Event Log entries (EventID-based, similar to Sysmon)."""
     n = _blank()
@@ -163,8 +182,12 @@ def _detect_source(event: dict) -> str:
     """Determine log source heuristically from available fields."""
     # If an explicit source is already set, trust it.
     explicit = event.get("source")
-    if explicit in ("sysmon", "suricata", "zeek", "wazuh", "windows_event"):
+    if explicit in ("sysmon", "suricata", "zeek", "wazuh", "windows_event", "linux"):
         return explicit
+
+    # Linux: has service field (e.g., "ssh") and authentication-related event_type
+    if event.get("service") == "ssh" or event.get("event_type") in ("authentication", "authentication_failed", "authentication_success"):
+        return "linux"
 
     # Windows Event Log: has TimeCreated (or Provider) along with EventID
     if event.get("TimeCreated") is not None or event.get("Provider") is not None:
@@ -213,6 +236,7 @@ _NORMALIZER_DISPATCH = {
     "suricata": _normalize_suricata,
     "zeek": _normalize_zeek,
     "wazuh": _normalize_wazuh,
+    "linux": _normalize_linux,
     "windows_event": _normalize_windows_event,
 }
 
@@ -249,6 +273,11 @@ class CollectionAgent:
     """
 
     def run(self, raw_events: List[Dict]) -> List[Dict]:
+        print("\n========== COLLECTION AGENT ==========\n")
         if not raw_events:
             return []
-        return [normalize_event(event) for event in raw_events]
+        normalized = []
+        for event in raw_events:
+            normalized.append(normalize_event(event))
+            print(f"Normalized event: {normalized[-1]}")
+        return normalized

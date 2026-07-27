@@ -94,10 +94,39 @@ class AttackMappingAgent:
             skipped.
         """
         mapped_techniques: List[Dict] = []
-        for event in events:
+        print("\n========== MAPPING AGENT ==========\n")
+        print(f"Processing {len(events)} events...\n")
+
+        for i, event in enumerate(events, 1):
+            print(f"--- Event {i} ---")
+            print(f"Event ID: {event.get('event_id', 'unknown')}")
+            print(f"Event Type: {event.get('event_type', 'unknown')}")
+            print(f"Process: {event.get('process', 'N/A')}")
+            print(f"Command Line: {event.get('command_line', 'N/A')[:100]}..." if event.get('command_line') and len(event.get('command_line', '')) > 100 else f"Command Line: {event.get('command_line', 'N/A')}")
+            
             event_techniques = self._map_event(event)
+            
             if event_techniques:
+                print(f"\n✅ Mapped to {len(event_techniques)} technique(s):")
+                for tech in event_techniques:
+                    print(f"   - {tech.get('attack_id')}: {tech.get('technique_name')}")
+                    print(f"     Confidence: {tech.get('confidence', 'N/A')}")
+                    print(f"     Source: {tech.get('mapping_source', 'N/A')}")
+                    if tech.get('rule_name'):
+                        print(f"     Rule: {tech.get('rule_name')}")
                 mapped_techniques.extend(event_techniques)
+            else:
+                print("\n❌ No techniques mapped for this event")
+            print()
+        
+        print(f"--- Summary ---")
+        print(f"Total events processed: {len(events)}")
+        print(f"Total techniques mapped: {len(mapped_techniques)}")
+        print("========================\n")
+        
+        # Detect SSH brute-force patterns and boost confidence
+        mapped_techniques = self._detect_ssh_brute_force(events, mapped_techniques)
+        
         return mapped_techniques
 
     # ------------------------------------------------------------------
@@ -455,6 +484,65 @@ class AttackMappingAgent:
         mapped["known_groups"] = [group.name for group in groups]
         mapped["known_software"] = [software_item.name for software_item in software]
         mapped["recommended_mitigations"] = [mitigation.name for mitigation in mitigations]
+
+    def _detect_ssh_brute_force(self, events: List[Dict], mapped_techniques: List[Dict]) -> List[Dict]:
+        """Detects SSH brute-force patterns and boosts confidence for T1110.
+        
+        If 3+ failed SSH logins from the same source IP occur within a short time
+        window followed by a successful login, this increases the confidence for
+        T1110 (Brute Force) mappings and adds a brute-force indicator.
+        
+        Args:
+            events: The original normalized events.
+            mapped_techniques: The current technique mappings.
+            
+        Returns:
+            Updated technique mappings with boosted confidence for brute-force patterns.
+        """
+        from datetime import datetime
+        from collections import defaultdict
+        
+        # Group SSH authentication events by source IP
+        ssh_events_by_ip = defaultdict(list)
+        for event in events:
+            if event.get("service") == "ssh" and event.get("event_type") in ("authentication_failed", "authentication_success"):
+                src_ip = event.get("src_ip")
+                if src_ip:
+                    ssh_events_by_ip[src_ip].append(event)
+        
+        # Check each IP for brute-force pattern
+        for src_ip, ip_events in ssh_events_by_ip.items():
+            # Sort by timestamp
+            ip_events.sort(key=lambda e: e.get("timestamp", ""))
+            
+            # Count failures before each success
+            failures = 0
+            for event in ip_events:
+                if event.get("event_type") == "authentication_failed":
+                    failures += 1
+                elif event.get("event_type") == "authentication_success" and failures >= 3:
+                    # Brute-force pattern detected: 3+ failures followed by success
+                    print(f"\n🔍 SSH Brute-Force Pattern Detected:")
+                    print(f"   Source IP: {src_ip}")
+                    print(f"   Failed attempts: {failures}")
+                    print(f"   Successful login detected")
+                    
+                    # Boost confidence for T1110 mappings from this IP
+                    for tech in mapped_techniques:
+                        if tech.get("attack_id") == "T1110":
+                            # Check if this technique came from an event with this src_ip
+                            evidence_event_id = tech.get("evidence_event_id")
+                            evidence_event = next((e for e in events if e.get("event_id") == evidence_event_id), None)
+                            if evidence_event and evidence_event.get("src_ip") == src_ip:
+                                old_confidence = tech.get("confidence", 0.7)
+                                tech["confidence"] = min(old_confidence + 0.2, 1.0)  # Boost by 0.2, max 1.0
+                                tech["ssh_brute_force_detected"] = True
+                                tech["ssh_brute_force_failures"] = failures
+                                print(f"   ✅ Boosted T1110 confidence from {old_confidence} to {tech['confidence']}")
+                    
+                    failures = 0  # Reset for next success
+        
+        return mapped_techniques
 
     # ------------------------------------------------------------------
     # Event formatting

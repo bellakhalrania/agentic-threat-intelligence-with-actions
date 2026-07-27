@@ -45,7 +45,7 @@ class ReportValidator:
         actions_taken = state.get('actions_taken', [])
 
         # Validate IP addresses
-        self._validate_ips(report_markdown, iocs)
+        self._validate_ips(report_markdown, iocs, events)
 
         # Validate timestamps and timeline
         self._validate_timeline(report_markdown, events)
@@ -74,24 +74,33 @@ class ReportValidator:
             'warnings': self.warnings
         }
 
-    def _validate_ips(self, report_markdown: str, iocs: List[Dict]) -> None:
-        """Validates that all IPs in report exist in evidence."""
+    def _validate_ips(self, report_markdown: str, iocs: List[Dict], events: List[Dict]) -> None:
+        """Validates that all IPs in report exist in evidence (IOCs or original events)."""
         # Extract IPv4 addresses from report
         ip_pattern = r'\b(?:\d{1,3}\.){3}\d{1,3}\b'
         report_ips = set(re.findall(ip_pattern, report_markdown))
 
-        # Extract IPs from evidence
+        # Extract IPs from evidence (both IOCs and original events)
         evidence_ips = set()
+        
+        # From IOCs
         for ioc in iocs:
             value = ioc.get('value', '')
             if re.match(ip_pattern, value):
                 evidence_ips.add(value)
+        
+        # From original events (src_ip, dest_ip fields)
+        for event in events:
+            for field in ['src_ip', 'dest_ip', 'source_ip', 'destination_ip']:
+                ip = event.get(field)
+                if ip and re.match(ip_pattern, ip):
+                    evidence_ips.add(ip)
 
         # Check for invented IPs
         for ip in report_ips:
             if ip not in evidence_ips:
                 self.issues.append(
-                    f"IP hallucination: Report mentions IP {ip} not found in evidence IOCs"
+                    f"IP hallucination: Report mentions IP {ip} not found in evidence (IOCs or events)"
                 )
 
     def _validate_timeline(self, report_markdown: str, events: List[Dict]) -> None:
@@ -284,20 +293,23 @@ class ReportValidator:
                 )
 
     def _validate_response_actions(self, report_markdown: str, actions_taken: List[Dict]) -> None:
-        """Validates response action statuses against audit log."""
-        # Look for "Completed" status in report
-        completed_pattern = r'\|\s*Completed\s*\|'
-        if re.search(completed_pattern, report_markdown):
-            # Check if any actions in evidence are actually completed
-            has_completed = any(
-                action.get('status', '').lower() == 'completed'
+        """Validates response action statuses against audit log.
+        
+        Response Agent uses status values: 'executed', 'pending_approval', 'denied', 'failed'
+        """
+        # Look for "Executed" or "Completed" status in report (both terms may be used)
+        executed_pattern = r'\|\s*(?:Executed|Completed)\s*\|'
+        if re.search(executed_pattern, report_markdown):
+            # Check if any actions in evidence are actually executed
+            has_executed = any(
+                action.get('status', '').lower() == 'executed'
                 for action in actions_taken
             )
 
-            if not has_completed:
+            if not has_executed:
                 self.issues.append(
-                    "Response action hallucination: Report marks actions as 'Completed' "
-                    "but no completed actions in evidence audit log"
+                    "Response action hallucination: Report marks actions as 'Executed/Completed' "
+                    "but no executed actions in evidence audit log"
                 )
 
         # Check for specific action types that might be fabricated
@@ -306,14 +318,24 @@ class ReportValidator:
         for match in re.finditer(action_pattern, report_markdown, re.IGNORECASE):
             action_type = match.group(1)
             if action_type in ['block_ip', 'isolate_host', 'kill_process', 'disable_account',
-                             'quarantine_file', 'firewall_block']:
+                             'quarantine_file', 'firewall_block', 'notify_analyst']:
                 action_types_in_report.add(action_type)
 
         # Verify these action types exist in evidence
-        evidence_action_types = {
-            action.get('action_type', '').lower()
-            for action in actions_taken
-        }
+        evidence_action_types = set()
+        for action in actions_taken:
+            # Handle both dict and ActionResult object formats
+            if isinstance(action, dict):
+                action_type = action.get('action_type', '').lower()
+            else:
+                # ActionResult object - access via action.action.action_type
+                action_type = getattr(action, 'action', None)
+                if action_type:
+                    action_type = getattr(action_type, 'action_type', '').lower()
+                else:
+                    action_type = ''
+            if action_type:
+                evidence_action_types.add(action_type)
 
         for action_type in action_types_in_report:
             if action_type not in evidence_action_types:

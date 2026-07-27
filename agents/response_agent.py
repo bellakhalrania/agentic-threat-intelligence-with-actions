@@ -37,17 +37,75 @@ class ResponseAgent:
     BLOCK_IP_AUTO_THRESHOLD = 0.8
 
     def run(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict]) -> List[ActionResult]:
+        print("\n========== RESPONSE AGENT ==========\n")
+        print(f"Input Context:")
+        print(f"  Campaign: {campaign.get('name', 'unknown')} (ID: {campaign.get('campaign_id', 'unknown')[:8]}...)")
+        print(f"  Techniques: {len(techniques)}")
+        print(f"  IOCs: {len(iocs)}")
+        print()
+        
         # --- Deterministic pre-check: auto-propose block_ip for high-confidence malicious IOCs ---
         # This ensures critical threats are never missed because the LLM was overly conservative.
         pre_proposals = self._auto_propose_high_confidence_actions(iocs)
+        
+        if pre_proposals:
+            print(f"--- Auto-Proposed Actions (Deterministic) ---")
+            for i, proposal in enumerate(pre_proposals, 1):
+                print(f"  {i}. {proposal.get('action_type')} on {proposal.get('target')}")
+                print(f"     Severity: {proposal.get('severity')}")
+                print(f"     Rationale: {proposal.get('rationale')}")
+                print(f"     Confidence: {proposal.get('confidence')}")
+            print()
+        else:
+            print("--- Auto-Proposed Actions: None ---")
+            print()
 
-        prompt = f"Campaign:\n{campaign}\n\nTechniques:\n{techniques}\n\nIOCs:\n{iocs}"
+        # Build a compact prompt to avoid token limit issues
+        campaign_summary = {
+            "name": campaign.get("name"),
+            "objective": campaign.get("objective"),
+            "confidence": campaign.get("confidence")
+        }
+        
+        techniques_summary = [
+            {
+                "id": t.get("attack_id"),
+                "name": t.get("technique_name"),
+                "confidence": t.get("confidence")
+            }
+            for t in techniques
+        ]
+        
+        iocs_summary = [
+            {
+                "value": i.get("value"),
+                "type": i.get("type"),
+                "reputation": i.get("reputation"),
+                "confidence": i.get("confidence")
+            }
+            for i in iocs
+        ]
+        
+        prompt = f"Campaign:\n{campaign_summary}\n\nTechniques:\n{techniques_summary}\n\nIOCs:\n{iocs_summary}"
+        print("Invoking LLM for action proposals...")
         response = invoke_llm(system_prompt=RESPONSE_SYSTEM_PROMPT, user_prompt=prompt)
 
         try:
             llm_proposals = extract_json(response)
+            print(f"LLM proposed {len(llm_proposals)} action(s)")
         except ValueError:
             llm_proposals = []
+            print("LLM failed to return valid JSON")
+
+        if llm_proposals:
+            print(f"\n--- LLM-Proposed Actions ---")
+            for i, proposal in enumerate(llm_proposals, 1):
+                print(f"  {i}. {proposal.get('action_type')} on {proposal.get('target')}")
+                print(f"     Severity: {proposal.get('severity')}")
+                print(f"     Rationale: {proposal.get('rationale')}")
+                print(f"     Technique ID: {proposal.get('technique_id', 'N/A')}")
+                print(f"     Confidence: {proposal.get('confidence')}")
+            print()
 
         # Merge: pre_proposals first so deterministic actions take priority
         # De-duplicate: skip LLM proposals that duplicate an auto-proposed action
@@ -58,18 +116,55 @@ class ResponseAgent:
             if dedup_key not in auto_targets:
                 all_proposals.append(raw)
 
+        print(f"--- Total Actions to Process: {len(all_proposals)} ---\n")
+        
         results = []
-        for raw in all_proposals:
+        for i, raw in enumerate(all_proposals, 1):
             try:
                 action = ProposedAction(**raw)
             except Exception:
+                print(f"❌ Action {i}: Malformed proposal, skipping")
                 continue  # skip malformed proposals rather than crash the run
 
+            print(f"--- Action {i}: {action.action_type} on {action.target} ---")
+            print(f"  Rationale: {action.rationale}")
+            print(f"  Severity: {action.severity}")
+            print(f"  Related Technique: {action.technique_id or 'N/A'}")
+            
+            # Show relation to events/IOCs
+            if action.technique_id:
+                related_tech = next((t for t in techniques if t.get('attack_id') == action.technique_id), None)
+                if related_tech:
+                    print(f"  Related to technique: {related_tech.get('technique_name', 'N/A')}")
+                    event_id = related_tech.get('evidence_event_id', 'N/A')
+                    print(f"  Evidence from event: {event_id}")
+            
+            if action.action_type == "block_ip":
+                related_ioc = next((ioc for ioc in iocs if ioc.get('value') == action.target), None)
+                if related_ioc:
+                    print(f"  Related IOC: {related_ioc.get('value')} (reputation: {related_ioc.get('reputation')}, confidence: {related_ioc.get('confidence')})")
+
             decision = policy.evaluate(action)
+            print(f"  Policy Decision: {decision}")
+            
             result = self._handle_decision(action, decision)
+            
+            print(f"  Final Status: {result.status}")
+            print(f"  Detail: {result.detail}")
+            print(f"  Dry Run: {result.dry_run}")
+            
             audit_log.record(result, campaign_id=campaign.get("campaign_id", ""))
             results.append(result)
-
+            print()
+        
+        print(f"--- Summary ---")
+        print(f"Total actions proposed: {len(all_proposals)}")
+        print(f"Executed: {sum(1 for r in results if r.status == 'executed')}")
+        print(f"Pending: {sum(1 for r in results if r.status == 'pending_approval')}")
+        print(f"Denied: {sum(1 for r in results if r.status == 'denied')}")
+        print(f"Failed: {sum(1 for r in results if r.status == 'failed')}")
+        print("===========================\n")
+        
         return results
 
     def _auto_propose_high_confidence_actions(self, iocs: List[Dict]) -> List[Dict]:

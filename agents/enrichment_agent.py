@@ -48,6 +48,11 @@ class EnrichmentAgent:
             Never invents reputation values — always derived from provider data.
         """
         iocs = extract_iocs(events)
+        
+        print("\n========== ENRICHMENT AGENT ==========\n")
+        for ioc in iocs:
+            print(ioc)
+
         if not iocs:
             return []
 

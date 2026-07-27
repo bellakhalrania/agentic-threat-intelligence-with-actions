@@ -42,8 +42,23 @@ class CorrelationAgent:
         Returns:
             Campaign summary dict with evidence-backed claims only
         """
+        print("\n========== CORRELATION AGENT ==========\n")
+        print(f"Input Evidence:")
+        print(f"  Events: {len(events)}")
+        print(f"  IOCs: {len(iocs)}")
+        print(f"  Techniques: {len(techniques)}")
+        print()
+        
         if not events:
+            print("No events provided - returning empty campaign")
             return self._empty_campaign()
+
+        # Detect SSH brute-force patterns and group events accordingly
+        ssh_brute_force_detected = self._detect_ssh_brute_force(events, techniques)
+        
+        if ssh_brute_force_detected:
+            print(f"🔍 SSH Brute-Force Pattern Detected in Correlation Agent")
+            print(f"   Grouping related SSH authentication events into single campaign")
 
         # Build evidence context for LLM
         evidence_context = self._build_evidence_context(events, iocs, techniques)
@@ -64,10 +79,30 @@ class CorrelationAgent:
         campaign["confidence"] = calculate_confidence(events, iocs, techniques)
         campaign.setdefault("campaign_id", str(uuid.uuid4()))
 
+        # Inspect campaign object
+        print("--- Campaign Object ---")
+        print(f"Campaign ID: {campaign.get('campaign_id', 'unknown')}")
+        print(f"Name: {campaign.get('name', 'unknown')}")
+        print(f"Objective: {campaign.get('objective', 'unknown')}")
+        print(f"Confidence: {campaign.get('confidence', 'unknown')}")
+        print(f"\nRelated Techniques: {campaign.get('related_techniques', [])}")
+        
+        if campaign.get('timeline'):
+            print(f"\nTimeline ({len(campaign['timeline'])} events):")
+            for i, item in enumerate(campaign['timeline'][:5], 1):  # Show first 5
+                print(f"  {i}. {item.get('timestamp', 'unknown')}: {item.get('description', 'unknown')[:80]}...")
+            if len(campaign['timeline']) > 5:
+                print(f"  ... and {len(campaign['timeline']) - 5} more")
+        
+        print(f"\nEvidence Summary: {campaign.get('evidence_summary', 'unknown')[:200]}...")
+        print("===========================\n")
+
         try:
             persist_campaign(campaign, events, techniques)
+            print("✅ Campaign persisted to Neo4j")
         except Exception as e:
             logger.exception("Failed to persist campaign to Neo4j: %s", e)
+            print(f"❌ Failed to persist campaign to Neo4j: {e}")
 
         return campaign
 
@@ -159,3 +194,43 @@ class CorrelationAgent:
             "evidence_summary": "No events provided for correlation.",
             "confidence": calculate_confidence([], [], []),
         }
+
+    def _detect_ssh_brute_force(self, events: List[Dict], techniques: List[Dict]) -> bool:
+        """Detects if SSH brute-force pattern exists across events.
+        
+        Groups repeated SSH authentication failures from the same IP into
+        a single campaign context.
+        
+        Args:
+            events: The normalized events.
+            techniques: The mapped techniques.
+            
+        Returns:
+            True if SSH brute-force pattern is detected, False otherwise.
+        """
+        from collections import defaultdict
+        
+        # Check if any technique has SSH brute-force indicator
+        for tech in techniques:
+            if tech.get("ssh_brute_force_detected"):
+                return True
+        
+        # Also check events directly for pattern
+        ssh_events_by_ip = defaultdict(list)
+        for event in events:
+            if event.get("service") == "ssh" and event.get("event_type") in ("authentication_failed", "authentication_success"):
+                src_ip = event.get("src_ip")
+                if src_ip:
+                    ssh_events_by_ip[src_ip].append(event)
+        
+        # Check each IP for brute-force pattern (3+ failures followed by success)
+        for src_ip, ip_events in ssh_events_by_ip.items():
+            ip_events.sort(key=lambda e: e.get("timestamp", ""))
+            failures = 0
+            for event in ip_events:
+                if event.get("event_type") == "authentication_failed":
+                    failures += 1
+                elif event.get("event_type") == "authentication_success" and failures >= 3:
+                    return True
+        
+        return False
