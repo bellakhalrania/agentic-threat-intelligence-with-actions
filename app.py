@@ -110,6 +110,21 @@ class SearchResponse(BaseModel):
     timestamp: str
 
 
+class ActionOnlyRequest(BaseModel):
+    """Request containing raw security events"""
+    events: List[Dict[str, Any]]
+
+
+class ActionOnlyResponse(BaseModel):
+    success: bool
+    actions: List[Dict[str, Any]] = []
+    execution_packages: List[Dict[str, Any]] = []
+    combined_script: str = ""
+    combined_filename: str = ""
+    campaign_id: Optional[str] = None
+    error: Optional[str] = None
+
+
 # Background task for async investigation
 async def run_investigation(events: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Run investigation on events"""
@@ -396,6 +411,54 @@ async def list_databases():
     except Exception as e:
         logger.error(f"Error listing databases: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/response/actions", response_model=ActionOnlyResponse)
+async def response_actions(request: ActionOnlyRequest):
+    """
+    Run the investigation workflow and return ONLY the response actions.
+    """
+
+    try:
+        initial_state = new_investigation_state(
+            raw_events=request.events
+        )
+
+        final_state = threat_intel_workflow.invoke(initial_state)
+
+        actions = []
+
+        for action_entry in final_state.get("actions_taken", []):
+            action_data = action_entry.get("action", action_entry)
+
+            actions.append({
+                "action_type": str(action_data.get("action_type", "")),
+                "target": action_data.get("target", ""),
+                "severity": str(action_data.get("severity", "")),
+                "status": str(action_entry.get("status", "")),
+                "technique_id": action_data.get("technique_id"),
+                "confidence": action_data.get("confidence", 0.0),
+                "rationale": action_data.get("rationale", ""),
+                "details": action_entry.get("detail", ""),
+                "dry_run": action_entry.get("dry_run", True)
+            })
+
+        return ActionOnlyResponse(
+            success=True,
+            actions=actions,
+            execution_packages=final_state.get("execution_packages", []),
+            combined_script=final_state.get("combined_script", ""),
+            combined_filename=final_state.get("combined_filename", ""),
+            campaign_id=final_state.get("campaign", {}).get("campaign_id")
+        )
+
+    except Exception as e:
+        logger.exception(e)
+
+        return ActionOnlyResponse(
+            success=False,
+            error=str(e)
+        )
 
 
 @app.post("/attack/search", response_model=SearchResponse)

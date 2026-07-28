@@ -18,6 +18,7 @@ from graph.nodes import (
     prediction_node,
     reporting_node,
     response_node,
+    execution_translation_node,
 )
 
 
@@ -31,6 +32,7 @@ def build_workflow():
     graph.add_node("prediction", prediction_node)
     graph.add_node("reporting", reporting_node)
     graph.add_node("response", response_node)
+    graph.add_node("execution_translation", execution_translation_node)
 
     graph.add_edge(START, "collection")
     graph.add_edge("collection", "enrichment")
@@ -38,7 +40,8 @@ def build_workflow():
     graph.add_edge("mapping", "correlation")
     graph.add_edge("correlation", "prediction")
     graph.add_edge("prediction", "response")
-    graph.add_edge("response", "reporting")
+    graph.add_edge("response", "execution_translation")
+    graph.add_edge("execution_translation", "reporting")
     graph.add_edge("reporting", END)
 
     # Compile without checkpointer to avoid schema corruption issues

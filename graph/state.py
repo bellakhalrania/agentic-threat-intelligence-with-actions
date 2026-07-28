@@ -33,6 +33,11 @@ class InvestigationState(TypedDict, total=False):
     # --- Response Agent output ---
     actions_taken: List[Dict[str, Any]]       # results of proposed/executed/pending response actions
 
+    # --- Execution Translation Agent output ---
+    execution_packages: List[Dict[str, Any]]  # platform-specific executable scripts
+    combined_script: str                      # single combined executable script containing all actions
+    combined_filename: str                    # filename for the combined script
+
     # --- Bookkeeping ---
     errors: List[str]                         # any non-fatal errors collected along the way
     metadata: Dict[str, Any]                  # run id, timestamps, source system, etc.
@@ -49,6 +54,9 @@ def new_investigation_state(raw_events: Optional[List[Dict[str, Any]]] = None) -
         prediction={},
         report="",
         actions_taken=[],
+        execution_packages=[],
+        combined_script="",
+        combined_filename="",
         errors=[],
         metadata={},
     )

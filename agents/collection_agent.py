@@ -92,54 +92,84 @@ def _normalize_zeek(event: dict) -> dict:
     return n
 
 
+def _clean_wazuh_user(value: Any) -> Any:
+    """Drop decoder artifacts that Wazuh can place in user fields."""
+    if not isinstance(value, str):
+        return value
+    cleaned = value.strip()
+    if cleaned.lower() in {"", "by", "unknown", "none", "n/a", "-"}:
+        return None
+    return cleaned
+
+
 def _normalize_wazuh(event: dict) -> dict:
     n = _blank()
     n["source"] = "wazuh"
-    n["event_type"] = "wazuh_alert"
     n["timestamp"] = event.get("timestamp")
+
     agent = event.get("agent") or {}
-    n["host"] = agent.get("name") or event.get("host")
     rule = event.get("rule") or {}
-    # Check top-level fields first, then nested rule structure
+    data = event.get("data") or {}
+    predecoder = event.get("predecoder") or {}
+    decoder = event.get("decoder") or {}
+    rule_groups = event.get("rule_groups") or rule.get("groups") or []
+
+    n["host"] = agent.get("name") or event.get("host")
     n["rule_description"] = event.get("rule_description") or rule.get("description")
     n["rule_level"] = event.get("rule_level") or rule.get("level")
-    n["rule_groups"] = event.get("rule_groups") or rule.get("groups")
-    n["severity"] = event.get("rule_level") or rule.get("level")
-    n["process"] = event.get("process")
-    n["command_line"] = event.get("command_line")
-    n["src_ip"] = event.get("src_ip")
-    n["dest_ip"] = event.get("dest_ip")
+    n["rule_groups"] = rule_groups
+    n["severity"] = event.get("severity") or event.get("rule_level") or rule.get("level")
+
+    # Preserve explicitly normalized top-level fields first, then use Wazuh's
+    # decoded fields. These are extracted by Wazuh decoders and are more
+    # reliable than parsing the human-readable full_log string.
+    n["src_ip"] = (
+        event.get("src_ip")
+        or event.get("source_ip")
+        or data.get("srcip")
+        or data.get("src_ip")
+        or data.get("source_ip")
+    )
+    n["dest_ip"] = (
+        event.get("dest_ip")
+        or event.get("destination_ip")
+        or data.get("dstip")
+        or data.get("dest_ip")
+        or data.get("destination_ip")
+    )
+    src_user = _clean_wazuh_user(data.get("srcuser"))
+    dst_user = _clean_wazuh_user(data.get("dstuser"))
+    n["user"] = _clean_wazuh_user(event.get("user")) or src_user or dst_user
+    n["username"] = _clean_wazuh_user(event.get("username")) or dst_user or src_user
+
+    program_name = predecoder.get("program_name") or decoder.get("name")
+    n["process"] = event.get("process") or data.get("program_name") or program_name
+    n["command_line"] = (
+        event.get("command_line")
+        or data.get("command")
+        or event.get("full_log")
+    )
+
+    if event.get("proto") or data.get("protocol"):
+        n["proto"] = event.get("proto") or data.get("protocol")
+
+    if event.get("service"):
+        n["service"] = event.get("service")
+    elif program_name == "sshd" or "sshd" in rule_groups:
+        n["service"] = "ssh"
+
+    if "authentication_failed" in rule_groups:
+        n["event_type"] = "authentication_failed"
+    elif "authentication_success" in rule_groups:
+        n["event_type"] = "authentication_success"
+    elif "syscheck_entry_added" in rule_groups:
+        n["event_type"] = "file_added"
+    elif rule.get("id"):
+        n["event_type"] = f"wazuh_rule_{rule.get('id')}"
+    else:
+        n["event_type"] = "wazuh_alert"
+
     n["raw"] = event
-    
-    # If process/command_line not at top level, try to extract from full_log
-    if not n["process"] or not n["command_line"]:
-        full_log = event.get("full_log", "")
-        if full_log:
-            import re
-            # Strategy 1: Extract process name as the first space-delimited token
-            # (e.g., "schtasks" from "schtasks /create ...", "powershell" from "powershell -enc ...")
-            first_token_match = re.match(r'^"([^"]+)"|^(\S+)', full_log.strip())
-            if first_token_match:
-                first_token = first_token_match.group(1) or first_token_match.group(2)
-                # If the token doesn't already have an extension, try .exe first
-                if "." not in first_token and not n["process"]:
-                    n["process"] = first_token
-                    # command_line is everything after the first token
-                    cmd_start = first_token_match.end()
-                    potential_cmd = full_log[cmd_start:].strip().strip('"')
-                    if potential_cmd and not n["command_line"]:
-                        n["command_line"] = potential_cmd[:500]
-            
-            # Strategy 2: Fallback — extract any .exe file name from full_log
-            if not n["process"]:
-                exe_match = re.search(r'\b([A-Za-z0-9_-]+\.exe)\b', full_log, re.IGNORECASE)
-                if exe_match:
-                    n["process"] = exe_match.group(1)
-                    cmd_start = exe_match.end()
-                    potential_cmd = full_log[cmd_start:].strip()
-                    if potential_cmd and not n["command_line"]:
-                        n["command_line"] = potential_cmd[:500]
-    
     return n
 
 

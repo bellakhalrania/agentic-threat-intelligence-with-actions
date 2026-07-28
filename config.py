@@ -66,6 +66,20 @@ class Config:
     # are wired to your real infrastructure and you trust the policy.
     DRY_RUN = os.getenv("DRY_RUN", "true").lower() == "true"
 
+    # ---------------- Remote Response Agent (Machine 2) ----------------
+    # URL of the Remote Response Agent running on the target machine.
+    # Example: http://192.168.1.100:9001
+    REMOTE_AGENT_URL = os.getenv("REMOTE_AGENT_URL", "")
+    # API key for authenticating with the remote agent.
+    REMOTE_AGENT_API_KEY = os.getenv("REMOTE_AGENT_API_KEY", "")
+    # Enable automatic push of generated scripts to the remote agent.
+    REMOTE_AGENT_ENABLED = os.getenv("REMOTE_AGENT_ENABLED", "false").lower() == "true"
+    # Timeout (seconds) for remote script execution.
+    REMOTE_AGENT_TIMEOUT = int(os.getenv("REMOTE_AGENT_TIMEOUT", "3600"))
+    # HMAC-SHA256 shared secret for payload signing.
+    # Must be the same on Machine 1 and Machine 2.
+    REMOTE_AGENT_HMAC_SECRET = os.getenv("REMOTE_AGENT_HMAC_SECRET", "")
+
     @classmethod
     def validate(cls):
         missing = []

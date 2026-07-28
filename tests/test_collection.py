@@ -250,6 +250,67 @@ class TestWazuhNormalization:
         result = agent.run([self.WAZUH_RAW])
         assert result[0]["raw"] == self.WAZUH_RAW
 
+    def test_nested_ssh_fields(self, agent):
+        event = {
+            "timestamp": "2026-07-28T10:55:00.618+0000",
+            "agent": {"id": "002", "name": "ip-172-31-19-70", "ip": "100.120.11.97"},
+            "rule": {"level": 4, "description": "sshd: connection reset", "id": "5762", "groups": ["syslog", "sshd"]},
+            "full_log": "Jul 28 10:54:58 ip-172-31-19-70 sshd[46289]: Connection reset by 205.210.31.25 port 63276 [preauth]",
+            "predecoder": {"program_name": "sshd", "timestamp": "Jul 28 10:54:58", "hostname": "ip-172-31-19-70"},
+            "decoder": {"parent": "sshd", "name": "sshd"},
+            "data": {"srcip": "205.210.31.25", "srcport": "63276", "dstuser": "by"},
+            "location": "journald",
+        }
+        result = agent.run([event])[0]
+        assert result["host"] == "ip-172-31-19-70"
+        assert result["process"] == "sshd"
+        assert result["service"] == "ssh"
+        assert result["src_ip"] == "205.210.31.25"
+        assert result["user"] is None
+        assert result["username"] is None
+        assert result["command_line"] == event["full_log"]
+        assert result["event_type"] == "wazuh_rule_5762"
+
+    def test_nested_auth_success_fields(self, agent):
+        event = {
+            "timestamp": "2026-07-28T13:56:14.486+0000",
+            "agent": {"id": "002", "name": "ip-172-31-19-70", "ip": "100.120.11.97"},
+            "rule": {
+                "level": 3,
+                "description": "PAM: Login session opened.",
+                "id": "5501",
+                "groups": ["pam", "syslog", "authentication_success"],
+            },
+            "full_log": "Jul 28 13:56:13 ip-172-31-19-70 sudo[49191]: pam_unix(sudo:session): session opened for user root(uid=0) by ubuntu(uid=1000)",
+            "predecoder": {"program_name": "sudo"},
+            "decoder": {"parent": "pam", "name": "pam"},
+            "data": {"srcuser": "ubuntu", "dstuser": "root", "uid": "1000"},
+            "location": "journald",
+        }
+        result = agent.run([event])[0]
+        assert result["event_type"] == "authentication_success"
+        assert result["process"] == "sudo"
+        assert result["user"] == "ubuntu"
+        assert result["username"] == "root"
+        assert result["command_line"] == event["full_log"]
+
+    def test_nested_sudo_command_field_preferred(self, agent):
+        event = {
+            "timestamp": "2026-07-28T13:57:02.804+0000",
+            "agent": {"id": "002", "name": "ip-172-31-19-70", "ip": "100.120.11.97"},
+            "rule": {"level": 3, "description": "Successful sudo to ROOT executed.", "id": "5402", "groups": ["syslog", "sudo"]},
+            "full_log": "Jul 28 13:57:02 ip-172-31-19-70 sudo[50259]: ubuntu : COMMAND=/usr/bin/cat /var/ossec/etc/ossec.conf",
+            "predecoder": {"program_name": "sudo"},
+            "decoder": {"parent": "sudo", "name": "sudo"},
+            "data": {"srcuser": "ubuntu", "dstuser": "root", "command": "/usr/bin/cat /var/ossec/etc/ossec.conf"},
+            "location": "journald",
+        }
+        result = agent.run([event])[0]
+        assert result["process"] == "sudo"
+        assert result["command_line"] == "/usr/bin/cat /var/ossec/etc/ossec.conf"
+        assert result["user"] == "ubuntu"
+        assert result["username"] == "root"
+
 
 # ═══════════════════════════════════════════════════════════════════════
 # Windows Event

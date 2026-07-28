@@ -1,0 +1,7 @@
+# remote_agent/requirements.txt
+# Minimal dependencies for the Remote Response Agent (Machine 2)
+
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+requests>=2.31.0

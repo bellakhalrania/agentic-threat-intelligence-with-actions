@@ -12,6 +12,7 @@ from agents.correlation_agent import CorrelationAgent
 from agents.prediction_agent import PredictionAgent
 from agents.reporting_agent import ReportingAgent
 from agents.response_agent import ResponseAgent
+from agents.execution_translation_agent import ExecutionTranslationAgent
 from intelligence.threat_intel.registry import ProviderRegistry
 
 # Initialize provider registry with available threat intelligence sources
@@ -38,6 +39,7 @@ correlation_agent = CorrelationAgent()
 prediction_agent = PredictionAgent()
 reporting_agent = ReportingAgent()
 response_agent = ResponseAgent()
+execution_translation_agent = ExecutionTranslationAgent()
 
 
 def collection_node(state: InvestigationState) -> dict:
@@ -82,5 +84,98 @@ def response_node(state: InvestigationState) -> dict:
         campaign=state.get("campaign", {}),
         techniques=state.get("techniques", []),
         iocs=state.get("iocs", []),
+        events=state.get("events", []),
     )
     return {"actions_taken": [r.model_dump() for r in results]}
+
+
+def execution_translation_node(state: InvestigationState) -> dict:
+    """Translate approved response actions into executable scripts.
+
+    The generated combined script is automatically saved to disk under
+    data/generated_scripts/ so it can be downloaded or deployed.
+
+    If REMOTE_AGENT_ENABLED is True, the script is also pushed to the
+    Remote Response Agent on Machine 2 for immediate execution.
+    """
+    import os
+    from config import config
+    from actions.remote_push import push_script_to_remote, verify_remote_connection
+
+    actions_taken = state.get("actions_taken", [])
+    platform = state.get("metadata", {}).get("target_platform", "linux")
+    campaign = state.get("campaign", {})
+    campaign_id = campaign.get("campaign_id", "")
+
+    result = execution_translation_agent.run(
+        actions_taken=actions_taken,
+        platform=platform,
+    )
+
+    combined_script = result.get("combined_script", "")
+    combined_filename = result.get("combined_filename", "")
+
+    remote_execution_result = None
+
+    # Write the combined script to disk
+    if combined_script and combined_filename:
+        output_dir = "data/generated_scripts"
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, combined_filename)
+        with open(output_path, "w") as f:
+            f.write(combined_script)
+        # Make the script executable on Linux/macOS
+        if not platform == "windows":
+            os.chmod(output_path, 0o755)
+        print(f"Generated script saved to: {output_path}")
+
+        # --- Push to Remote Agent (Machine 2) if enabled ---
+        if config.REMOTE_AGENT_ENABLED:
+            remote_url = config.REMOTE_AGENT_URL
+            api_key = config.REMOTE_AGENT_API_KEY
+            timeout = config.REMOTE_AGENT_TIMEOUT
+
+            if not remote_url:
+                print("WARNING: REMOTE_AGENT_ENABLED is True but REMOTE_AGENT_URL is not set. Skipping push.")
+            else:
+                print(f"\n--- Pushing script to remote agent at {remote_url} ---")
+                # Verify connection first
+                healthy = verify_remote_connection(remote_url=remote_url, api_key=api_key)
+                if not healthy:
+                    print(f"WARNING: Remote agent at {remote_url} is not reachable. Skipping push.")
+                else:
+                    try:
+                        execution_packages = result.get("execution_packages", [])
+                        action_count = len(execution_packages)
+                        remote_result = push_script_to_remote(
+                            script=combined_script,
+                            filename=combined_filename,
+                            campaign_id=campaign_id,
+                            action_count=action_count,
+                            platform=platform,
+                            remote_url=remote_url,
+                            api_key=api_key,
+                            hmac_secret=config.REMOTE_AGENT_HMAC_SECRET,
+                            timeout=timeout,
+                            execution_packages=execution_packages,
+                        )
+                        remote_execution_result = remote_result
+                        print(f"Remote execution completed:")
+                        print(f"  Status: {remote_result.get('status')}")
+                        print(f"  Exit code: {remote_result.get('exit_code')}")
+                        print(f"  Duration: {remote_result.get('duration_ms')}ms")
+                        print(f"  Execution ID: {remote_result.get('execution_id')}")
+                        if remote_result.get("stdout"):
+                            print(f"  stdout: {remote_result['stdout'][:500]}")
+                        if remote_result.get("stderr"):
+                            print(f"  stderr: {remote_result['stderr'][:500]}")
+                    except Exception as e:
+                        print(f"ERROR: Failed to push script to remote agent: {e}")
+            print()
+
+    return {
+        "execution_packages": result.get("execution_packages", []),
+        "combined_script": combined_script,
+        "combined_filename": combined_filename,
+        "remote_execution_result": remote_execution_result,
+    }
