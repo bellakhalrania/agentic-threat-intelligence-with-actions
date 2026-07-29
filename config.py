@@ -47,6 +47,10 @@ class Config:
     WAZUH_API_PASSWORD = os.getenv("WAZUH_API_PASSWORD", "")
     # Default to Docker volume path in container, fallback to local path
     WAZUH_ALERTS_PATH = os.getenv("WAZUH_ALERTS_PATH", "/app/data/wazuh_logs/alerts.json")
+    # Persistent cursor file used to remember last processed alerts across runs.
+    WAZUH_CURSOR_PATH = os.getenv("WAZUH_CURSOR_PATH", "./data/state/wazuh_cursor.json")
+    # Maximum number of processed alert IDs cached in the cursor (bounded memory/state).
+    WAZUH_CURSOR_MAX_IDS = int(os.getenv("WAZUH_CURSOR_MAX_IDS", "5000"))
     WAZUH_POLL_INTERVAL = int(os.getenv("WAZUH_POLL_INTERVAL", "30"))  # seconds
     WAZUH_VERIFY_SSL = os.getenv("WAZUH_VERIFY_SSL", "false").lower() == "true"
 

@@ -36,23 +36,23 @@ echo "",
 
 # =======================================
 # Action 1: isolate_host
-# Target: unknown
-# ID: isolate_host_8eb9aedd
-# Expected: Block all traffic on host host_affected_by_sudo_abuse except loopback
+# Target: sshd
+# ID: isolate_host_02daa78f
+# Expected: Block all traffic on host sshd except loopback
 # =======================================
 action_1() {
-    echo "[ACTION 1] isolate_host -> unknown"
-    echo "  Expected: Block all traffic on host host_affected_by_sudo_abuse except loopback"
+    echo "[ACTION 1] isolate_host -> sshd"
+    echo "  Expected: Block all traffic on host sshd except loopback"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Isolate host host_affected_by_sudo_abuse
+    # Isolate host sshd
     # Flush existing rules and set default policies to drop
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_8eb9aedd.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_02daa78f.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
@@ -61,23 +61,23 @@ action_1() {
         iptables -A OUTPUT -o lo -j ACCEPT
     elif command -v nft &> /dev/null; then
         nft add table inet isolate
-        nft add chain inet isolate input { type filter hook input priority 0; policy drop; }
-        nft add chain inet isolate output { type filter hook output priority 0; policy drop; }
+        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }'
+        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }'
         nft add rule inet isolate input iif lo accept
         nft add rule inet isolate output oif lo accept
     else
         echo 'ERROR: No firewall tool found' >&2
         exit 1
     fi
-    echo 'Host host_affected_by_sudo_abuse isolated'
+    echo 'Host sshd isolated'
     echo "  [OK] isolate_host completed"
 }
 
 rollback_1() {
-    echo "[ROLLBACK 1] isolate_host -> unknown"
-    if [ -f /tmp/iptables_backup_8eb9aedd.txt ]; then
-        iptables-restore < /tmp/iptables_backup_8eb9aedd.txt
-        rm /tmp/iptables_backup_8eb9aedd.txt
+    echo "[ROLLBACK 1] isolate_host -> sshd"
+    if [ -f /tmp/iptables_backup_02daa78f.txt ]; then
+        iptables-restore < /tmp/iptables_backup_02daa78f.txt
+        rm /tmp/iptables_backup_02daa78f.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -87,7 +87,7 @@ rollback_1() {
 }
 
 verify_1() {
-    echo "[VERIFY 1] isolate_host -> unknown"
+    echo "[VERIFY 1] isolate_host -> sshd"
     iptables -L -n 2>/dev/null | head -5
     ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'
 }
@@ -95,36 +95,36 @@ verify_1() {
 
 # =======================================
 # Action 2: notify_analyst
-# Target: unknown
-# ID: notify_analyst_2f43e777
-# Expected: Create analyst notification for SOC team
+# Target: SOC Team
+# ID: notify_analyst_2a815f2a
+# Expected: Create analyst notification for SOC Team
 # =======================================
 action_2() {
-    echo "[ACTION 2] notify_analyst -> unknown"
-    echo "  Expected: Create analyst notification for SOC team"
+    echo "[ACTION 2] notify_analyst -> SOC Team"
+    echo "  Expected: Create analyst notification for SOC Team"
 
-    # Notify analyst about: SOC team
+    # Notify analyst about: SOC Team
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
-    # Related technique: multiple
-    # Confidence: 0.7
+    # Related technique: T1110
+    # Confidence: 1.0
     #
     # Please review the following:
-    #   - SOC team
+    #   - SOC Team
     #
     # Manual investigation is required.
     echo "  [OK] notify_analyst completed"
 }
 
 rollback_2() {
-    echo "[ROLLBACK 2] notify_analyst -> unknown"
+    echo "[ROLLBACK 2] notify_analyst -> SOC Team"
     # No rollback needed for notification actions.
     echo "  [OK] Rollback of notify_analyst completed"
 }
 
 verify_2() {
-    echo "[VERIFY 2] notify_analyst -> unknown"
+    echo "[VERIFY 2] notify_analyst -> SOC Team"
     # Notification logged; verify via platform audit trail.
 }
 

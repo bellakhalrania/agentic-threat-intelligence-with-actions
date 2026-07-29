@@ -105,7 +105,7 @@ class ReportingAgent:
                 "rule_description": self._shorten(event.get("rule_description")),
                 "rule_level": event.get("rule_level"),
                 "rule_groups": event.get("rule_groups"),
-                "wazuh_mitre": self._extract_wazuh_mitre(event),
+                "rule_mitre": event.get("rule_mitre"),
             })
         return summarized
 
@@ -273,10 +273,3 @@ class ReportingAgent:
         if len(text) <= limit:
             return text
         return text[: limit - 3] + "..."
-
-    @staticmethod
-    def _extract_wazuh_mitre(event: Dict[str, Any]) -> Dict[str, Any] | None:
-        raw = event.get("raw") or {}
-        rule = raw.get("rule") or {}
-        mitre = rule.get("mitre")
-        return mitre if isinstance(mitre, dict) else None

@@ -9,7 +9,7 @@ before anything is allowed to actually execute, and every outcome - executed,
 pending, or denied - is written to the audit log.
 """
 
-from typing import List, Dict
+from typing import List, Dict, Set
 from llm.groq_client import invoke_llm
 from llm.output_parsers import extract_json
 from actions.action_models import ProposedAction, ActionResult
@@ -36,8 +36,13 @@ class ResponseAgent:
     # a block_ip proposal without waiting for the LLM.
     BLOCK_IP_AUTO_THRESHOLD = 0.8
 
-    def run(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict]) -> List[ActionResult]:
+    def run(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict], events: List[Dict] | None = None) -> List[ActionResult]:
         print("\n========== RESPONSE AGENT ==========\n")
+        
+        # --- Extract valid targets to prevent LLM hallucination ---
+        valid_targets = self._extract_valid_targets(campaign, techniques, iocs, events or [])
+        print(f"Valid Targets for Actions: {', '.join(valid_targets) if valid_targets else 'None detected'}")
+        
         print(f"Input Context:")
         print(f"  Campaign: {campaign.get('name', 'unknown')} (ID: {campaign.get('campaign_id', 'unknown')[:8]}...)")
         print(f"  Techniques: {len(techniques)}")
@@ -62,6 +67,7 @@ class ResponseAgent:
 
         # Build a compact prompt to avoid token limit issues
         campaign_summary = {
+            "campaign_id": campaign.get("campaign_id"),
             "name": campaign.get("name"),
             "objective": campaign.get("objective"),
             "confidence": campaign.get("confidence")
@@ -86,12 +92,13 @@ class ResponseAgent:
             for i in iocs
         ]
         
-        prompt = f"Campaign:\n{campaign_summary}\n\nTechniques:\n{techniques_summary}\n\nIOCs:\n{iocs_summary}"
+        prompt = f"Campaign:\n{campaign_summary}\n\nTechniques:\n{techniques_summary}\n\nIOCs:\n{iocs_summary}\n\nVALID TARGETS (Choose only from these):\n{valid_targets}"
         print("Invoking LLM for action proposals...")
         response = invoke_llm(system_prompt=RESPONSE_SYSTEM_PROMPT, user_prompt=prompt)
 
         try:
             llm_proposals = extract_json(response)
+            llm_proposals = self._sanitize_llm_proposals(llm_proposals, valid_targets)
             print(f"LLM proposed {len(llm_proposals)} action(s)")
         except ValueError:
             llm_proposals = []
@@ -166,6 +173,73 @@ class ResponseAgent:
         print("===========================\n")
         
         return results
+
+    def _extract_valid_targets(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict], events: List[Dict]) -> List[str]:
+        """Collects allowed action targets from grounded evidence."""
+        targets: Set[str] = set()
+
+        # IOC values are first-class targets (IPs, domains, hashes, etc.)
+        for ioc in iocs:
+            val = ioc.get("value")
+            if val:
+                targets.add(str(val))
+
+        # Include concrete entities from normalized events.
+        for event in events:
+            for key in ("host", "src_ip", "dest_ip", "user", "username", "process"):
+                value = event.get(key)
+                if value:
+                    targets.add(str(value))
+
+        # Include any concrete targets already mentioned in campaign timeline items.
+        for item in campaign.get("timeline", []) or []:
+            for key in ("host", "src_ip", "dest_ip", "user", "username", "process"):
+                value = item.get(key)
+                if value:
+                    targets.add(str(value))
+
+        # Notification endpoints are always valid.
+        targets.update({"SOC_analyst", "SOC Team", "SOC_Team"})
+
+        return sorted(t for t in targets if t)
+
+    def _sanitize_llm_proposals(self, proposals: List[Dict], valid_targets: List[str]) -> List[Dict]:
+        """Drop hallucinated targets and normalize notify targets."""
+        if not isinstance(proposals, list):
+            return []
+
+        allowed = set(valid_targets)
+        sanitized: List[Dict] = []
+
+        for proposal in proposals:
+            if not isinstance(proposal, dict):
+                continue
+
+            action_type = str(proposal.get("action_type", "")).strip()
+            target = proposal.get("target")
+
+            if action_type == "notify_analyst":
+                # Keep notify actions even if LLM used slight target variation.
+                if not target or str(target).strip() not in allowed:
+                    proposal["target"] = "SOC_analyst"
+                sanitized.append(proposal)
+                continue
+
+            if not target:
+                continue
+
+            normalized_target = str(target).strip()
+            if normalized_target not in allowed:
+                # Keep protected targets so deterministic policy can explicitly deny them.
+                if normalized_target in policy.PROTECTED_TARGETS:
+                    sanitized.append(proposal)
+                    continue
+                print(f"Discarding LLM action with ungrounded target: {target}")
+                continue
+
+            sanitized.append(proposal)
+
+        return sanitized
 
     def _auto_propose_high_confidence_actions(self, iocs: List[Dict]) -> List[Dict]:
         """Deterministically proposes block_ip for high-confidence malicious IOCs.

@@ -135,7 +135,17 @@ def execution_translation_node(state: InvestigationState) -> dict:
             api_key = config.REMOTE_AGENT_API_KEY
             timeout = config.REMOTE_AGENT_TIMEOUT
 
-            if not remote_url:
+            # Safety gate: only actions already approved/executed are eligible
+            # for remote execution. pending_approval/denied/failed must never
+            # be executed automatically on the target.
+            remotely_executable_actions = [
+                action for action in actions_taken
+                if action.get("status") == "executed"
+            ]
+
+            if not remotely_executable_actions:
+                print("\n--- Remote push skipped: no policy-approved actions to execute (only 'executed' actions are pushed). ---")
+            elif not remote_url:
                 print("WARNING: REMOTE_AGENT_ENABLED is True but REMOTE_AGENT_URL is not set. Skipping push.")
             else:
                 print(f"\n--- Pushing script to remote agent at {remote_url} ---")
@@ -145,30 +155,40 @@ def execution_translation_node(state: InvestigationState) -> dict:
                     print(f"WARNING: Remote agent at {remote_url} is not reachable. Skipping push.")
                 else:
                     try:
-                        execution_packages = result.get("execution_packages", [])
-                        action_count = len(execution_packages)
-                        remote_result = push_script_to_remote(
-                            script=combined_script,
-                            filename=combined_filename,
-                            campaign_id=campaign_id,
-                            action_count=action_count,
+                        remote_translation = execution_translation_agent.run(
+                            actions_taken=remotely_executable_actions,
                             platform=platform,
-                            remote_url=remote_url,
-                            api_key=api_key,
-                            hmac_secret=config.REMOTE_AGENT_HMAC_SECRET,
-                            timeout=timeout,
-                            execution_packages=execution_packages,
                         )
-                        remote_execution_result = remote_result
-                        print(f"Remote execution completed:")
-                        print(f"  Status: {remote_result.get('status')}")
-                        print(f"  Exit code: {remote_result.get('exit_code')}")
-                        print(f"  Duration: {remote_result.get('duration_ms')}ms")
-                        print(f"  Execution ID: {remote_result.get('execution_id')}")
-                        if remote_result.get("stdout"):
-                            print(f"  stdout: {remote_result['stdout'][:500]}")
-                        if remote_result.get("stderr"):
-                            print(f"  stderr: {remote_result['stderr'][:500]}")
+                        remote_script = remote_translation.get("combined_script", "")
+                        remote_filename = remote_translation.get("combined_filename", combined_filename)
+                        execution_packages = remote_translation.get("execution_packages", [])
+                        action_count = len(execution_packages)
+
+                        if not remote_script or action_count == 0:
+                            print("WARNING: No executable remote script produced after approval filtering. Skipping push.")
+                        else:
+                            remote_result = push_script_to_remote(
+                                script=remote_script,
+                                filename=remote_filename,
+                                campaign_id=campaign_id,
+                                action_count=action_count,
+                                platform=platform,
+                                remote_url=remote_url,
+                                api_key=api_key,
+                                hmac_secret=config.REMOTE_AGENT_HMAC_SECRET,
+                                timeout=timeout,
+                                execution_packages=execution_packages,
+                            )
+                            remote_execution_result = remote_result
+                            print(f"Remote execution completed:")
+                            print(f"  Status: {remote_result.get('status')}")
+                            print(f"  Exit code: {remote_result.get('exit_code')}")
+                            print(f"  Duration: {remote_result.get('duration_ms')}ms")
+                            print(f"  Execution ID: {remote_result.get('execution_id')}")
+                            if remote_result.get("stdout"):
+                                print(f"  stdout: {remote_result['stdout'][:500]}")
+                            if remote_result.get("stderr"):
+                                print(f"  stderr: {remote_result['stderr'][:500]}")
                     except Exception as e:
                         print(f"ERROR: Failed to push script to remote agent: {e}")
             print()

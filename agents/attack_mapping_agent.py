@@ -134,7 +134,7 @@ class AttackMappingAgent:
     # ------------------------------------------------------------------
 
     def _map_event(self, event: Dict) -> List[Dict]:
-        """Maps a single event, trying the deterministic path first.
+        """Maps a single event, trying pre-existing metadata first, then deterministic rules.
 
         Args:
             event: A single normalized event dict.
@@ -143,11 +143,45 @@ class AttackMappingAgent:
             A list of mapping dicts for all matched techniques,
             or an empty list if no confident mapping could be produced.
         """
+        # 1. Check for pre-existing MITRE metadata (e.g. from Wazuh)
+        metadata_mappings = self._try_metadata_match(event)
+        if metadata_mappings:
+            return metadata_mappings
+
+        # 2. Try deterministic rules
         deterministic = self._try_deterministic_match(event)
         if deterministic:
             return deterministic
+
+        # 3. Fall back to LLM
         llm_result = self._try_llm_match(event)
         return [llm_result] if llm_result else []
+
+    def _try_metadata_match(self, event: Dict) -> List[Dict]:
+        """Checks if the event already has MITRE IDs (e.g. from Wazuh rules)."""
+        mitre_ids = event.get("rule_mitre")
+        if not mitre_ids:
+            return []
+
+        if isinstance(mitre_ids, str):
+            mitre_ids = [mitre_ids]
+
+        mappings = []
+        for attack_id in mitre_ids:
+            try:
+                technique = self._resolve_technique(str(attack_id))
+                mapped = {
+                    "attack_id": technique.attack_id,
+                    "technique_name": technique.name,
+                    "confidence": 1.0,
+                    "mapping_source": "event_metadata",
+                    "evidence_event_id": event.get("event_id"),
+                }
+                self._enrich(mapped, technique.attack_id)
+                mappings.append(mapped)
+            except (RecordNotFoundError, KnowledgeLayerError):
+                continue
+        return mappings
 
     def _try_deterministic_match(self, event: Dict) -> List[Dict]:
         """Attempts to map an event using the rule-based ATT&CK matcher.
@@ -281,7 +315,7 @@ class AttackMappingAgent:
         # invented. If it doesn't resolve in the knowledge layer, the
         # mapping is dropped rather than passed downstream.
         try:
-            technique = self.attack_service.get_technique(str(attack_id).strip())
+            technique = self._resolve_technique(str(attack_id).strip())
         except RecordNotFoundError:
             logger.warning(
                 "LLM proposed unknown ATT&CK ID %r for event %s; discarding",
@@ -296,10 +330,12 @@ class AttackMappingAgent:
         # Candidate-set constraint: verify the LLM selected an attack_id
         # that was present in the retrieved context.
         context_attack_ids = {result.attack_id for result in context_results}
-        if context_attack_ids and str(attack_id).strip() not in context_attack_ids:
+        normalized_attack_id = technique.attack_id
+        if context_attack_ids and normalized_attack_id not in context_attack_ids and str(attack_id).strip() not in context_attack_ids:
             logger.warning(
-                "LLM selected attack_id %r not present in retrieved context for event %s; discarding",
+                "LLM selected attack_id %r (normalized=%r) not present in retrieved context for event %s; discarding",
                 attack_id,
+                normalized_attack_id,
                 event.get("event_id"),
             )
             return None
@@ -466,6 +502,25 @@ class AttackMappingAgent:
     # ------------------------------------------------------------------
     # Enrichment
     # ------------------------------------------------------------------
+
+    def _resolve_technique(self, attack_id: str):
+        """Resolve ATT&CK ID; fall back from sub-technique (e.g. T1562.001) to parent (T1562)."""
+        cleaned = str(attack_id or "").strip().upper()
+        candidates = [cleaned]
+        if "." in cleaned:
+            candidates.append(cleaned.split(".", 1)[0])
+
+        last_error = None
+        for candidate in candidates:
+            try:
+                return self.attack_service.get_technique(candidate)
+            except RecordNotFoundError as exc:
+                last_error = exc
+                continue
+
+        if last_error:
+            raise last_error
+        raise RecordNotFoundError(f"Technique not found: {attack_id}")
 
     def _enrich(self, mapped: Dict, attack_id: str) -> None:
         """Adds known groups/software/mitigations to a mapping in place.

@@ -109,8 +109,9 @@ HOST = os.getenv("REMOTE_AGENT_HOST", "0.0.0.0")
 PORT = int(os.getenv("REMOTE_AGENT_PORT", "9001"))
 API_KEY = os.getenv("REMOTE_AGENT_API_KEY", "change-me-in-production")
 HMAC_SECRET = os.getenv("REMOTE_AGENT_HMAC_SECRET", "")
-SCRIPTS_DIR = os.getenv("REMOTE_AGENT_SCRIPTS_DIR", "./remote_agent/received_scripts")
-LOG_FILE = os.getenv("REMOTE_AGENT_LOG_FILE", "./remote_agent/execution_log.jsonl")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPTS_DIR = os.path.abspath(os.getenv("REMOTE_AGENT_SCRIPTS_DIR", os.path.join(BASE_DIR, "received_scripts")))
+LOG_FILE = os.path.abspath(os.getenv("REMOTE_AGENT_LOG_FILE", os.path.join(BASE_DIR, "execution_log.jsonl")))
 REPLAY_WINDOW = int(os.getenv("REMOTE_AGENT_REPLAY_WINDOW", "300"))
 
 os.makedirs(SCRIPTS_DIR, exist_ok=True)
@@ -405,7 +406,7 @@ async def execute_script(
         timeout_seconds = int(os.getenv("REMOTE_AGENT_TIMEOUT", "1800"))
 
         result = subprocess.run(
-            ["/bin/bash", script_path],
+            ["/bin/bash", os.path.abspath(script_path)],
             capture_output=True,
             text=True,
             timeout=timeout_seconds,

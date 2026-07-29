@@ -30,6 +30,7 @@ NORMALIZED_FIELDS = [
     "rule_description",
     "rule_level",
     "rule_groups",
+    "rule_mitre",
     "proto",
     "service",
     "query",
@@ -118,6 +119,7 @@ def _normalize_wazuh(event: dict) -> dict:
     n["rule_description"] = event.get("rule_description") or rule.get("description")
     n["rule_level"] = event.get("rule_level") or rule.get("level")
     n["rule_groups"] = rule_groups
+    n["rule_mitre"] = rule.get("mitre", {}).get("id", [])
     n["severity"] = event.get("severity") or event.get("rule_level") or rule.get("level")
 
     # Preserve explicitly normalized top-level fields first, then use Wazuh's

@@ -504,6 +504,7 @@ class ExecutionTranslationAgent:
         return {
             "action_id": action_id,
             "action_type": "block_ip",
+            "target": target,
             "platform": platform,
             "language": language,
             "filename": filename,
@@ -554,8 +555,8 @@ class ExecutionTranslationAgent:
                 f"    iptables -A OUTPUT -o lo -j ACCEPT\n"
                 f"elif command -v nft &> /dev/null; then\n"
                 f"    nft add table inet isolate\n"
-                f"    nft add chain inet isolate input {{ type filter hook input priority 0; policy drop; }}\n"
-                f"    nft add chain inet isolate output {{ type filter hook output priority 0; policy drop; }}\n"
+                f"    nft add chain inet isolate input '{{ type filter hook input priority 0; policy drop; }}'\n"
+                f"    nft add chain inet isolate output '{{ type filter hook output priority 0; policy drop; }}'\n"
                 f"    nft add rule inet isolate input iif lo accept\n"
                 f"    nft add rule inet isolate output oif lo accept\n"
                 f"else\n"
@@ -587,6 +588,7 @@ class ExecutionTranslationAgent:
         return {
             "action_id": action_id,
             "action_type": "isolate_host",
+            "target": target,
             "platform": platform,
             "language": language,
             "filename": filename,
@@ -656,6 +658,7 @@ class ExecutionTranslationAgent:
         return {
             "action_id": action_id,
             "action_type": "disable_account",
+            "target": target,
             "platform": platform,
             "language": language,
             "filename": filename,
@@ -717,6 +720,7 @@ class ExecutionTranslationAgent:
         return {
             "action_id": action_id,
             "action_type": "kill_process",
+            "target": target,
             "platform": platform,
             "language": language,
             "filename": filename,
@@ -797,6 +801,7 @@ class ExecutionTranslationAgent:
         return {
             "action_id": action_id,
             "action_type": "quarantine_file",
+            "target": target,
             "platform": platform,
             "language": language,
             "filename": filename,
@@ -839,6 +844,7 @@ class ExecutionTranslationAgent:
         return {
             "action_id": action_id,
             "action_type": "notify_analyst",
+            "target": target,
             "platform": "cross_platform",
             "language": "text",
             "filename": filename,
@@ -863,6 +869,7 @@ class ExecutionTranslationAgent:
         return {
             "action_id": f"error_{hash(target) & 0xffffffff:08x}",
             "action_type": action_type,
+            "target": target,
             "platform": "unknown",
             "language": "unknown",
             "filename": "",
