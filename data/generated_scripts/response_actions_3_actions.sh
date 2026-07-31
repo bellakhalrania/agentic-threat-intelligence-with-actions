@@ -36,96 +36,109 @@ echo "",
 
 # =======================================
 # Action 1: block_ip
-# Target: 195.178.110.137
-# ID: block_ip_bfa6b0c2
-# Expected: Block all inbound and outbound traffic to/from IP 195.178.110.137
+# Target: 101.206.211.72
+# ID: block_ip_0c7e7462
+# Expected: Block all inbound and outbound traffic to/from IP 101.206.211.72
 # =======================================
 action_1() {
-    echo "[ACTION 1] block_ip -> 195.178.110.137"
-    echo "  Expected: Block all inbound and outbound traffic to/from IP 195.178.110.137"
+    echo "[ACTION 1] block_ip -> 101.206.211.72"
+    echo "  Expected: Block all inbound and outbound traffic to/from IP 101.206.211.72"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Block IP 195.178.110.137
+    # Block IP 101.206.211.72
     if command -v nft &> /dev/null; then
-        nft add rule inet filter input ip saddr 195.178.110.137 drop
-        nft add rule inet filter output ip daddr 195.178.110.137 drop
+        nft add rule inet filter input ip saddr 101.206.211.72 drop
+        nft add rule inet filter output ip daddr 101.206.211.72 drop
     elif command -v iptables &> /dev/null; then
-        iptables -A INPUT -s 195.178.110.137 -j DROP 2>/dev/null
-        iptables -A OUTPUT -d 195.178.110.137 -j DROP 2>/dev/null
+        iptables -A INPUT -s 101.206.211.72 -j DROP 2>/dev/null
+        iptables -A OUTPUT -d 101.206.211.72 -j DROP 2>/dev/null
     else
         echo 'ERROR: Neither nft nor iptables found' >&2
         exit 1
     fi
-    echo 'Blocked IP 195.178.110.137'
+    echo 'Blocked IP 101.206.211.72'
     echo "  [OK] block_ip completed"
 }
 
 rollback_1() {
-    echo "[ROLLBACK 1] block_ip -> 195.178.110.137"
+    echo "[ROLLBACK 1] block_ip -> 101.206.211.72"
     if command -v nft &> /dev/null; then
-        nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '195.178.110.137' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
-        nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '195.178.110.137' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
+        nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '101.206.211.72' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
+        nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '101.206.211.72' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
     elif command -v iptables &> /dev/null; then
-        iptables -D INPUT -s 195.178.110.137 -j DROP 2>/dev/null || true
-        iptables -D OUTPUT -d 195.178.110.137 -j DROP 2>/dev/null || true
+        iptables -D INPUT -s 101.206.211.72 -j DROP 2>/dev/null || true
+        iptables -D OUTPUT -d 101.206.211.72 -j DROP 2>/dev/null || true
     fi
     echo "  [OK] Rollback of block_ip completed"
 }
 
 verify_1() {
-    echo "[VERIFY 1] block_ip -> 195.178.110.137"
-    iptables -L INPUT -n 2>/dev/null | grep '195.178.110.137' || nft list ruleset 2>/dev/null | grep '195.178.110.137'
-    ping -c 1 -W 2 195.178.110.137 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'
+    echo "[VERIFY 1] block_ip -> 101.206.211.72"
+    iptables -L INPUT -n 2>/dev/null | grep '101.206.211.72' || nft list ruleset 2>/dev/null | grep '101.206.211.72'
+    ping -c 1 -W 2 101.206.211.72 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'
 }
 
 
 # =======================================
 # Action 2: isolate_host
-# Target: 195.178.110.137
-# ID: isolate_host_bfa6b0c2
-# Expected: Block all traffic on host 195.178.110.137 except loopback
+# Target: ip-172-31-19-70
+# ID: isolate_host_8f48bac8
+# Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000
 # =======================================
 action_2() {
-    echo "[ACTION 2] isolate_host -> 195.178.110.137"
-    echo "  Expected: Block all traffic on host 195.178.110.137 except loopback"
+    echo "[ACTION 2] isolate_host -> ip-172-31-19-70"
+    echo "  Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Isolate host 195.178.110.137
-    # Flush existing rules and set default policies to drop
+    # Isolate host ip-172-31-19-70 while preserving remote management channel
+    # NOTE: Keep port 9001 reachable so the remote agent does not self-lock.
+    MGMT_IP="${REMOTE_MANAGER_IP:-100.76.226.30}"
+    REMOTE_PORT="${REMOTE_AGENT_PORT:-9001}"
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_bfa6b0c2.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_8f48bac8.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
         # Allow loopback
         iptables -A INPUT -i lo -j ACCEPT
         iptables -A OUTPUT -o lo -j ACCEPT
+        # Keep established connections alive
+        iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+        iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+        # Keep control-plane reachable from manager
+        iptables -A INPUT -p tcp --dport "$REMOTE_PORT" -s "$MGMT_IP" -j ACCEPT
+        # Allow callback webhook traffic to manager
+        iptables -A OUTPUT -p tcp -d "$MGMT_IP" --dport 8000 -j ACCEPT
     elif command -v nft &> /dev/null; then
-        nft add table inet isolate
-        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }'
-        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }'
+        nft add table inet isolate 2>/dev/null || true
+        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true
+        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true
         nft add rule inet isolate input iif lo accept
         nft add rule inet isolate output oif lo accept
+        nft add rule inet isolate input ct state established,related accept
+        nft add rule inet isolate output ct state established,related accept
+        nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept
+        nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept
     else
         echo 'ERROR: No firewall tool found' >&2
         exit 1
     fi
-    echo 'Host 195.178.110.137 isolated'
+    echo 'Host ip-172-31-19-70 isolated with management channel preserved'
     echo "  [OK] isolate_host completed"
 }
 
 rollback_2() {
-    echo "[ROLLBACK 2] isolate_host -> 195.178.110.137"
-    if [ -f /tmp/iptables_backup_bfa6b0c2.txt ]; then
-        iptables-restore < /tmp/iptables_backup_bfa6b0c2.txt
-        rm /tmp/iptables_backup_bfa6b0c2.txt
+    echo "[ROLLBACK 2] isolate_host -> ip-172-31-19-70"
+    if [ -f /tmp/iptables_backup_8f48bac8.txt ]; then
+        iptables-restore < /tmp/iptables_backup_8f48bac8.txt
+        rm /tmp/iptables_backup_8f48bac8.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -135,7 +148,7 @@ rollback_2() {
 }
 
 verify_2() {
-    echo "[VERIFY 2] isolate_host -> 195.178.110.137"
+    echo "[VERIFY 2] isolate_host -> ip-172-31-19-70"
     iptables -L -n 2>/dev/null | head -5
     ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'
 }
@@ -144,7 +157,7 @@ verify_2() {
 # =======================================
 # Action 3: notify_analyst
 # Target: SOC Team
-# ID: notify_analyst_313b9f1b
+# ID: notify_analyst_347a9745
 # Expected: Create analyst notification for SOC Team
 # =======================================
 action_3() {
@@ -155,8 +168,8 @@ action_3() {
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
-    # Related technique: T1078
-    # Confidence: 1.0
+    # Related technique: T1110
+    # Confidence: 0.85
     #
     # Please review the following:
     #   - SOC Team

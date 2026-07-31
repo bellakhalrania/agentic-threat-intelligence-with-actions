@@ -298,7 +298,19 @@ class ResponseAgent:
             return ActionResult(action=action, status="failed", detail="No connector registered.", dry_run=config.DRY_RUN)
 
         try:
-            raw_output = handler(action.target)
+            # notify_analyst expects a human-readable message body; other connectors
+            # still receive the action target as before.
+            if action.action_type.value == "notify_analyst":
+                notify_message = (
+                    f"Notify target: {action.target} | "
+                    f"Technique: {action.technique_id or 'N/A'} | "
+                    f"Confidence: {action.confidence:.2f} | "
+                    f"Rationale: {action.rationale}"
+                )
+                raw_output = handler(notify_message)
+            else:
+                raw_output = handler(action.target)
+
             # Connectors now return JSON strings; parse to extract the detail field
             import json
             try:

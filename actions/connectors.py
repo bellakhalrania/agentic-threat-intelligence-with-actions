@@ -19,8 +19,11 @@ logic in each function with the actual API call. Examples of what you'd plug in:
 
 import json
 import logging
+import time
 from datetime import datetime, timezone
 from typing import Optional
+
+from actions.notifier_email import send_notify_analyst_email
 from config import config
 
 logger = logging.getLogger(__name__)
@@ -146,17 +149,24 @@ def quarantine_file(file_hash: str) -> str:
 
 
 def notify_analyst(message: str) -> str:
-    """Send a notification to the security operations team.
+    """Send analyst notification by SMTP email (real delivery when DRY_RUN=false)."""
+    if config.DRY_RUN:
+        result = _simulate_api_call("notify_analyst", message, success=True)
+        return json.dumps(result)
 
-    Always "executes" — replace with Slack/Teams/PagerDuty webhook.
-    In production, replace with:
-        response = requests.post(
-            SLACK_WEBHOOK_URL,
-            json={"text": message},
-        )
-        response.raise_for_status()
-    """
-    result = _simulate_api_call("notify_analyst", message, success=True)
+    start = time.time()
+    send_result = send_notify_analyst_email(target="SOC Team", message=message)
+    duration = time.time() - start
+
+    if send_result.get("sent"):
+        detail = send_result.get("detail", "Email notification sent")
+        result = _build_result("notify_analyst", message, "executed", detail, duration)
+        logger.info(detail)
+        return json.dumps(result)
+
+    detail = send_result.get("detail", "Email notification failed")
+    result = _build_result("notify_analyst", message, "failed", detail, duration)
+    logger.error(detail)
     return json.dumps(result)
 
 

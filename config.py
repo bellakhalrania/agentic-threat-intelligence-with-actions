@@ -79,6 +79,20 @@ class Config:
         t.strip() for t in os.getenv("APPROVED_ISOLATION_TARGETS", "").split(",") if t.strip()
     }
 
+    # ---------------- Analyst Notification (SMTP email) ----------------
+    NOTIFY_EMAIL_ENABLED = os.getenv("NOTIFY_EMAIL_ENABLED", "false").lower() == "true"
+    NOTIFY_EMAIL_SMTP_HOST = os.getenv("NOTIFY_EMAIL_SMTP_HOST", "")
+    NOTIFY_EMAIL_SMTP_PORT = int(os.getenv("NOTIFY_EMAIL_SMTP_PORT", "587"))
+    NOTIFY_EMAIL_SMTP_USER = os.getenv("NOTIFY_EMAIL_SMTP_USER", "")
+    NOTIFY_EMAIL_SMTP_PASS = os.getenv("NOTIFY_EMAIL_SMTP_PASS", "")
+    NOTIFY_EMAIL_USE_TLS = os.getenv("NOTIFY_EMAIL_USE_TLS", "true").lower() == "true"
+    NOTIFY_EMAIL_FROM = os.getenv("NOTIFY_EMAIL_FROM", "")
+    NOTIFY_EMAIL_TO = [
+        addr.strip() for addr in os.getenv("NOTIFY_EMAIL_TO", "").split(",") if addr.strip()
+    ]
+    NOTIFY_EMAIL_SUBJECT_PREFIX = os.getenv("NOTIFY_EMAIL_SUBJECT_PREFIX", "[ATI]")
+    NOTIFY_EMAIL_TIMEOUT = int(os.getenv("NOTIFY_EMAIL_TIMEOUT", "10"))
+
     # ---------------- Remote Response Agent (Machine 2) ----------------
     # URL of the Remote Response Agent running on the target machine.
     # Example: http://192.168.1.100:9001
