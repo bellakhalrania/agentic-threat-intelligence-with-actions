@@ -122,6 +122,10 @@ class ActionOnlyResponse(BaseModel):
     combined_script: str = ""
     combined_filename: str = ""
     campaign_id: Optional[str] = None
+    remote_push_attempted: bool = False
+    remote_push_url: str = ""
+    remote_execution_result: Optional[Dict[str, Any]] = None
+    remote_execution_error: str = ""
     error: Optional[str] = None
 
 
@@ -449,7 +453,11 @@ async def response_actions(request: ActionOnlyRequest):
             execution_packages=final_state.get("execution_packages", []),
             combined_script=final_state.get("combined_script", ""),
             combined_filename=final_state.get("combined_filename", ""),
-            campaign_id=final_state.get("campaign", {}).get("campaign_id")
+            campaign_id=final_state.get("campaign", {}).get("campaign_id"),
+            remote_push_attempted=final_state.get("remote_push_attempted", False),
+            remote_push_url=final_state.get("remote_push_url", ""),
+            remote_execution_result=final_state.get("remote_execution_result"),
+            remote_execution_error=final_state.get("remote_execution_error", ""),
         )
 
     except Exception as e:

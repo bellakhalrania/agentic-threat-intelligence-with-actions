@@ -36,23 +36,23 @@ echo "",
 
 # =======================================
 # Action 1: isolate_host
-# Target: sshd
-# ID: isolate_host_02daa78f
-# Expected: Block all traffic on host sshd except loopback
+# Target: ip-172-31-19-70
+# ID: isolate_host_f1f7b4e5
+# Expected: Block all traffic on host ip-172-31-19-70 except loopback
 # =======================================
 action_1() {
-    echo "[ACTION 1] isolate_host -> sshd"
-    echo "  Expected: Block all traffic on host sshd except loopback"
+    echo "[ACTION 1] isolate_host -> ip-172-31-19-70"
+    echo "  Expected: Block all traffic on host ip-172-31-19-70 except loopback"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Isolate host sshd
+    # Isolate host ip-172-31-19-70
     # Flush existing rules and set default policies to drop
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_02daa78f.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_f1f7b4e5.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
@@ -69,15 +69,15 @@ action_1() {
         echo 'ERROR: No firewall tool found' >&2
         exit 1
     fi
-    echo 'Host sshd isolated'
+    echo 'Host ip-172-31-19-70 isolated'
     echo "  [OK] isolate_host completed"
 }
 
 rollback_1() {
-    echo "[ROLLBACK 1] isolate_host -> sshd"
-    if [ -f /tmp/iptables_backup_02daa78f.txt ]; then
-        iptables-restore < /tmp/iptables_backup_02daa78f.txt
-        rm /tmp/iptables_backup_02daa78f.txt
+    echo "[ROLLBACK 1] isolate_host -> ip-172-31-19-70"
+    if [ -f /tmp/iptables_backup_f1f7b4e5.txt ]; then
+        iptables-restore < /tmp/iptables_backup_f1f7b4e5.txt
+        rm /tmp/iptables_backup_f1f7b4e5.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -87,7 +87,7 @@ rollback_1() {
 }
 
 verify_1() {
-    echo "[VERIFY 1] isolate_host -> sshd"
+    echo "[VERIFY 1] isolate_host -> ip-172-31-19-70"
     iptables -L -n 2>/dev/null | head -5
     ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'
 }
@@ -96,7 +96,7 @@ verify_1() {
 # =======================================
 # Action 2: notify_analyst
 # Target: SOC Team
-# ID: notify_analyst_2a815f2a
+# ID: notify_analyst_b3a0e520
 # Expected: Create analyst notification for SOC Team
 # =======================================
 action_2() {
@@ -107,8 +107,8 @@ action_2() {
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
-    # Related technique: T1110
-    # Confidence: 1.0
+    # Related technique: T1110.001
+    # Confidence: 0.7
     #
     # Please review the following:
     #   - SOC Team

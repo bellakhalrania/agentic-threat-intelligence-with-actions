@@ -36,71 +36,71 @@ echo "",
 
 # =======================================
 # Action 1: block_ip
-# Target: 47.98.100.193
-# ID: block_ip_9b56632e
-# Expected: Block all inbound and outbound traffic to/from IP 47.98.100.193
+# Target: 195.178.110.137
+# ID: block_ip_bfa6b0c2
+# Expected: Block all inbound and outbound traffic to/from IP 195.178.110.137
 # =======================================
 action_1() {
-    echo "[ACTION 1] block_ip -> 47.98.100.193"
-    echo "  Expected: Block all inbound and outbound traffic to/from IP 47.98.100.193"
+    echo "[ACTION 1] block_ip -> 195.178.110.137"
+    echo "  Expected: Block all inbound and outbound traffic to/from IP 195.178.110.137"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Block IP 47.98.100.193
+    # Block IP 195.178.110.137
     if command -v nft &> /dev/null; then
-        nft add rule inet filter input ip saddr 47.98.100.193 drop
-        nft add rule inet filter output ip daddr 47.98.100.193 drop
+        nft add rule inet filter input ip saddr 195.178.110.137 drop
+        nft add rule inet filter output ip daddr 195.178.110.137 drop
     elif command -v iptables &> /dev/null; then
-        iptables -A INPUT -s 47.98.100.193 -j DROP 2>/dev/null
-        iptables -A OUTPUT -d 47.98.100.193 -j DROP 2>/dev/null
+        iptables -A INPUT -s 195.178.110.137 -j DROP 2>/dev/null
+        iptables -A OUTPUT -d 195.178.110.137 -j DROP 2>/dev/null
     else
         echo 'ERROR: Neither nft nor iptables found' >&2
         exit 1
     fi
-    echo 'Blocked IP 47.98.100.193'
+    echo 'Blocked IP 195.178.110.137'
     echo "  [OK] block_ip completed"
 }
 
 rollback_1() {
-    echo "[ROLLBACK 1] block_ip -> 47.98.100.193"
+    echo "[ROLLBACK 1] block_ip -> 195.178.110.137"
     if command -v nft &> /dev/null; then
-        nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '47.98.100.193' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
-        nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '47.98.100.193' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
+        nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '195.178.110.137' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
+        nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '195.178.110.137' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
     elif command -v iptables &> /dev/null; then
-        iptables -D INPUT -s 47.98.100.193 -j DROP 2>/dev/null || true
-        iptables -D OUTPUT -d 47.98.100.193 -j DROP 2>/dev/null || true
+        iptables -D INPUT -s 195.178.110.137 -j DROP 2>/dev/null || true
+        iptables -D OUTPUT -d 195.178.110.137 -j DROP 2>/dev/null || true
     fi
     echo "  [OK] Rollback of block_ip completed"
 }
 
 verify_1() {
-    echo "[VERIFY 1] block_ip -> 47.98.100.193"
-    iptables -L INPUT -n 2>/dev/null | grep '47.98.100.193' || nft list ruleset 2>/dev/null | grep '47.98.100.193'
-    ping -c 1 -W 2 47.98.100.193 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'
+    echo "[VERIFY 1] block_ip -> 195.178.110.137"
+    iptables -L INPUT -n 2>/dev/null | grep '195.178.110.137' || nft list ruleset 2>/dev/null | grep '195.178.110.137'
+    ping -c 1 -W 2 195.178.110.137 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'
 }
 
 
 # =======================================
 # Action 2: isolate_host
-# Target: sshd
-# ID: isolate_host_58909bda
-# Expected: Block all traffic on host sshd except loopback
+# Target: 195.178.110.137
+# ID: isolate_host_bfa6b0c2
+# Expected: Block all traffic on host 195.178.110.137 except loopback
 # =======================================
 action_2() {
-    echo "[ACTION 2] isolate_host -> sshd"
-    echo "  Expected: Block all traffic on host sshd except loopback"
+    echo "[ACTION 2] isolate_host -> 195.178.110.137"
+    echo "  Expected: Block all traffic on host 195.178.110.137 except loopback"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Isolate host sshd
+    # Isolate host 195.178.110.137
     # Flush existing rules and set default policies to drop
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_58909bda.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_bfa6b0c2.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
@@ -117,15 +117,15 @@ action_2() {
         echo 'ERROR: No firewall tool found' >&2
         exit 1
     fi
-    echo 'Host sshd isolated'
+    echo 'Host 195.178.110.137 isolated'
     echo "  [OK] isolate_host completed"
 }
 
 rollback_2() {
-    echo "[ROLLBACK 2] isolate_host -> sshd"
-    if [ -f /tmp/iptables_backup_58909bda.txt ]; then
-        iptables-restore < /tmp/iptables_backup_58909bda.txt
-        rm /tmp/iptables_backup_58909bda.txt
+    echo "[ROLLBACK 2] isolate_host -> 195.178.110.137"
+    if [ -f /tmp/iptables_backup_bfa6b0c2.txt ]; then
+        iptables-restore < /tmp/iptables_backup_bfa6b0c2.txt
+        rm /tmp/iptables_backup_bfa6b0c2.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -135,7 +135,7 @@ rollback_2() {
 }
 
 verify_2() {
-    echo "[VERIFY 2] isolate_host -> sshd"
+    echo "[VERIFY 2] isolate_host -> 195.178.110.137"
     iptables -L -n 2>/dev/null | head -5
     ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'
 }
@@ -144,7 +144,7 @@ verify_2() {
 # =======================================
 # Action 3: notify_analyst
 # Target: SOC Team
-# ID: notify_analyst_2582c66a
+# ID: notify_analyst_313b9f1b
 # Expected: Create analyst notification for SOC Team
 # =======================================
 action_3() {
@@ -155,7 +155,7 @@ action_3() {
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
-    # Related technique: T1110
+    # Related technique: T1078
     # Confidence: 1.0
     #
     # Please review the following:

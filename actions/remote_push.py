@@ -89,6 +89,12 @@ def push_script_to_remote(
             "Set REMOTE_AGENT_URL in .env or pass remote_url parameter."
         )
 
+    if not key:
+        raise RemotePushError(
+            "Remote agent API key not configured. "
+            "Set REMOTE_AGENT_API_KEY in .env or pass api_key parameter."
+        )
+
     if not hmac_key:
         raise RemotePushError(
             "HMAC secret not configured. "
@@ -113,6 +119,10 @@ def push_script_to_remote(
     # Build headers with Bearer token
     headers = {
         "Content-Type": "application/json",
+        # Avoid keep-alive edge cases across overlay networks (e.g., Tailscale)
+        # where the request is processed remotely but the client stalls waiting
+        # on a persistent socket.
+        "Connection": "close",
     }
     if key:
         headers["Authorization"] = f"Bearer {key}"
@@ -169,6 +179,14 @@ def push_script_to_remote(
         raise RemotePushError(f"Request to remote agent failed: {e}")
 
 
+def _base_url_from_remote_url(remote_url: str) -> str:
+    """Normalize configured remote URL to base origin/path without /execute."""
+    normalized = remote_url.strip().rstrip("/")
+    if normalized.endswith("/execute"):
+        return normalized[: -len("/execute")]
+    return normalized
+
+
 def verify_remote_connection(
     remote_url: Optional[str] = None,
     api_key: Optional[str] = None,
@@ -191,8 +209,8 @@ def verify_remote_connection(
         logger.warning("REMOTE_AGENT_URL not configured, cannot verify connection")
         return False
 
-    # Use base URL (remove /execute if present)
-    health_url = url.rstrip("/execute").rstrip("/") + "/health"
+    # Use base URL (remove trailing /execute if present)
+    health_url = _base_url_from_remote_url(url) + "/health"
 
     headers = {}
     if key:
@@ -205,7 +223,10 @@ def verify_remote_connection(
             if data.get("status") == "healthy":
                 logger.info(f"Remote agent at {url} is healthy")
                 return True
-        logger.warning(f"Remote agent at {url} returned unexpected response: {response.status_code}")
+        logger.warning(
+            f"Remote agent at {url} returned unexpected response: "
+            f"{response.status_code} {response.text[:300]}"
+        )
         return False
     except requests.RequestException as e:
         logger.warning(f"Cannot reach remote agent at {url}: {e}")

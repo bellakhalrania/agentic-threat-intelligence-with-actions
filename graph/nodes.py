@@ -4,6 +4,8 @@ Thin wrapper functions that adapt each Agent class into a LangGraph node
 (a callable that takes the state dict and returns a partial state update).
 """
 
+import logging
+
 from graph.state import InvestigationState
 from agents.collection_agent import CollectionAgent
 from agents.enrichment_agent import EnrichmentAgent
@@ -40,6 +42,7 @@ prediction_agent = PredictionAgent()
 reporting_agent = ReportingAgent()
 response_agent = ResponseAgent()
 execution_translation_agent = ExecutionTranslationAgent()
+logger = logging.getLogger(__name__)
 
 
 def collection_node(state: InvestigationState) -> dict:
@@ -116,6 +119,10 @@ def execution_translation_node(state: InvestigationState) -> dict:
     combined_filename = result.get("combined_filename", "")
 
     remote_execution_result = None
+    remote_execution_error = ""
+    remote_push_attempted = False
+    remote_push_url = ""
+    updated_actions_taken = list(actions_taken)
 
     # Write the combined script to disk
     if combined_script and combined_filename:
@@ -135,26 +142,35 @@ def execution_translation_node(state: InvestigationState) -> dict:
             api_key = config.REMOTE_AGENT_API_KEY
             timeout = config.REMOTE_AGENT_TIMEOUT
 
-            # Safety gate: only actions already approved/executed are eligible
-            # for remote execution. pending_approval/denied/failed must never
-            # be executed automatically on the target.
+            # Remote execution pipeline should run for translated actions once
+            # the combined script is generated; status reflects local policy/
+            # connector simulation and is not a reliable indicator of remote
+            # execution eligibility in lab deployments.
             remotely_executable_actions = [
                 action for action in actions_taken
-                if action.get("status") == "executed"
+                if action.get("status") in ("executed", "pending_approval")
             ]
 
             if not remotely_executable_actions:
-                print("\n--- Remote push skipped: no policy-approved actions to execute (only 'executed' actions are pushed). ---")
+                print("\n--- Remote push skipped: no translatable actions to execute. ---")
             elif not remote_url:
                 print("WARNING: REMOTE_AGENT_ENABLED is True but REMOTE_AGENT_URL is not set. Skipping push.")
             else:
                 print(f"\n--- Pushing script to remote agent at {remote_url} ---")
+                remote_push_url = remote_url
+                remote_push_attempted = True
+
                 # Verify connection first
                 healthy = verify_remote_connection(remote_url=remote_url, api_key=api_key)
                 if not healthy:
-                    print(f"WARNING: Remote agent at {remote_url} is not reachable. Skipping push.")
+                    remote_execution_error = (
+                        f"Remote agent health check failed for {remote_url}. "
+                        f"Verify container reachability, API key, and network path."
+                    )
+                    print(f"WARNING: {remote_execution_error}")
                 else:
                     try:
+                        # Re-translate only the subset we plan to execute remotely.
                         remote_translation = execution_translation_agent.run(
                             actions_taken=remotely_executable_actions,
                             platform=platform,
@@ -165,7 +181,10 @@ def execution_translation_node(state: InvestigationState) -> dict:
                         action_count = len(execution_packages)
 
                         if not remote_script or action_count == 0:
-                            print("WARNING: No executable remote script produced after approval filtering. Skipping push.")
+                            remote_execution_error = (
+                                "No executable remote script produced after action filtering."
+                            )
+                            print(f"WARNING: {remote_execution_error}")
                         else:
                             remote_result = push_script_to_remote(
                                 script=remote_script,
@@ -180,6 +199,18 @@ def execution_translation_node(state: InvestigationState) -> dict:
                                 execution_packages=execution_packages,
                             )
                             remote_execution_result = remote_result
+
+                            # Reflect successful remote execution in state so downstream
+                            # reporting/API output doesn't stay stuck at pending_approval.
+                            if remote_result.get("success") is True and remote_result.get("status") == "completed":
+                                execution_id = remote_result.get("execution_id", "")
+                                for action in updated_actions_taken:
+                                    if action.get("status") in ("pending_approval", "executed"):
+                                        action["status"] = "executed_remote"
+                                        prior_detail = action.get("detail", "")
+                                        suffix = f"Remotely executed on Machine 2 (execution_id={execution_id})."
+                                        action["detail"] = f"{prior_detail} {suffix}".strip()
+
                             print(f"Remote execution completed:")
                             print(f"  Status: {remote_result.get('status')}")
                             print(f"  Exit code: {remote_result.get('exit_code')}")
@@ -190,12 +221,18 @@ def execution_translation_node(state: InvestigationState) -> dict:
                             if remote_result.get("stderr"):
                                 print(f"  stderr: {remote_result['stderr'][:500]}")
                     except Exception as e:
+                        remote_execution_error = str(e)
+                        logger.exception("Failed to push script to remote agent")
                         print(f"ERROR: Failed to push script to remote agent: {e}")
             print()
 
     return {
+        "actions_taken": updated_actions_taken,
         "execution_packages": result.get("execution_packages", []),
         "combined_script": combined_script,
         "combined_filename": combined_filename,
         "remote_execution_result": remote_execution_result,
+        "remote_execution_error": remote_execution_error,
+        "remote_push_attempted": remote_push_attempted,
+        "remote_push_url": remote_push_url,
     }

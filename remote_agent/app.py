@@ -17,25 +17,25 @@ Security:
   - All executions are logged to remote_agent/execution_log.jsonl
 """
 
-import os
+import base64
+import hashlib
+import hmac
 import json
 import logging
+import os
+import re
 import subprocess
+import time
 import uuid
 from datetime import datetime, timezone
-from typing import Optional, Set
 
-from fastapi import FastAPI, HTTPException, Depends, Header
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 
 # Shared crypto module is co-located; copy it to remote_agent/ or install from path
 # For now, inline the needed functions to keep the remote agent self-contained.
 # In production, use a shared package or copy actions/crypto.py to remote_agent/.
-import hmac
-import hashlib
-import base64
-import time
 
 # ---------------------------------------------------------------------------
 # Inline crypto functions (mirrors actions/crypto.py for self-contained agent)
@@ -52,7 +52,7 @@ FORBIDDEN_COMMANDS = [
 ]
 
 # In-memory set of seen nonces for replay protection
-_seen_nonces: Set[str] = set()
+_seen_nonces: set[str] = set()
 
 # Max entries in seen_nonces to prevent memory exhaustion
 _MAX_NONCES = 10000
@@ -98,6 +98,13 @@ def _validate_script(script: str) -> dict:
             result["reason"] = f"Script contains forbidden command: {cmd}"
             return result
 
+    if not result["detected_actions"] and script.strip():
+        result["valid"] = False
+        result["reason"] = (
+            "No allowed action types detected in script. Refusing to execute unknown script content."
+        )
+        return result
+
     return result
 
 
@@ -107,7 +114,7 @@ def _validate_script(script: str) -> dict:
 
 HOST = os.getenv("REMOTE_AGENT_HOST", "0.0.0.0")
 PORT = int(os.getenv("REMOTE_AGENT_PORT", "9001"))
-API_KEY = os.getenv("REMOTE_AGENT_API_KEY", "change-me-in-production")
+API_KEY = os.getenv("REMOTE_AGENT_API_KEY", "")
 HMAC_SECRET = os.getenv("REMOTE_AGENT_HMAC_SECRET", "")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS_DIR = os.path.abspath(os.getenv("REMOTE_AGENT_SCRIPTS_DIR", os.path.join(BASE_DIR, "received_scripts")))
@@ -180,7 +187,7 @@ class ExecutionResult(BaseModel):
     status: str  # "completed", "failed", "timeout"
     executed_at: str
     duration_ms: float
-    error: Optional[str] = None
+    error: str | None = None
 
 
 class ExecutionLogEntry(BaseModel):
@@ -201,10 +208,19 @@ class ExecutionLogEntry(BaseModel):
 # ---------------------------------------------------------------------------
 
 
-def verify_auth(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> bool:
-    """Verify Bearer token. If no API key is configured, allow unauthenticated access."""
-    if not API_KEY or API_KEY == "":
-        return True
+def verify_auth(credentials: HTTPAuthorizationCredentials | None = Depends(security)) -> bool:
+    """Verify Bearer token.
+
+    In production we require a non-default API key. Running without one is rejected.
+    """
+    if not API_KEY or API_KEY == "change-me-in-production":
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Remote agent is misconfigured: set REMOTE_AGENT_API_KEY to a strong value. "
+                "Refusing unauthenticated execution endpoints."
+            ),
+        )
 
     if credentials is None:
         raise HTTPException(status_code=401, detail="Missing authentication token")
@@ -226,7 +242,7 @@ def _log_execution(entry: ExecutionLogEntry) -> None:
     try:
         with open(LOG_FILE, "a") as f:
             f.write(entry.model_dump_json() + "\n")
-    except Exception as e:
+    except OSError as e:
         logger.error(f"Failed to write execution log: {e}")
 
 
@@ -241,7 +257,7 @@ async def health():
     return {
         "status": "healthy",
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "agent": f"RemoteResponseAgent",
+        "agent": "RemoteResponseAgent",
     }
 
 
@@ -256,7 +272,7 @@ async def get_status(auth: bool = Depends(verify_auth)):
                     line = line.strip()
                     if line:
                         entries.append(json.loads(line))
-        except Exception as e:
+        except (OSError, json.JSONDecodeError) as e:
             logger.error(f"Failed to read execution log: {e}")
 
     return {
@@ -270,7 +286,6 @@ async def get_status(auth: bool = Depends(verify_auth)):
 async def execute_script(
     request: ExecuteRequest,
     auth: bool = Depends(verify_auth),
-    x_api_key: Optional[str] = Header(None),
 ):
     """
     Receive a response script, execute it, and return the result.
@@ -291,30 +306,33 @@ async def execute_script(
     # ======================================================================
     # SECURITY CHECK 1: Signature verification (HMAC-SHA256)
     # ======================================================================
-    if HMAC_SECRET:
-        if not request.signature:
-            raise HTTPException(
-                status_code=400,
-                detail="Signature required but not provided. Set REMOTE_AGENT_HMAC_SECRET on both sides.",
-            )
-
-        # Build the verification payload (same keys as signed on Machine 1)
-        payload_dict = request.model_dump()
-        if not _verify_signature(payload_dict, request.signature, HMAC_SECRET):
-            logger.warning(
-                f"Signature verification FAILED for execution {execution_id}. "
-                f"Expected valid HMAC-SHA256 with configured secret."
-            )
-            raise HTTPException(
-                status_code=403,
-                detail="Invalid payload signature. The request may have been tampered with.",
-            )
-        logger.info(f"Signature verified OK for execution {execution_id}")
-    else:
-        logger.warning(
-            "REMOTE_AGENT_HMAC_SECRET not configured. "
-            "Signature verification DISABLED - this is INSECURE for production!"
+    if not HMAC_SECRET:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Remote agent is misconfigured: set REMOTE_AGENT_HMAC_SECRET on Machine 2 "
+                "and match it on Machine 3."
+            ),
         )
+
+    if not request.signature:
+        raise HTTPException(
+            status_code=400,
+            detail="Signature required but not provided. Set REMOTE_AGENT_HMAC_SECRET on both sides.",
+        )
+
+    # Build the verification payload (same keys as signed on Machine 1)
+    payload_dict = request.model_dump()
+    if not _verify_signature(payload_dict, request.signature, HMAC_SECRET):
+        logger.warning(
+            f"Signature verification FAILED for execution {execution_id}. "
+            f"Expected valid HMAC-SHA256 with configured secret."
+        )
+        raise HTTPException(
+            status_code=403,
+            detail="Invalid payload signature. The request may have been tampered with.",
+        )
+    logger.info(f"Signature verified OK for execution {execution_id}")
 
     # ======================================================================
     # SECURITY CHECK 2: Replay attack protection (timestamp + nonce)
@@ -366,7 +384,7 @@ async def execute_script(
     detected = validation.get("detected_actions", [])
     logger.info(
         f"Action whitelist validation passed for execution {execution_id}. "
-        f"Detected actions: {detected if detected else 'none (custom script)'}"
+        f"Detected actions: {detected}"
     )
 
     # --- Basic content validation ---
@@ -379,7 +397,10 @@ async def execute_script(
     # ======================================================================
     # Save the script to disk and execute
     # ======================================================================
-    sanitized_filename = os.path.basename(request.filename or f"response_{execution_id[:8]}.sh")
+    original_filename = request.filename or f"response_{execution_id[:8]}.sh"
+    sanitized_filename = re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(original_filename))
+    if not sanitized_filename:
+        sanitized_filename = f"response_{execution_id[:8]}.sh"
     script_path = os.path.join(SCRIPTS_DIR, sanitized_filename)
 
     try:
@@ -387,9 +408,9 @@ async def execute_script(
             f.write(request.script)
         os.chmod(script_path, 0o755)  # make executable
         logger.info(f"Saved script to {script_path}")
-    except Exception as e:
+    except OSError as e:
         logger.error(f"Failed to save script: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to save script: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to save script: {e!s}")
 
     # --- Execute the script ---
     status = "failed"
@@ -398,12 +419,10 @@ async def execute_script(
     stderr = ""
     error_msg = None
     duration_ms = 0.0
+    timeout_seconds = int(os.getenv("REMOTE_AGENT_TIMEOUT", "1800"))
 
     try:
         logger.info(f"Executing script: {script_path}")
-
-        # Use timeout to prevent runaway scripts (30 minutes default)
-        timeout_seconds = int(os.getenv("REMOTE_AGENT_TIMEOUT", "1800"))
 
         result = subprocess.run(
             ["/bin/bash", os.path.abspath(script_path)],
@@ -411,6 +430,7 @@ async def execute_script(
             text=True,
             timeout=timeout_seconds,
             cwd=SCRIPTS_DIR,
+            check=False,
         )
 
         exit_code = result.returncode
@@ -429,12 +449,12 @@ async def execute_script(
         error_msg = f"Script execution timed out after {timeout_seconds} seconds"
         logger.error(f"Script {execution_id} timed out")
 
-    except subprocess.NoSuchFileError:
+    except FileNotFoundError:
         status = "failed"
-        error_msg = f"Shell interpreter not found"
+        error_msg = "Shell interpreter not found"
         logger.error(f"Script {execution_id}: shell not found")
 
-    except Exception as e:
+    except (subprocess.SubprocessError, OSError, ValueError) as e:
         status = "failed"
         error_msg = str(e)
         logger.error(f"Script {execution_id} execution error: {e}")
@@ -488,7 +508,7 @@ if __name__ == "__main__":
     import uvicorn
 
     print(f"Starting Remote Response Agent on {HOST}:{PORT}")
-    print(f"  API Key: {'configured' if API_KEY and API_KEY != 'change-me-in-production' else 'NOT SET (INSECURE)'}")
+    print(f"  API Key: {'configured' if API_KEY and API_KEY != 'change-me-in-production' else 'NOT SET (BLOCKED)'}")
     print(f"  Scripts dir: {SCRIPTS_DIR}")
     print(f"  Log file: {LOG_FILE}")
     print(f"  Timeout: {os.getenv('REMOTE_AGENT_TIMEOUT', '1800')}s")
