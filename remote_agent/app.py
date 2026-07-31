@@ -24,12 +24,14 @@ import json
 import logging
 import os
 import re
+import socket
 import subprocess
 import time
 import uuid
 from datetime import datetime, timezone
 
-from fastapi import Depends, FastAPI, HTTPException
+import requests
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 
@@ -120,6 +122,17 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS_DIR = os.path.abspath(os.getenv("REMOTE_AGENT_SCRIPTS_DIR", os.path.join(BASE_DIR, "received_scripts")))
 LOG_FILE = os.path.abspath(os.getenv("REMOTE_AGENT_LOG_FILE", os.path.join(BASE_DIR, "execution_log.jsonl")))
 REPLAY_WINDOW = int(os.getenv("REMOTE_AGENT_REPLAY_WINDOW", "300"))
+
+# Callback webhook (Machine 2 -> Machine 3)
+RESULT_WEBHOOK_ENABLED = os.getenv("REMOTE_RESULT_WEBHOOK_ENABLED", "false").lower() == "true"
+RESULT_WEBHOOK_URL = os.getenv("REMOTE_RESULT_WEBHOOK_URL", "")
+RESULT_WEBHOOK_KEY = os.getenv("REMOTE_WEBHOOK_KEY", "")
+RESULT_WEBHOOK_TIMEOUT = int(os.getenv("REMOTE_RESULT_WEBHOOK_TIMEOUT", "10"))
+RESULT_WEBHOOK_RETRIES = int(os.getenv("REMOTE_RESULT_WEBHOOK_RETRIES", "3"))
+RESULT_WEBHOOK_BACKOFF = float(os.getenv("REMOTE_RESULT_WEBHOOK_BACKOFF", "1.0"))
+RESULT_WEBHOOK_VERIFY_SSL = os.getenv("REMOTE_RESULT_WEBHOOK_VERIFY_SSL", "true").lower() == "true"
+AGENT_HOSTNAME = os.getenv("REMOTE_AGENT_NODE_HOSTNAME", socket.gethostname())
+AGENT_IP = os.getenv("REMOTE_AGENT_NODE_IP", "")
 
 os.makedirs(SCRIPTS_DIR, exist_ok=True)
 os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
@@ -246,6 +259,62 @@ def _log_execution(entry: ExecutionLogEntry) -> None:
         logger.error(f"Failed to write execution log: {e}")
 
 
+def _post_execution_result_to_manager(result_payload: dict) -> None:
+    """Best-effort callback of execution result from Machine 2 to Machine 3."""
+    if not RESULT_WEBHOOK_ENABLED:
+        return
+
+    if not RESULT_WEBHOOK_URL:
+        logger.warning("Webhook callback enabled but REMOTE_RESULT_WEBHOOK_URL is empty")
+        return
+
+    if not RESULT_WEBHOOK_KEY:
+        logger.warning("Webhook callback enabled but REMOTE_WEBHOOK_KEY is empty")
+        return
+
+    callback_payload = dict(result_payload)
+    callback_payload["agent_host"] = AGENT_HOSTNAME
+    callback_payload["agent_ip"] = AGENT_IP
+
+    headers = {
+        "Content-Type": "application/json",
+        "X-Webhook-Key": RESULT_WEBHOOK_KEY,
+        "Connection": "close",
+    }
+
+    for attempt in range(1, RESULT_WEBHOOK_RETRIES + 1):
+        try:
+            resp = requests.post(
+                RESULT_WEBHOOK_URL,
+                json=callback_payload,
+                headers=headers,
+                timeout=RESULT_WEBHOOK_TIMEOUT,
+                verify=RESULT_WEBHOOK_VERIFY_SSL,
+            )
+            if 200 <= resp.status_code < 300:
+                logger.info(
+                    "Execution callback delivered to manager: "
+                    f"execution_id={callback_payload.get('execution_id')} status={callback_payload.get('status')}"
+                )
+                return
+
+            logger.warning(
+                "Execution callback rejected by manager: "
+                f"HTTP {resp.status_code} body={resp.text[:300]}"
+            )
+        except requests.RequestException as e:
+            logger.warning(f"Execution callback attempt {attempt} failed: {e}")
+
+        if attempt < RESULT_WEBHOOK_RETRIES:
+            sleep_s = RESULT_WEBHOOK_BACKOFF * attempt
+            time.sleep(sleep_s)
+
+    logger.error(
+        "Execution callback permanently failed after retries: "
+        f"execution_id={callback_payload.get('execution_id')}"
+    )
+
+
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
@@ -285,6 +354,7 @@ async def get_status(auth: bool = Depends(verify_auth)):
 @app.post("/execute", response_model=ExecutionResult)
 async def execute_script(
     request: ExecuteRequest,
+    background_tasks: BackgroundTasks,
     auth: bool = Depends(verify_auth),
 ):
     """
@@ -497,6 +567,9 @@ async def execute_script(
         f"status={status}, exit_code={exit_code}, duration={duration_ms:.0f}ms"
     )
 
+    # Best-effort asynchronous callback to Machine 3 webhook
+    background_tasks.add_task(_post_execution_result_to_manager, result.model_dump())
+
     return result
 
 
@@ -512,5 +585,8 @@ if __name__ == "__main__":
     print(f"  Scripts dir: {SCRIPTS_DIR}")
     print(f"  Log file: {LOG_FILE}")
     print(f"  Timeout: {os.getenv('REMOTE_AGENT_TIMEOUT', '1800')}s")
+    print(f"  Callback webhook: {'enabled' if RESULT_WEBHOOK_ENABLED else 'disabled'}")
+    if RESULT_WEBHOOK_ENABLED:
+        print(f"  Callback URL: {RESULT_WEBHOOK_URL or 'NOT SET'}")
     print()
     uvicorn.run(app, host=HOST, port=PORT)

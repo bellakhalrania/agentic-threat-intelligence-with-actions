@@ -142,13 +142,13 @@ def execution_translation_node(state: InvestigationState) -> dict:
             api_key = config.REMOTE_AGENT_API_KEY
             timeout = config.REMOTE_AGENT_TIMEOUT
 
-            # Remote execution pipeline should run for translated actions once
-            # the combined script is generated; status reflects local policy/
-            # connector simulation and is not a reliable indicator of remote
-            # execution eligibility in lab deployments.
+            # Safe default: only policy-approved actions are pushed remotely.
+            # Optional override exists for labs via REMOTE_ALLOW_PENDING_EXECUTION.
+            allow_pending = config.REMOTE_ALLOW_PENDING_EXECUTION
             remotely_executable_actions = [
                 action for action in actions_taken
-                if action.get("status") in ("executed", "pending_approval")
+                if action.get("status") == "executed"
+                or (allow_pending and action.get("status") == "pending_approval")
             ]
 
             if not remotely_executable_actions:
@@ -207,9 +207,10 @@ def execution_translation_node(state: InvestigationState) -> dict:
                                 for action in updated_actions_taken:
                                     if action.get("status") in ("pending_approval", "executed"):
                                         action["status"] = "executed_remote"
-                                        prior_detail = action.get("detail", "")
-                                        suffix = f"Remotely executed on Machine 2 (execution_id={execution_id})."
-                                        action["detail"] = f"{prior_detail} {suffix}".strip()
+                                        action["detail"] = (
+                                            f"Remotely executed on Machine 2 "
+                                            f"(execution_id={execution_id})."
+                                        )
 
                             print(f"Remote execution completed:")
                             print(f"  Status: {remote_result.get('status')}")

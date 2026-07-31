@@ -15,13 +15,14 @@ API Documentation:
     http://localhost:8000/redoc (ReDoc)
 """
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Header
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 import json
 import logging
-from datetime import datetime
+import os
+from datetime import datetime, timezone
 
 # Import project modules
 from graph.workflow import threat_intel_workflow
@@ -127,6 +128,36 @@ class ActionOnlyResponse(BaseModel):
     remote_execution_result: Optional[Dict[str, Any]] = None
     remote_execution_error: str = ""
     error: Optional[str] = None
+
+
+class RemoteExecutionWebhookPayload(BaseModel):
+    """Execution result posted from Machine 2 remote agent."""
+    execution_id: str
+    campaign_id: str = ""
+    filename: str
+    status: str
+    success: bool
+    exit_code: int
+    stdout: str = ""
+    stderr: str = ""
+    executed_at: str
+    duration_ms: float
+    agent_host: str = ""
+    agent_ip: str = ""
+
+
+WEBHOOK_RESULTS_PATH = os.getenv(
+    "REMOTE_RESULT_STORAGE_PATH",
+    "./data/remote_results/execution_results.jsonl",
+)
+WEBHOOK_SHARED_KEY = os.getenv("REMOTE_WEBHOOK_KEY", "")
+
+
+def _append_remote_execution_result(entry: Dict[str, Any]) -> None:
+    """Persist remote execution callback payload as JSONL."""
+    os.makedirs(os.path.dirname(WEBHOOK_RESULTS_PATH), exist_ok=True)
+    with open(WEBHOOK_RESULTS_PATH, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 # Background task for async investigation
@@ -338,6 +369,38 @@ async def get_config():
             "groq_configured": bool(config.GROQ_API_KEY)
         }
     }
+
+
+@app.post("/remote/execution-result")
+async def receive_remote_execution_result(
+    payload: RemoteExecutionWebhookPayload,
+    x_webhook_key: Optional[str] = Header(None, alias="X-Webhook-Key"),
+):
+    """Receive execution-result callbacks from Machine 2 remote agent."""
+    if not WEBHOOK_SHARED_KEY:
+        raise HTTPException(
+            status_code=503,
+            detail="Webhook receiver misconfigured: set REMOTE_WEBHOOK_KEY on Machine 3.",
+        )
+
+    if not x_webhook_key or x_webhook_key != WEBHOOK_SHARED_KEY:
+        raise HTTPException(status_code=403, detail="Invalid webhook authentication key")
+
+    result = payload.model_dump()
+    result["received_at"] = datetime.now(timezone.utc).isoformat()
+
+    try:
+        _append_remote_execution_result(result)
+        logger.info(
+            "Remote execution callback received: "
+            f"execution_id={result.get('execution_id')} status={result.get('status')} "
+            f"campaign={result.get('campaign_id')} agent={result.get('agent_ip') or result.get('agent_host')}"
+        )
+    except OSError as e:
+        logger.error(f"Failed to persist remote execution callback: {e}")
+        raise HTTPException(status_code=500, detail="Failed to persist callback payload")
+
+    return {"ok": True}
 
 
 @app.get("/chroma/collections", response_model=CollectionsResponse)

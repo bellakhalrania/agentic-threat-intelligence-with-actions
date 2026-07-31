@@ -37,47 +37,60 @@ echo "",
 # =======================================
 # Action 1: isolate_host
 # Target: ip-172-31-19-70
-# ID: isolate_host_f1f7b4e5
-# Expected: Block all traffic on host ip-172-31-19-70 except loopback
+# ID: isolate_host_f34b1cd1
+# Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000
 # =======================================
 action_1() {
     echo "[ACTION 1] isolate_host -> ip-172-31-19-70"
-    echo "  Expected: Block all traffic on host ip-172-31-19-70 except loopback"
+    echo "  Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Isolate host ip-172-31-19-70
-    # Flush existing rules and set default policies to drop
+    # Isolate host ip-172-31-19-70 while preserving remote management channel
+    # NOTE: Keep port 9001 reachable so the remote agent does not self-lock.
+    MGMT_IP="${REMOTE_MANAGER_IP:-100.76.226.30}"
+    REMOTE_PORT="${REMOTE_AGENT_PORT:-9001}"
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_f1f7b4e5.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_f34b1cd1.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
         # Allow loopback
         iptables -A INPUT -i lo -j ACCEPT
         iptables -A OUTPUT -o lo -j ACCEPT
+        # Keep established connections alive
+        iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+        iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+        # Keep control-plane reachable from manager
+        iptables -A INPUT -p tcp --dport "$REMOTE_PORT" -s "$MGMT_IP" -j ACCEPT
+        # Allow callback webhook traffic to manager
+        iptables -A OUTPUT -p tcp -d "$MGMT_IP" --dport 8000 -j ACCEPT
     elif command -v nft &> /dev/null; then
-        nft add table inet isolate
-        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }'
-        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }'
+        nft add table inet isolate 2>/dev/null || true
+        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true
+        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true
         nft add rule inet isolate input iif lo accept
         nft add rule inet isolate output oif lo accept
+        nft add rule inet isolate input ct state established,related accept
+        nft add rule inet isolate output ct state established,related accept
+        nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept
+        nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept
     else
         echo 'ERROR: No firewall tool found' >&2
         exit 1
     fi
-    echo 'Host ip-172-31-19-70 isolated'
+    echo 'Host ip-172-31-19-70 isolated with management channel preserved'
     echo "  [OK] isolate_host completed"
 }
 
 rollback_1() {
     echo "[ROLLBACK 1] isolate_host -> ip-172-31-19-70"
-    if [ -f /tmp/iptables_backup_f1f7b4e5.txt ]; then
-        iptables-restore < /tmp/iptables_backup_f1f7b4e5.txt
-        rm /tmp/iptables_backup_f1f7b4e5.txt
+    if [ -f /tmp/iptables_backup_f34b1cd1.txt ]; then
+        iptables-restore < /tmp/iptables_backup_f34b1cd1.txt
+        rm /tmp/iptables_backup_f34b1cd1.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -95,36 +108,36 @@ verify_1() {
 
 # =======================================
 # Action 2: notify_analyst
-# Target: SOC Team
-# ID: notify_analyst_b3a0e520
-# Expected: Create analyst notification for SOC Team
+# Target: SOC_Team
+# ID: notify_analyst_db9884e7
+# Expected: Create analyst notification for SOC_Team
 # =======================================
 action_2() {
-    echo "[ACTION 2] notify_analyst -> SOC Team"
-    echo "  Expected: Create analyst notification for SOC Team"
+    echo "[ACTION 2] notify_analyst -> SOC_Team"
+    echo "  Expected: Create analyst notification for SOC_Team"
 
-    # Notify analyst about: SOC Team
+    # Notify analyst about: SOC_Team
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
     # Related technique: T1110.001
-    # Confidence: 0.7
+    # Confidence: 1.0
     #
     # Please review the following:
-    #   - SOC Team
+    #   - SOC_Team
     #
     # Manual investigation is required.
     echo "  [OK] notify_analyst completed"
 }
 
 rollback_2() {
-    echo "[ROLLBACK 2] notify_analyst -> SOC Team"
+    echo "[ROLLBACK 2] notify_analyst -> SOC_Team"
     # No rollback needed for notification actions.
     echo "  [OK] Rollback of notify_analyst completed"
 }
 
 verify_2() {
-    echo "[VERIFY 2] notify_analyst -> SOC Team"
+    echo "[VERIFY 2] notify_analyst -> SOC_Team"
     # Notification logged; verify via platform audit trail.
 }
 

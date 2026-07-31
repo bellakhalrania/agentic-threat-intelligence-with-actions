@@ -70,6 +70,15 @@ class Config:
     # are wired to your real infrastructure and you trust the policy.
     DRY_RUN = os.getenv("DRY_RUN", "true").lower() == "true"
 
+    # Safe mode guardrails:
+    # - notify_analyst can still auto-execute (low risk)
+    # - isolate_host requires explicit approval by target allowlist
+    SAFE_MODE_ENFORCED = os.getenv("SAFE_MODE_ENFORCED", "true").lower() == "true"
+    SAFE_MODE_NOTIFY_ANALYST_AUTO = os.getenv("SAFE_MODE_NOTIFY_ANALYST_AUTO", "true").lower() == "true"
+    APPROVED_ISOLATION_TARGETS = {
+        t.strip() for t in os.getenv("APPROVED_ISOLATION_TARGETS", "").split(",") if t.strip()
+    }
+
     # ---------------- Remote Response Agent (Machine 2) ----------------
     # URL of the Remote Response Agent running on the target machine.
     # Example: http://192.168.1.100:9001
@@ -80,6 +89,9 @@ class Config:
     REMOTE_AGENT_ENABLED = os.getenv("REMOTE_AGENT_ENABLED", "false").lower() == "true"
     # Timeout (seconds) for remote script execution.
     REMOTE_AGENT_TIMEOUT = int(os.getenv("REMOTE_AGENT_TIMEOUT", "3600"))
+    # If true, allow pushing pending_approval actions remotely (unsafe).
+    # Keep false in safe-mode lab/testing to avoid accidental disruptive actions.
+    REMOTE_ALLOW_PENDING_EXECUTION = os.getenv("REMOTE_ALLOW_PENDING_EXECUTION", "false").lower() == "true"
     # HMAC-SHA256 shared secret for payload signing.
     # Must be the same on Machine 1 and Machine 2.
     REMOTE_AGENT_HMAC_SECRET = os.getenv("REMOTE_AGENT_HMAC_SECRET", "")
