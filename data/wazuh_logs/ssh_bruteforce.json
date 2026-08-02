@@ -1,0 +1,38 @@
+[
+  {
+    "timestamp": "2026-07-20T09:00:00Z",
+    "source": "linux",
+    "host": "SERVER-01",
+    "src_ip": "203.0.113.50",
+    "event_type": "authentication_failed",
+    "username": "root",
+    "service": "ssh"
+  },
+  {
+    "timestamp": "2026-07-20T09:00:03Z",
+    "source": "linux",
+    "host": "SERVER-01",
+    "src_ip": "203.0.113.50",
+    "event_type": "authentication_failed",
+    "username": "root",
+    "service": "ssh"
+  },
+  {
+    "timestamp": "2026-07-20T09:00:06Z",
+    "source": "linux",
+    "host": "SERVER-01",
+    "src_ip": "203.0.113.50",
+    "event_type": "authentication_failed",
+    "username": "root",
+    "service": "ssh"
+  },
+  {
+    "timestamp": "2026-07-20T09:00:10Z",
+    "source": "linux",
+    "host": "SERVER-01",
+    "src_ip": "203.0.113.50",
+    "event_type": "authentication_success",
+    "username": "root",
+    "service": "ssh"
+  }
+]

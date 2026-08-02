@@ -9,7 +9,8 @@ before anything is allowed to actually execute, and every outcome - executed,
 pending, or denied - is written to the audit log.
 """
 
-from typing import List, Dict
+import re
+from typing import List, Dict, Set
 from llm.groq_client import invoke_llm
 from llm.output_parsers import extract_json
 from actions.action_models import ProposedAction, ActionResult
@@ -25,33 +26,361 @@ response actions. For each action, output:
  "technique_id": "...", "confidence": 0.0}
 Respond ONLY with a JSON array of action objects. Be conservative: only
 propose disruptive actions (isolate_host, disable_account) when evidence is
-strong. Always include at least one notify_analyst action summarizing the
-situation."""
+strong. Thresholds:
+- block_ip: when IOC confidence >= 0.8 AND reputation == malicious
+- isolate_host: when IOC confidence >= 0.9 OR multiple high-confidence techniques observed
+- notify_analyst: ALWAYS include at least one notify_analyst action summarizing the situation."""
 
 
 class ResponseAgent:
-    def run(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict]) -> List[ActionResult]:
-        prompt = f"Campaign:\n{campaign}\n\nTechniques:\n{techniques}\n\nIOCs:\n{iocs}"
+    # Confidence threshold above which a malicious IOC automatically triggers
+    # a block_ip proposal without waiting for the LLM.
+    BLOCK_IP_AUTO_THRESHOLD = 0.8
+
+    def run(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict], events: List[Dict] | None = None) -> List[ActionResult]:
+        print("\n========== RESPONSE AGENT ==========\n")
+        
+        event_list = events or []
+
+        # --- Extract valid targets to prevent LLM hallucination ---
+        valid_targets = self._extract_valid_targets(campaign, techniques, iocs, event_list)
+        victim_isolation_targets = self._extract_victim_isolation_targets(campaign, event_list)
+        attacker_source_ips = self._extract_attacker_source_ips(event_list)
+        print(f"Valid Targets for Actions: {', '.join(valid_targets) if valid_targets else 'None detected'}")
+        
+        print(f"Input Context:")
+        print(f"  Campaign: {campaign.get('name', 'unknown')} (ID: {campaign.get('campaign_id', 'unknown')[:8]}...)")
+        print(f"  Techniques: {len(techniques)}")
+        print(f"  IOCs: {len(iocs)}")
+        print()
+        
+        # --- Deterministic pre-check: auto-propose block_ip for high-confidence malicious IOCs ---
+        # This ensures critical threats are never missed because the LLM was overly conservative.
+        pre_proposals = self._auto_propose_high_confidence_actions(iocs)
+        
+        if pre_proposals:
+            print(f"--- Auto-Proposed Actions (Deterministic) ---")
+            for i, proposal in enumerate(pre_proposals, 1):
+                print(f"  {i}. {proposal.get('action_type')} on {proposal.get('target')}")
+                print(f"     Severity: {proposal.get('severity')}")
+                print(f"     Rationale: {proposal.get('rationale')}")
+                print(f"     Confidence: {proposal.get('confidence')}")
+            print()
+        else:
+            print("--- Auto-Proposed Actions: None ---")
+            print()
+
+        # Build a compact prompt to avoid token limit issues
+        campaign_summary = {
+            "campaign_id": campaign.get("campaign_id"),
+            "name": campaign.get("name"),
+            "objective": campaign.get("objective"),
+            "confidence": campaign.get("confidence")
+        }
+        
+        techniques_summary = [
+            {
+                "id": t.get("attack_id"),
+                "name": t.get("technique_name"),
+                "confidence": t.get("confidence")
+            }
+            for t in techniques
+        ]
+        
+        iocs_summary = [
+            {
+                "value": i.get("value"),
+                "type": i.get("type"),
+                "reputation": i.get("reputation"),
+                "confidence": i.get("confidence")
+            }
+            for i in iocs
+        ]
+        
+        prompt = f"Campaign:\n{campaign_summary}\n\nTechniques:\n{techniques_summary}\n\nIOCs:\n{iocs_summary}\n\nVALID TARGETS (Choose only from these):\n{valid_targets}"
+        print("Invoking LLM for action proposals...")
         response = invoke_llm(system_prompt=RESPONSE_SYSTEM_PROMPT, user_prompt=prompt)
 
         try:
-            proposals = extract_json(response)
+            llm_proposals = extract_json(response)
+            llm_proposals = self._sanitize_llm_proposals(
+                llm_proposals,
+                valid_targets,
+                victim_isolation_targets,
+                attacker_source_ips,
+            )
+            print(f"LLM proposed {len(llm_proposals)} action(s)")
         except ValueError:
-            proposals = []
+            llm_proposals = []
+            print("LLM failed to return valid JSON")
 
+        if llm_proposals:
+            print(f"\n--- LLM-Proposed Actions ---")
+            for i, proposal in enumerate(llm_proposals, 1):
+                print(f"  {i}. {proposal.get('action_type')} on {proposal.get('target')}")
+                print(f"     Severity: {proposal.get('severity')}")
+                print(f"     Rationale: {proposal.get('rationale')}")
+                print(f"     Technique ID: {proposal.get('technique_id', 'N/A')}")
+                print(f"     Confidence: {proposal.get('confidence')}")
+            print()
+
+        # Merge: pre_proposals first so deterministic actions take priority
+        # De-duplicate: skip LLM proposals that duplicate an auto-proposed action
+        all_proposals = list(pre_proposals)
+        auto_targets = {p["target"] + p["action_type"] for p in pre_proposals}
+        for raw in llm_proposals:
+            dedup_key = raw.get("target", "") + raw.get("action_type", "")
+            if dedup_key not in auto_targets:
+                all_proposals.append(raw)
+
+        print(f"--- Total Actions to Process: {len(all_proposals)} ---\n")
+        
         results = []
-        for raw in proposals:
+        for i, raw in enumerate(all_proposals, 1):
             try:
                 action = ProposedAction(**raw)
             except Exception:
+                print(f"❌ Action {i}: Malformed proposal, skipping")
                 continue  # skip malformed proposals rather than crash the run
 
+            print(f"--- Action {i}: {action.action_type} on {action.target} ---")
+            print(f"  Rationale: {action.rationale}")
+            print(f"  Severity: {action.severity}")
+            print(f"  Related Technique: {action.technique_id or 'N/A'}")
+            
+            # Show relation to events/IOCs
+            if action.technique_id:
+                related_tech = next((t for t in techniques if t.get('attack_id') == action.technique_id), None)
+                if related_tech:
+                    print(f"  Related to technique: {related_tech.get('technique_name', 'N/A')}")
+                    event_id = related_tech.get('evidence_event_id', 'N/A')
+                    print(f"  Evidence from event: {event_id}")
+            
+            if action.action_type == "block_ip":
+                related_ioc = next((ioc for ioc in iocs if ioc.get('value') == action.target), None)
+                if related_ioc:
+                    print(f"  Related IOC: {related_ioc.get('value')} (reputation: {related_ioc.get('reputation')}, confidence: {related_ioc.get('confidence')})")
+
             decision = policy.evaluate(action)
+            print(f"  Policy Decision: {decision}")
+            
             result = self._handle_decision(action, decision)
+            
+            print(f"  Final Status: {result.status}")
+            print(f"  Detail: {result.detail}")
+            print(f"  Dry Run: {result.dry_run}")
+            
             audit_log.record(result, campaign_id=campaign.get("campaign_id", ""))
             results.append(result)
-
+            print()
+        
+        print(f"--- Summary ---")
+        print(f"Total actions proposed: {len(all_proposals)}")
+        print(f"Executed: {sum(1 for r in results if r.status == 'executed')}")
+        print(f"Pending: {sum(1 for r in results if r.status == 'pending_approval')}")
+        print(f"Denied: {sum(1 for r in results if r.status == 'denied')}")
+        print(f"Failed: {sum(1 for r in results if r.status == 'failed')}")
+        print("===========================\n")
+        
         return results
+
+    def _extract_valid_targets(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict], events: List[Dict]) -> List[str]:
+        """Collects allowed action targets from grounded evidence."""
+        targets: Set[str] = set()
+
+        # IOC values are first-class targets (IPs, domains, hashes, etc.)
+        for ioc in iocs:
+            val = ioc.get("value")
+            if val:
+                targets.add(str(val))
+
+        # Include concrete entities from normalized events.
+        for event in events:
+            for key in ("host", "src_ip", "dest_ip", "user", "username", "process"):
+                value = event.get(key)
+                if value:
+                    targets.add(str(value))
+
+        # Include any concrete targets already mentioned in campaign timeline items.
+        for item in campaign.get("timeline", []) or []:
+            for key in ("host", "src_ip", "dest_ip", "user", "username", "process"):
+                value = item.get(key)
+                if value:
+                    targets.add(str(value))
+
+        # Notification endpoints are always valid.
+        targets.update({"SOC_analyst", "SOC Team", "SOC_Team"})
+
+        return sorted(t for t in targets if t)
+
+    def _sanitize_llm_proposals(
+        self,
+        proposals: List[Dict],
+        valid_targets: List[str],
+        victim_isolation_targets: List[str],
+        attacker_source_ips: Set[str],
+    ) -> List[Dict]:
+        """Drop hallucinated targets, normalize notify targets, and enforce safe isolate targeting."""
+        if not isinstance(proposals, list):
+            return []
+
+        allowed = set(valid_targets) | set(victim_isolation_targets)
+        victim_targets = set(victim_isolation_targets)
+        preferred_victim = victim_isolation_targets[0] if victim_isolation_targets else None
+        sanitized: List[Dict] = []
+
+        for proposal in proposals:
+            if not isinstance(proposal, dict):
+                continue
+
+            action_type = str(proposal.get("action_type", "")).strip()
+            target = proposal.get("target")
+
+            if action_type == "notify_analyst":
+                # Keep notify actions even if LLM used slight target variation.
+                if not target or str(target).strip() not in allowed:
+                    proposal["target"] = "SOC_analyst"
+                sanitized.append(proposal)
+                continue
+
+            if not target:
+                continue
+
+            normalized_target = str(target).strip()
+
+            # Critical guardrail: never isolate a source/attacker IP.
+            # isolate_host must target the monitored/compromised endpoint only.
+            if action_type == "isolate_host":
+                if normalized_target in attacker_source_ips or normalized_target not in victim_targets:
+                    if preferred_victim:
+                        print(
+                            f"Rewriting isolate_host target from '{normalized_target}' "
+                            f"to victim endpoint '{preferred_victim}'"
+                        )
+                        proposal["target"] = preferred_victim
+                        normalized_target = preferred_victim
+                    else:
+                        print(
+                            f"Discarding isolate_host action: no trusted victim endpoint available "
+                            f"(proposed target: {normalized_target})"
+                        )
+                        continue
+
+            if normalized_target not in allowed:
+                # Keep protected targets so deterministic policy can explicitly deny them.
+                if normalized_target in policy.PROTECTED_TARGETS:
+                    sanitized.append(proposal)
+                    continue
+                print(f"Discarding LLM action with ungrounded target: {target}")
+                continue
+
+            sanitized.append(proposal)
+
+        return sanitized
+
+    @staticmethod
+    def _host_to_ipv4(host: str) -> str | None:
+        """Convert AWS-style hostname like ip-172-31-19-70 to IPv4 172.31.19.70."""
+        match = re.fullmatch(r"ip-(\d+)-(\d+)-(\d+)-(\d+)", host.strip())
+        if not match:
+            return None
+        octets = [int(match.group(i)) for i in range(1, 5)]
+        if all(0 <= o <= 255 for o in octets):
+            return ".".join(str(o) for o in octets)
+        return None
+
+    def _extract_victim_isolation_targets(self, campaign: Dict, events: List[Dict]) -> List[str]:
+        """Build trusted endpoint targets for isolate_host (victim side only)."""
+        candidates: List[str] = []
+        seen: Set[str] = set()
+
+        def add(value: str | None):
+            if not value:
+                return
+            v = str(value).strip()
+            if not v or v in seen:
+                return
+            seen.add(v)
+            candidates.append(v)
+
+        # Prefer monitored host identity from events (victim), not src_ip.
+        for event in events:
+            host = event.get("host")
+            if isinstance(host, str):
+                add(self._host_to_ipv4(host))
+            add(host)
+
+            # Destination IP can represent the monitored endpoint in some telemetry.
+            add(event.get("dest_ip"))
+
+            raw = event.get("raw") or {}
+            if isinstance(raw, dict):
+                agent = raw.get("agent") or {}
+                if isinstance(agent, dict):
+                    agent_name = agent.get("name")
+                    if isinstance(agent_name, str):
+                        add(self._host_to_ipv4(agent_name))
+                    add(agent.get("name"))
+                    add(agent.get("ip"))
+
+        # Campaign timeline fallback (if present)
+        for item in campaign.get("timeline", []) or []:
+            host = item.get("host")
+            if isinstance(host, str):
+                add(self._host_to_ipv4(host))
+            add(item.get("host"))
+            add(item.get("dest_ip"))
+
+        # Remove notification aliases from isolate candidates if present
+        return [c for c in candidates if c not in {"SOC Team", "SOC_Team", "SOC_analyst"}]
+
+    @staticmethod
+    def _extract_attacker_source_ips(events: List[Dict]) -> Set[str]:
+        """Collect source IPs seen in telemetry (attacker/prober side)."""
+        ips: Set[str] = set()
+        for event in events:
+            src_ip = event.get("src_ip")
+            if src_ip:
+                ips.add(str(src_ip).strip())
+        return ips
+
+    def _auto_propose_high_confidence_actions(self, iocs: List[Dict]) -> List[Dict]:
+        """Deterministically proposes block_ip for high-confidence malicious IOCs.
+
+        This runs BEFORE the LLM so critical blocking actions are never omitted
+        due to LLM conservatism. Only fires when:
+        - IOC reputation == 'malicious'
+        - IOC confidence >= BLOCK_IP_AUTO_THRESHOLD (default 0.8)
+        - IOC type is 'ip' or 'ipv4'
+
+        Returns a list of raw proposal dicts suitable for ProposedAction(**raw).
+        """
+        proposals = []
+        for ioc in iocs:
+            reputation = ioc.get("reputation", "")
+            confidence = float(ioc.get("confidence", 0.0))
+            ioc_type = ioc.get("ioc_type") or ioc.get("type", "")
+            value = ioc.get("value", "")
+
+            if (
+                reputation == "malicious"
+                and confidence >= self.BLOCK_IP_AUTO_THRESHOLD
+                and ioc_type.lower() in ("ip", "ipv4", "ip_address")
+                and value
+            ):
+                proposals.append({
+                    "action_type": "block_ip",
+                    "target": value,
+                    "severity": "high" if confidence >= 0.9 else "medium",
+                    "rationale": (
+                        f"IP {value} has AbuseIPDB confidence {confidence:.2f} with "
+                        f"reputation '{reputation}'. Automatic block proposed per "
+                        f"policy threshold (>= {self.BLOCK_IP_AUTO_THRESHOLD})."
+                    ),
+                    "technique_id": "",
+                    "confidence": confidence,
+                })
+        return proposals
 
     @staticmethod
     def _handle_decision(action: ProposedAction, decision: str) -> ActionResult:
@@ -72,7 +401,26 @@ class ResponseAgent:
             return ActionResult(action=action, status="failed", detail="No connector registered.", dry_run=config.DRY_RUN)
 
         try:
-            detail = handler(action.target)
+            # notify_analyst expects a human-readable message body; other connectors
+            # still receive the action target as before.
+            if action.action_type.value == "notify_analyst":
+                notify_message = (
+                    f"Notify target: {action.target} | "
+                    f"Technique: {action.technique_id or 'N/A'} | "
+                    f"Confidence: {action.confidence:.2f} | "
+                    f"Rationale: {action.rationale}"
+                )
+                raw_output = handler(notify_message)
+            else:
+                raw_output = handler(action.target)
+
+            # Connectors now return JSON strings; parse to extract the detail field
+            import json
+            try:
+                parsed = json.loads(raw_output)
+                detail = parsed.get("detail", raw_output)
+            except (json.JSONDecodeError, TypeError):
+                detail = raw_output
             return ActionResult(action=action, status="executed", detail=detail, dry_run=config.DRY_RUN)
         except Exception as e:
             return ActionResult(action=action, status="failed", detail=str(e), dry_run=config.DRY_RUN)

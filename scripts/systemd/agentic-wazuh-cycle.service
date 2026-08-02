@@ -1,0 +1,19 @@
+[Unit]
+Description=Agentic Threat Intel - Pull Wazuh logs, investigate, and check remote agent status
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rania/Documents/agentic-threat-intelligence-with-actions
+ExecStart=/home/rania/Documents/agentic-threat-intelligence-with-actions/scripts/run_wazuh_cycle.sh
+
+# Keep environment predictable
+Environment=PYTHONUNBUFFERED=1
+
+# Logs
+StandardOutput=append:/home/rania/Documents/agentic-threat-intelligence-with-actions/logs/agentic-wazuh-cycle.log
+StandardError=append:/home/rania/Documents/agentic-threat-intelligence-with-actions/logs/agentic-wazuh-cycle.log
+
+[Install]
+WantedBy=multi-user.target

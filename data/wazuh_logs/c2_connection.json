@@ -1,0 +1,20 @@
+[
+  {
+    "version": 1,
+    "timestamp": "2026-07-20T10:16:32Z",
+    "rule": {
+      "level": 10,
+      "description": "Possible C2 beacon detected",
+      "groups": [
+        "network",
+        "c2"
+      ]
+    },
+    "agent": {
+      "id": "001",
+      "name": "WORKSTATION-07"
+    },
+    "id": "c2-001",
+    "full_log": "Outbound connection to malicious IP 185.44.12.7"
+  }
+]

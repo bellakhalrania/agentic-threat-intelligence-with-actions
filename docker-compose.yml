@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # Agentic Threat Intelligence Platform
+  threat-intel:
+    build: .
+    container_name: threat-intel-platform
+    volumes:
+      - threat_intel_data:/app/data
+      - threat_intel_reports:/app/reports/generated_reports
+      - ./.env:/app/.env:ro
+    env_file:
+      - .env
+    environment:
+      - WAZUH_ALERTS_PATH=/app/data/wazuh_logs/alerts.json
+    depends_on:
+      - neo4j
+    networks:
+      - threat-intel-network
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+
+  # Neo4j for knowledge graph
+  neo4j:
+    image: neo4j:5.15
+    container_name: threat-intel-neo4j
+    volumes:
+      - neo4j_data:/data
+    environment:
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-changeme}
+      - NEO4J_PLUGINS=["apoc"]
+    networks:
+      - threat-intel-network
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    restart: unless-stopped
+
+volumes:
+  threat_intel_data:
+  threat_intel_reports:
+  neo4j_data:
+
+networks:
+  threat-intel-network:
+    driver: bridge

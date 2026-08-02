@@ -10,14 +10,24 @@ from config import config
 from reports.markdown_templates import render_report
 
 
-def save_report(body: str, campaign: Dict) -> str:
+def save_report(
+    body: str,
+    campaign: Dict,
+    validation_status: str = "Pending",
+    validation_issues: list = None
+) -> str:
     os.makedirs(config.REPORTS_OUTPUT_DIR, exist_ok=True)
 
     campaign_id = campaign.get("campaign_id", "unknown")
     campaign_name = campaign.get("name", "Unclassified Activity")
     generated_at = datetime.now(timezone.utc).isoformat()
 
-    full_report = render_report(body, campaign_name, campaign_id, generated_at)
+    full_report = render_report(
+        body,
+        campaign_name,
+        campaign_id,
+        generated_at
+    )
 
     filename = f"report_{campaign_id}.md"
     filepath = os.path.join(config.REPORTS_OUTPUT_DIR, filename)

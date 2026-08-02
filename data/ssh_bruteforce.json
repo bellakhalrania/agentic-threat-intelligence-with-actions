@@ -1,0 +1,21 @@
+[
+  {
+    "version": 1,
+    "timestamp": "2026-07-20T10:15:00Z",
+    "rule": {
+      "level": 8,
+      "description": "Multiple failed SSH login attempts detected",
+      "groups": [
+        "authentication_failed",
+        "ssh",
+        "brute_force"
+      ]
+    },
+    "agent": {
+      "id": "001",
+      "name": "LINUX-SERVER-01"
+    },
+    "id": "ssh-001",
+    "full_log": "Failed password for root from 45.155.205.233 port 52314 ssh2"
+  }
+]

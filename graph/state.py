@@ -33,6 +33,15 @@ class InvestigationState(TypedDict, total=False):
     # --- Response Agent output ---
     actions_taken: List[Dict[str, Any]]       # results of proposed/executed/pending response actions
 
+    # --- Execution Translation Agent output ---
+    execution_packages: List[Dict[str, Any]]  # platform-specific executable scripts
+    combined_script: str                      # single combined executable script containing all actions
+    combined_filename: str                    # filename for the combined script
+    remote_execution_result: Dict[str, Any]   # remote /execute response payload (if attempted)
+    remote_execution_error: str               # remote push failure detail (if any)
+    remote_push_attempted: bool               # whether Machine 3 attempted remote push
+    remote_push_url: str                       # URL used for remote push
+
     # --- Bookkeeping ---
     errors: List[str]                         # any non-fatal errors collected along the way
     metadata: Dict[str, Any]                  # run id, timestamps, source system, etc.
@@ -49,6 +58,13 @@ def new_investigation_state(raw_events: Optional[List[Dict[str, Any]]] = None) -
         prediction={},
         report="",
         actions_taken=[],
+        execution_packages=[],
+        combined_script="",
+        combined_filename="",
+        remote_execution_result={},
+        remote_execution_error="",
+        remote_push_attempted=False,
+        remote_push_url="",
         errors=[],
         metadata={},
     )

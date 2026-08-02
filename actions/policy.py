@@ -21,7 +21,7 @@ Rules, in order:
 import time
 from collections import defaultdict
 from config import config
-from actions.action_models import ProposedAction, ActionSeverity
+from actions.action_models import ProposedAction, ActionSeverity, ActionType
 
 # Targets that must NEVER be auto-actioned, regardless of confidence.
 # Populate this with domain controllers, exec accounts, critical infra, etc.
@@ -49,11 +49,24 @@ def _rate_limit_exceeded(target: str) -> bool:
 def evaluate(action: ProposedAction) -> str:
     """Returns one of: 'auto_execute', 'pending_approval', 'denied'."""
 
-    if not config.AUTO_RESPONSE_ENABLED:
-        return "pending_approval"  # kill switch off -> everything needs a human
-
     if action.target in PROTECTED_TARGETS:
         return "denied"
+
+    # Safe-mode policy: keep disruptive containment gated, allow analyst notification.
+    if config.SAFE_MODE_ENFORCED:
+        if action.action_type == ActionType.NOTIFY_ANALYST and config.SAFE_MODE_NOTIFY_ANALYST_AUTO:
+            _action_history[action.target].append(time.time())
+            return "auto_execute"
+
+        if action.action_type == ActionType.ISOLATE_HOST:
+            # Explicit approval channel for isolation: operator must allowlist target.
+            if action.target in config.APPROVED_ISOLATION_TARGETS:
+                _action_history[action.target].append(time.time())
+                return "auto_execute"
+            return "pending_approval"
+
+    if not config.AUTO_RESPONSE_ENABLED:
+        return "pending_approval"  # kill switch off -> everything needs a human
 
     if action.severity in ALWAYS_REQUIRE_APPROVAL:
         return "pending_approval"
