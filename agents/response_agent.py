@@ -9,6 +9,7 @@ before anything is allowed to actually execute, and every outcome - executed,
 pending, or denied - is written to the audit log.
 """
 
+import re
 from typing import List, Dict, Set
 from llm.groq_client import invoke_llm
 from llm.output_parsers import extract_json
@@ -39,8 +40,12 @@ class ResponseAgent:
     def run(self, campaign: Dict, techniques: List[Dict], iocs: List[Dict], events: List[Dict] | None = None) -> List[ActionResult]:
         print("\n========== RESPONSE AGENT ==========\n")
         
+        event_list = events or []
+
         # --- Extract valid targets to prevent LLM hallucination ---
-        valid_targets = self._extract_valid_targets(campaign, techniques, iocs, events or [])
+        valid_targets = self._extract_valid_targets(campaign, techniques, iocs, event_list)
+        victim_isolation_targets = self._extract_victim_isolation_targets(campaign, event_list)
+        attacker_source_ips = self._extract_attacker_source_ips(event_list)
         print(f"Valid Targets for Actions: {', '.join(valid_targets) if valid_targets else 'None detected'}")
         
         print(f"Input Context:")
@@ -98,7 +103,12 @@ class ResponseAgent:
 
         try:
             llm_proposals = extract_json(response)
-            llm_proposals = self._sanitize_llm_proposals(llm_proposals, valid_targets)
+            llm_proposals = self._sanitize_llm_proposals(
+                llm_proposals,
+                valid_targets,
+                victim_isolation_targets,
+                attacker_source_ips,
+            )
             print(f"LLM proposed {len(llm_proposals)} action(s)")
         except ValueError:
             llm_proposals = []
@@ -203,12 +213,20 @@ class ResponseAgent:
 
         return sorted(t for t in targets if t)
 
-    def _sanitize_llm_proposals(self, proposals: List[Dict], valid_targets: List[str]) -> List[Dict]:
-        """Drop hallucinated targets and normalize notify targets."""
+    def _sanitize_llm_proposals(
+        self,
+        proposals: List[Dict],
+        valid_targets: List[str],
+        victim_isolation_targets: List[str],
+        attacker_source_ips: Set[str],
+    ) -> List[Dict]:
+        """Drop hallucinated targets, normalize notify targets, and enforce safe isolate targeting."""
         if not isinstance(proposals, list):
             return []
 
-        allowed = set(valid_targets)
+        allowed = set(valid_targets) | set(victim_isolation_targets)
+        victim_targets = set(victim_isolation_targets)
+        preferred_victim = victim_isolation_targets[0] if victim_isolation_targets else None
         sanitized: List[Dict] = []
 
         for proposal in proposals:
@@ -229,6 +247,25 @@ class ResponseAgent:
                 continue
 
             normalized_target = str(target).strip()
+
+            # Critical guardrail: never isolate a source/attacker IP.
+            # isolate_host must target the monitored/compromised endpoint only.
+            if action_type == "isolate_host":
+                if normalized_target in attacker_source_ips or normalized_target not in victim_targets:
+                    if preferred_victim:
+                        print(
+                            f"Rewriting isolate_host target from '{normalized_target}' "
+                            f"to victim endpoint '{preferred_victim}'"
+                        )
+                        proposal["target"] = preferred_victim
+                        normalized_target = preferred_victim
+                    else:
+                        print(
+                            f"Discarding isolate_host action: no trusted victim endpoint available "
+                            f"(proposed target: {normalized_target})"
+                        )
+                        continue
+
             if normalized_target not in allowed:
                 # Keep protected targets so deterministic policy can explicitly deny them.
                 if normalized_target in policy.PROTECTED_TARGETS:
@@ -240,6 +277,72 @@ class ResponseAgent:
             sanitized.append(proposal)
 
         return sanitized
+
+    @staticmethod
+    def _host_to_ipv4(host: str) -> str | None:
+        """Convert AWS-style hostname like ip-172-31-19-70 to IPv4 172.31.19.70."""
+        match = re.fullmatch(r"ip-(\d+)-(\d+)-(\d+)-(\d+)", host.strip())
+        if not match:
+            return None
+        octets = [int(match.group(i)) for i in range(1, 5)]
+        if all(0 <= o <= 255 for o in octets):
+            return ".".join(str(o) for o in octets)
+        return None
+
+    def _extract_victim_isolation_targets(self, campaign: Dict, events: List[Dict]) -> List[str]:
+        """Build trusted endpoint targets for isolate_host (victim side only)."""
+        candidates: List[str] = []
+        seen: Set[str] = set()
+
+        def add(value: str | None):
+            if not value:
+                return
+            v = str(value).strip()
+            if not v or v in seen:
+                return
+            seen.add(v)
+            candidates.append(v)
+
+        # Prefer monitored host identity from events (victim), not src_ip.
+        for event in events:
+            host = event.get("host")
+            if isinstance(host, str):
+                add(self._host_to_ipv4(host))
+            add(host)
+
+            # Destination IP can represent the monitored endpoint in some telemetry.
+            add(event.get("dest_ip"))
+
+            raw = event.get("raw") or {}
+            if isinstance(raw, dict):
+                agent = raw.get("agent") or {}
+                if isinstance(agent, dict):
+                    agent_name = agent.get("name")
+                    if isinstance(agent_name, str):
+                        add(self._host_to_ipv4(agent_name))
+                    add(agent.get("name"))
+                    add(agent.get("ip"))
+
+        # Campaign timeline fallback (if present)
+        for item in campaign.get("timeline", []) or []:
+            host = item.get("host")
+            if isinstance(host, str):
+                add(self._host_to_ipv4(host))
+            add(item.get("host"))
+            add(item.get("dest_ip"))
+
+        # Remove notification aliases from isolate candidates if present
+        return [c for c in candidates if c not in {"SOC Team", "SOC_Team", "SOC_analyst"}]
+
+    @staticmethod
+    def _extract_attacker_source_ips(events: List[Dict]) -> Set[str]:
+        """Collect source IPs seen in telemetry (attacker/prober side)."""
+        ips: Set[str] = set()
+        for event in events:
+            src_ip = event.get("src_ip")
+            if src_ip:
+                ips.add(str(src_ip).strip())
+        return ips
 
     def _auto_propose_high_confidence_actions(self, iocs: List[Dict]) -> List[Dict]:
         """Deterministically proposes block_ip for high-confidence malicious IOCs.

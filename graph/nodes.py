@@ -205,7 +205,7 @@ def execution_translation_node(state: InvestigationState) -> dict:
                             if remote_result.get("success") is True and remote_result.get("status") == "completed":
                                 execution_id = remote_result.get("execution_id", "")
                                 for action in updated_actions_taken:
-                                    if action.get("status") in ("pending_approval", "executed"):
+                                    if action.get("status") == "executed":
                                         action["status"] = "executed_remote"
                                         action["detail"] = (
                                             f"Remotely executed on Machine 2 "

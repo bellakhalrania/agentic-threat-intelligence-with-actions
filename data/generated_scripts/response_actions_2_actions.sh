@@ -37,7 +37,7 @@ echo "",
 # =======================================
 # Action 1: isolate_host
 # Target: ip-172-31-19-70
-# ID: isolate_host_f34b1cd1
+# ID: isolate_host_d98c7f0b
 # Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000
 # =======================================
 action_1() {
@@ -54,7 +54,7 @@ action_1() {
     REMOTE_PORT="${REMOTE_AGENT_PORT:-9001}"
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_f34b1cd1.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_d98c7f0b.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
@@ -88,9 +88,9 @@ action_1() {
 
 rollback_1() {
     echo "[ROLLBACK 1] isolate_host -> ip-172-31-19-70"
-    if [ -f /tmp/iptables_backup_f34b1cd1.txt ]; then
-        iptables-restore < /tmp/iptables_backup_f34b1cd1.txt
-        rm /tmp/iptables_backup_f34b1cd1.txt
+    if [ -f /tmp/iptables_backup_d98c7f0b.txt ]; then
+        iptables-restore < /tmp/iptables_backup_d98c7f0b.txt
+        rm /tmp/iptables_backup_d98c7f0b.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -108,36 +108,36 @@ verify_1() {
 
 # =======================================
 # Action 2: notify_analyst
-# Target: SOC_Team
-# ID: notify_analyst_db9884e7
-# Expected: Create analyst notification for SOC_Team
+# Target: SOC Team
+# ID: notify_analyst_9de4e49e
+# Expected: Create analyst notification for SOC Team
 # =======================================
 action_2() {
-    echo "[ACTION 2] notify_analyst -> SOC_Team"
-    echo "  Expected: Create analyst notification for SOC_Team"
+    echo "[ACTION 2] notify_analyst -> SOC Team"
+    echo "  Expected: Create analyst notification for SOC Team"
 
-    # Notify analyst about: SOC_Team
+    # Notify analyst about: SOC Team
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
-    # Related technique: T1110.001
+    # Related technique: multiple
     # Confidence: 1.0
     #
     # Please review the following:
-    #   - SOC_Team
+    #   - SOC Team
     #
     # Manual investigation is required.
     echo "  [OK] notify_analyst completed"
 }
 
 rollback_2() {
-    echo "[ROLLBACK 2] notify_analyst -> SOC_Team"
+    echo "[ROLLBACK 2] notify_analyst -> SOC Team"
     # No rollback needed for notification actions.
     echo "  [OK] Rollback of notify_analyst completed"
 }
 
 verify_2() {
-    echo "[VERIFY 2] notify_analyst -> SOC_Team"
+    echo "[VERIFY 2] notify_analyst -> SOC Team"
     # Notification logged; verify via platform audit trail.
 }
 

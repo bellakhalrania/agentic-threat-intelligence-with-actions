@@ -467,10 +467,13 @@ async def execute_script(
     # ======================================================================
     # Save the script to disk and execute
     # ======================================================================
-    original_filename = request.filename or f"response_{execution_id[:8]}.sh"
-    sanitized_filename = re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(original_filename))
-    if not sanitized_filename:
-        sanitized_filename = f"response_{execution_id[:8]}.sh"
+    original_filename = request.filename or "response.sh"
+    sanitized_base = re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(original_filename))
+    if not sanitized_base:
+        sanitized_base = "response.sh"
+    # Include the server-side execution_id in the saved filename for traceability
+    # and to avoid overwriting previous scripts with the same base name.
+    sanitized_filename = f"{execution_id}_{sanitized_base}"
     script_path = os.path.join(SCRIPTS_DIR, sanitized_filename)
 
     try:

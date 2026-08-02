@@ -17,8 +17,7 @@ services:
       context: ..
       dockerfile: remote_agent/Dockerfile
     container_name: remote-response-agent
-    ports:
-      - "9001:9001"
+    network_mode: host
     environment:
       - REMOTE_AGENT_HOST=0.0.0.0
       - REMOTE_AGENT_PORT=9001
