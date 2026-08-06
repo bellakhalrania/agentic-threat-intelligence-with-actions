@@ -343,3 +343,10 @@ Agent not showing up?
 | Agent Log File | `/var/ossec/logs/ossec.log` |
 | Manager Alerts File | `/var/ossec/logs/alerts/alerts.json` |
 | Manager Container Name | `single-node_wazuh.manager_1` |
+
+
+
+sudo docker cp single-node_wazuh.manager_1:/var/ossec/logs/alerts/alerts.json ./data/wazuh_logs/alerts.json && sudo chown rania:rania ./data/wazuh_logs/alerts.json && chmod 644 ./data/wazuh_logs/alerts.json && python main.py --source wazuh
+
+
+rsync -avz   -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes"   --exclude 'venv/'   --exclude '__pycache__/'   --exclude 'received_scripts/'   --exclude 'execution_log.jsonl'   /home/rania/Documents/agentic-threat-intelligence-with-actions/remote_agent/   ubuntu@100.120.11.97:~/remote_agent/

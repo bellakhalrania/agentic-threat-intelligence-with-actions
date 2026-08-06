@@ -134,16 +134,8 @@ class AttackMappingAgent:
     # ------------------------------------------------------------------
 
     def _map_event(self, event: Dict) -> List[Dict]:
-        """Maps a single event, trying pre-existing metadata first, then deterministic rules.
 
-        Args:
-            event: A single normalized event dict.
-
-        Returns:
-            A list of mapping dicts for all matched techniques,
-            or an empty list if no confident mapping could be produced.
-        """
-        # 1. Check for pre-existing MITRE metadata (e.g. from Wazuh)
+        # 1. Check for pre-existing MITRE metadata (from Wazuh)
         metadata_mappings = self._try_metadata_match(event)
         if metadata_mappings:
             return metadata_mappings

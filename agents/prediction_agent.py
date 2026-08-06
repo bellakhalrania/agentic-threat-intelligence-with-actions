@@ -30,7 +30,7 @@ class PredictionAgent:
         
         if not techniques:
             logger.info("PREDICTION_AGENT: No techniques observed - skipping prediction")
-            print("❌ No techniques observed - skipping prediction")
+            print("No techniques observed - skipping prediction")
             return {"likely_next_techniques": [], "rationale": "No techniques observed yet."}
 
         technique_names = [t.get("technique_name") or t.get("name", "") for t in techniques if t.get("technique_name") or t.get("name")]
@@ -51,7 +51,7 @@ class PredictionAgent:
             logger.warning(
                 "PREDICTION_AGENT: no RAG context returned — skipping LLM call to avoid hallucination"
             )
-            print("❌ No RAG context - skipping prediction to avoid hallucination")
+            print("No RAG context - skipping prediction to avoid hallucination")
             return {
                 "likely_next_techniques": [],
                 "rationale": "Prediction skipped: No suitable follow-on techniques were found in the knowledge base.",
@@ -76,7 +76,7 @@ class PredictionAgent:
             logger.info("PREDICTION_AGENT: Parsed LLM result: %s", result)
         except ValueError as e:
             logger.warning("PREDICTION_AGENT: Failed to parse LLM response as JSON: %s", e)
-            print(f"❌ Failed to parse LLM response: {e}")
+            print(f" Failed to parse LLM response: {e}")
             return {
                 "likely_next_techniques": [],
                 "rationale": "Prediction could not be parsed from model output.",
