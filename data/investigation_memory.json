@@ -139710,5 +139710,2515 @@
     "remote_push_url": "http://100.120.11.97:9001",
     "errors": [],
     "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-08-02T21:50:16.970+0000",
+        "rule": {
+          "level": 5,
+          "description": "PAM: User login failed.",
+          "id": "5503",
+          "mitre": {
+            "id": [
+              "T1110.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Password Guessing"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_failed"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ip-172-31-19-70",
+          "ip": "100.120.11.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785707416.174525",
+        "full_log": "Aug 02 21:50:16 ip-172-31-19-70 sshd[115363]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=labuser",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 02 21:50:16",
+          "hostname": "ip-172-31-19-70"
+        },
+        "decoder": {
+          "name": "pam"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "dstuser": "labuser",
+          "uid": "0",
+          "euid": "0",
+          "tty": "ssh"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-02T21:50:18.975+0000",
+        "rule": {
+          "level": 5,
+          "description": "sshd: authentication failed.",
+          "id": "5760",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1021.004"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Password Guessing",
+              "SSH"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "sshd",
+            "authentication_failed"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "gpg13": [
+            "7.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ip-172-31-19-70",
+          "ip": "100.120.11.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785707418.175074",
+        "full_log": "Aug 02 21:50:18 ip-172-31-19-70 sshd[115363]: Failed password for labuser from 172.31.24.217 port 44848 ssh2",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 02 21:50:18",
+          "hostname": "ip-172-31-19-70"
+        },
+        "decoder": {
+          "parent": "sshd",
+          "name": "sshd"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "srcport": "44848",
+          "dstuser": "labuser"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-02T21:50:32.969+0000",
+        "rule": {
+          "level": 5,
+          "description": "PAM: User login failed.",
+          "id": "5503",
+          "mitre": {
+            "id": [
+              "T1110.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Password Guessing"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_failed"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ip-172-31-19-70",
+          "ip": "100.120.11.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785707432.175568",
+        "full_log": "Aug 02 21:50:32 ip-172-31-19-70 sshd[115382]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=rania",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 02 21:50:32",
+          "hostname": "ip-172-31-19-70"
+        },
+        "decoder": {
+          "name": "pam"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "dstuser": "rania",
+          "uid": "0",
+          "euid": "0",
+          "tty": "ssh"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-02T21:50:35.081+0000",
+        "rule": {
+          "level": 5,
+          "description": "sshd: authentication failed.",
+          "id": "5760",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1021.004"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Password Guessing",
+              "SSH"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "sshd",
+            "authentication_failed"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "gpg13": [
+            "7.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ip-172-31-19-70",
+          "ip": "100.120.11.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785707435.176113",
+        "full_log": "Aug 02 21:50:34 ip-172-31-19-70 sshd[115382]: Failed password for rania from 172.31.24.217 port 40696 ssh2",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 02 21:50:34",
+          "hostname": "ip-172-31-19-70"
+        },
+        "decoder": {
+          "parent": "sshd",
+          "name": "sshd"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "srcport": "40696",
+          "dstuser": "rania"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-02T21:50:48.974+0000",
+        "rule": {
+          "level": 5,
+          "description": "PAM: User login failed.",
+          "id": "5503",
+          "mitre": {
+            "id": [
+              "T1110.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Password Guessing"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_failed"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ip-172-31-19-70",
+          "ip": "100.120.11.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785707448.176603",
+        "full_log": "Aug 02 21:50:48 ip-172-31-19-70 sshd[115398]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=anna",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 02 21:50:48",
+          "hostname": "ip-172-31-19-70"
+        },
+        "decoder": {
+          "name": "pam"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "dstuser": "anna",
+          "uid": "0",
+          "euid": "0",
+          "tty": "ssh"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-02T21:50:50.973+0000",
+        "rule": {
+          "level": 5,
+          "description": "sshd: authentication failed.",
+          "id": "5760",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1021.004"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Password Guessing",
+              "SSH"
+            ]
+          },
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "sshd",
+            "authentication_failed"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "gpg13": [
+            "7.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ip-172-31-19-70",
+          "ip": "100.120.11.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785707450.177146",
+        "full_log": "Aug 02 21:50:50 ip-172-31-19-70 sshd[115398]: Failed password for anna from 172.31.24.217 port 42072 ssh2",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 02 21:50:50",
+          "hostname": "ip-172-31-19-70"
+        },
+        "decoder": {
+          "parent": "sshd",
+          "name": "sshd"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "srcport": "42072",
+          "dstuser": "anna"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-02T21:51:18.977+0000",
+        "rule": {
+          "level": 5,
+          "description": "PAM: User login failed.",
+          "id": "5503",
+          "mitre": {
+            "id": [
+              "T1110.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Password Guessing"
+            ]
+          },
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_failed"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ip-172-31-19-70",
+          "ip": "100.120.11.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785707478.177634",
+        "full_log": "Aug 02 21:51:18 ip-172-31-19-70 sshd[115414]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=med",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 02 21:51:18",
+          "hostname": "ip-172-31-19-70"
+        },
+        "decoder": {
+          "name": "pam"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "dstuser": "med",
+          "uid": "0",
+          "euid": "0",
+          "tty": "ssh"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-02T21:51:21.059+0000",
+        "rule": {
+          "level": 5,
+          "description": "sshd: authentication failed.",
+          "id": "5760",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1021.004"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Password Guessing",
+              "SSH"
+            ]
+          },
+          "firedtimes": 4,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "sshd",
+            "authentication_failed"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "gpg13": [
+            "7.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "002",
+          "name": "ip-172-31-19-70",
+          "ip": "100.120.11.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785707481.178175",
+        "full_log": "Aug 02 21:51:20 ip-172-31-19-70 sshd[115414]: Failed password for med from 172.31.24.217 port 44550 ssh2",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 02 21:51:20",
+          "hostname": "ip-172-31-19-70"
+        },
+        "decoder": {
+          "parent": "sshd",
+          "name": "sshd"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "srcport": "44550",
+          "dstuser": "med"
+        },
+        "location": "journald"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "a78c237e-7ca4-421d-bf20-ea195d23a08d",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-02T21:50:16.970+0000",
+        "host": "ip-172-31-19-70",
+        "user": "labuser",
+        "username": "labuser",
+        "process": "sshd",
+        "command_line": "Aug 02 21:50:16 ip-172-31-19-70 sshd[115363]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=labuser",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "PAM: User login failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-02T21:50:16.970+0000",
+          "rule": {
+            "level": 5,
+            "description": "PAM: User login failed.",
+            "id": "5503",
+            "mitre": {
+              "id": [
+                "T1110.001"
+              ],
+              "tactic": [
+                "Credential Access"
+              ],
+              "technique": [
+                "Password Guessing"
+              ]
+            },
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_failed"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "002",
+            "name": "ip-172-31-19-70",
+            "ip": "100.120.11.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785707416.174525",
+          "full_log": "Aug 02 21:50:16 ip-172-31-19-70 sshd[115363]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=labuser",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 02 21:50:16",
+            "hostname": "ip-172-31-19-70"
+          },
+          "decoder": {
+            "name": "pam"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "dstuser": "labuser",
+            "uid": "0",
+            "euid": "0",
+            "tty": "ssh"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "08d262aa-4373-489a-889d-b390001d6bdb",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-02T21:50:18.975+0000",
+        "host": "ip-172-31-19-70",
+        "user": "labuser",
+        "username": "labuser",
+        "process": "sshd",
+        "command_line": "Aug 02 21:50:18 ip-172-31-19-70 sshd[115363]: Failed password for labuser from 172.31.24.217 port 44848 ssh2",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "sshd: authentication failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "syslog",
+          "sshd",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001",
+          "T1021.004"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-02T21:50:18.975+0000",
+          "rule": {
+            "level": 5,
+            "description": "sshd: authentication failed.",
+            "id": "5760",
+            "mitre": {
+              "id": [
+                "T1110.001",
+                "T1021.004"
+              ],
+              "tactic": [
+                "Credential Access",
+                "Lateral Movement"
+              ],
+              "technique": [
+                "Password Guessing",
+                "SSH"
+              ]
+            },
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "syslog",
+              "sshd",
+              "authentication_failed"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "gpg13": [
+              "7.1"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "002",
+            "name": "ip-172-31-19-70",
+            "ip": "100.120.11.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785707418.175074",
+          "full_log": "Aug 02 21:50:18 ip-172-31-19-70 sshd[115363]: Failed password for labuser from 172.31.24.217 port 44848 ssh2",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 02 21:50:18",
+            "hostname": "ip-172-31-19-70"
+          },
+          "decoder": {
+            "parent": "sshd",
+            "name": "sshd"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "srcport": "44848",
+            "dstuser": "labuser"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "c0ebc779-0308-47f5-bcfd-8cfb4767d859",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-02T21:50:32.969+0000",
+        "host": "ip-172-31-19-70",
+        "user": "rania",
+        "username": "rania",
+        "process": "sshd",
+        "command_line": "Aug 02 21:50:32 ip-172-31-19-70 sshd[115382]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=rania",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "PAM: User login failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-02T21:50:32.969+0000",
+          "rule": {
+            "level": 5,
+            "description": "PAM: User login failed.",
+            "id": "5503",
+            "mitre": {
+              "id": [
+                "T1110.001"
+              ],
+              "tactic": [
+                "Credential Access"
+              ],
+              "technique": [
+                "Password Guessing"
+              ]
+            },
+            "firedtimes": 2,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_failed"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "002",
+            "name": "ip-172-31-19-70",
+            "ip": "100.120.11.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785707432.175568",
+          "full_log": "Aug 02 21:50:32 ip-172-31-19-70 sshd[115382]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=rania",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 02 21:50:32",
+            "hostname": "ip-172-31-19-70"
+          },
+          "decoder": {
+            "name": "pam"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "dstuser": "rania",
+            "uid": "0",
+            "euid": "0",
+            "tty": "ssh"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "1cb333b4-b24d-4e3d-9d0e-c67958b1ddd1",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-02T21:50:35.081+0000",
+        "host": "ip-172-31-19-70",
+        "user": "rania",
+        "username": "rania",
+        "process": "sshd",
+        "command_line": "Aug 02 21:50:34 ip-172-31-19-70 sshd[115382]: Failed password for rania from 172.31.24.217 port 40696 ssh2",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "sshd: authentication failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "syslog",
+          "sshd",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001",
+          "T1021.004"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-02T21:50:35.081+0000",
+          "rule": {
+            "level": 5,
+            "description": "sshd: authentication failed.",
+            "id": "5760",
+            "mitre": {
+              "id": [
+                "T1110.001",
+                "T1021.004"
+              ],
+              "tactic": [
+                "Credential Access",
+                "Lateral Movement"
+              ],
+              "technique": [
+                "Password Guessing",
+                "SSH"
+              ]
+            },
+            "firedtimes": 2,
+            "mail": false,
+            "groups": [
+              "syslog",
+              "sshd",
+              "authentication_failed"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "gpg13": [
+              "7.1"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "002",
+            "name": "ip-172-31-19-70",
+            "ip": "100.120.11.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785707435.176113",
+          "full_log": "Aug 02 21:50:34 ip-172-31-19-70 sshd[115382]: Failed password for rania from 172.31.24.217 port 40696 ssh2",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 02 21:50:34",
+            "hostname": "ip-172-31-19-70"
+          },
+          "decoder": {
+            "parent": "sshd",
+            "name": "sshd"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "srcport": "40696",
+            "dstuser": "rania"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "d678bf4c-ba7f-4569-b740-b32d596441f8",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-02T21:50:48.974+0000",
+        "host": "ip-172-31-19-70",
+        "user": "anna",
+        "username": "anna",
+        "process": "sshd",
+        "command_line": "Aug 02 21:50:48 ip-172-31-19-70 sshd[115398]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=anna",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "PAM: User login failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-02T21:50:48.974+0000",
+          "rule": {
+            "level": 5,
+            "description": "PAM: User login failed.",
+            "id": "5503",
+            "mitre": {
+              "id": [
+                "T1110.001"
+              ],
+              "tactic": [
+                "Credential Access"
+              ],
+              "technique": [
+                "Password Guessing"
+              ]
+            },
+            "firedtimes": 3,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_failed"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "002",
+            "name": "ip-172-31-19-70",
+            "ip": "100.120.11.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785707448.176603",
+          "full_log": "Aug 02 21:50:48 ip-172-31-19-70 sshd[115398]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=anna",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 02 21:50:48",
+            "hostname": "ip-172-31-19-70"
+          },
+          "decoder": {
+            "name": "pam"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "dstuser": "anna",
+            "uid": "0",
+            "euid": "0",
+            "tty": "ssh"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "107c4c99-e3ef-4bc1-bc88-ed73b776d7ad",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-02T21:50:50.973+0000",
+        "host": "ip-172-31-19-70",
+        "user": "anna",
+        "username": "anna",
+        "process": "sshd",
+        "command_line": "Aug 02 21:50:50 ip-172-31-19-70 sshd[115398]: Failed password for anna from 172.31.24.217 port 42072 ssh2",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "sshd: authentication failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "syslog",
+          "sshd",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001",
+          "T1021.004"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-02T21:50:50.973+0000",
+          "rule": {
+            "level": 5,
+            "description": "sshd: authentication failed.",
+            "id": "5760",
+            "mitre": {
+              "id": [
+                "T1110.001",
+                "T1021.004"
+              ],
+              "tactic": [
+                "Credential Access",
+                "Lateral Movement"
+              ],
+              "technique": [
+                "Password Guessing",
+                "SSH"
+              ]
+            },
+            "firedtimes": 3,
+            "mail": false,
+            "groups": [
+              "syslog",
+              "sshd",
+              "authentication_failed"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "gpg13": [
+              "7.1"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "002",
+            "name": "ip-172-31-19-70",
+            "ip": "100.120.11.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785707450.177146",
+          "full_log": "Aug 02 21:50:50 ip-172-31-19-70 sshd[115398]: Failed password for anna from 172.31.24.217 port 42072 ssh2",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 02 21:50:50",
+            "hostname": "ip-172-31-19-70"
+          },
+          "decoder": {
+            "parent": "sshd",
+            "name": "sshd"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "srcport": "42072",
+            "dstuser": "anna"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "64ab009a-6912-4ae7-a271-0d9c98ebb955",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-02T21:51:18.977+0000",
+        "host": "ip-172-31-19-70",
+        "user": "med",
+        "username": "med",
+        "process": "sshd",
+        "command_line": "Aug 02 21:51:18 ip-172-31-19-70 sshd[115414]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=med",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "PAM: User login failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-02T21:51:18.977+0000",
+          "rule": {
+            "level": 5,
+            "description": "PAM: User login failed.",
+            "id": "5503",
+            "mitre": {
+              "id": [
+                "T1110.001"
+              ],
+              "tactic": [
+                "Credential Access"
+              ],
+              "technique": [
+                "Password Guessing"
+              ]
+            },
+            "firedtimes": 4,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_failed"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "002",
+            "name": "ip-172-31-19-70",
+            "ip": "100.120.11.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785707478.177634",
+          "full_log": "Aug 02 21:51:18 ip-172-31-19-70 sshd[115414]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=med",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 02 21:51:18",
+            "hostname": "ip-172-31-19-70"
+          },
+          "decoder": {
+            "name": "pam"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "dstuser": "med",
+            "uid": "0",
+            "euid": "0",
+            "tty": "ssh"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "570e396c-30fe-4b05-add5-b6c3356a5ced",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-02T21:51:21.059+0000",
+        "host": "ip-172-31-19-70",
+        "user": "med",
+        "username": "med",
+        "process": "sshd",
+        "command_line": "Aug 02 21:51:20 ip-172-31-19-70 sshd[115414]: Failed password for med from 172.31.24.217 port 44550 ssh2",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "sshd: authentication failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "syslog",
+          "sshd",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001",
+          "T1021.004"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-02T21:51:21.059+0000",
+          "rule": {
+            "level": 5,
+            "description": "sshd: authentication failed.",
+            "id": "5760",
+            "mitre": {
+              "id": [
+                "T1110.001",
+                "T1021.004"
+              ],
+              "tactic": [
+                "Credential Access",
+                "Lateral Movement"
+              ],
+              "technique": [
+                "Password Guessing",
+                "SSH"
+              ]
+            },
+            "firedtimes": 4,
+            "mail": false,
+            "groups": [
+              "syslog",
+              "sshd",
+              "authentication_failed"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "gpg13": [
+              "7.1"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "002",
+            "name": "ip-172-31-19-70",
+            "ip": "100.120.11.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785707481.178175",
+          "full_log": "Aug 02 21:51:20 ip-172-31-19-70 sshd[115414]: Failed password for med from 172.31.24.217 port 44550 ssh2",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 02 21:51:20",
+            "hostname": "ip-172-31-19-70"
+          },
+          "decoder": {
+            "parent": "sshd",
+            "name": "sshd"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "srcport": "44550",
+            "dstuser": "med"
+          },
+          "location": "journald"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.120.11.97",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "100.120.11.97",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null
+            },
+            "queried_at": "2026-08-02 21:51:45.050186"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.120.11.97",
+          "source_event_id": "a78c237e-7ca4-421d-bf20-ea195d23a08d",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "a78c237e-7ca4-421d-bf20-ea195d23a08d",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "a78c237e-7ca4-421d-bf20-ea195d23a08d",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "08d262aa-4373-489a-889d-b390001d6bdb",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1021.004",
+        "technique_name": "SSH",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "08d262aa-4373-489a-889d-b390001d6bdb",
+        "known_groups": [
+          "FIN7",
+          "Lazarus Group",
+          "Leviathan",
+          "Scattered Spider",
+          "BlackTech",
+          "Aquatic Panda",
+          "GCMAN",
+          "Fox Kitten",
+          "TeamTNT",
+          "Storm-1811",
+          "Salt Typhoon",
+          "OilRig",
+          "APT5",
+          "UNC3886",
+          "FIN13",
+          "menuPass",
+          "Indrik Spider",
+          "Rocke",
+          "APT39"
+        ],
+        "known_software": [
+          "Empire",
+          "Cobalt Strike",
+          "reGeorg",
+          "Kinsing",
+          "Qilin"
+        ],
+        "recommended_mitigations": [
+          "Disable or Remove Feature or Program",
+          "Multi-factor Authentication",
+          "User Account Management"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "c0ebc779-0308-47f5-bcfd-8cfb4767d859",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "1cb333b4-b24d-4e3d-9d0e-c67958b1ddd1",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1021.004",
+        "technique_name": "SSH",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "1cb333b4-b24d-4e3d-9d0e-c67958b1ddd1",
+        "known_groups": [
+          "FIN7",
+          "Lazarus Group",
+          "Leviathan",
+          "Scattered Spider",
+          "BlackTech",
+          "Aquatic Panda",
+          "GCMAN",
+          "Fox Kitten",
+          "TeamTNT",
+          "Storm-1811",
+          "Salt Typhoon",
+          "OilRig",
+          "APT5",
+          "UNC3886",
+          "FIN13",
+          "menuPass",
+          "Indrik Spider",
+          "Rocke",
+          "APT39"
+        ],
+        "known_software": [
+          "Empire",
+          "Cobalt Strike",
+          "reGeorg",
+          "Kinsing",
+          "Qilin"
+        ],
+        "recommended_mitigations": [
+          "Disable or Remove Feature or Program",
+          "Multi-factor Authentication",
+          "User Account Management"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "d678bf4c-ba7f-4569-b740-b32d596441f8",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "107c4c99-e3ef-4bc1-bc88-ed73b776d7ad",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1021.004",
+        "technique_name": "SSH",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "107c4c99-e3ef-4bc1-bc88-ed73b776d7ad",
+        "known_groups": [
+          "FIN7",
+          "Lazarus Group",
+          "Leviathan",
+          "Scattered Spider",
+          "BlackTech",
+          "Aquatic Panda",
+          "GCMAN",
+          "Fox Kitten",
+          "TeamTNT",
+          "Storm-1811",
+          "Salt Typhoon",
+          "OilRig",
+          "APT5",
+          "UNC3886",
+          "FIN13",
+          "menuPass",
+          "Indrik Spider",
+          "Rocke",
+          "APT39"
+        ],
+        "known_software": [
+          "Empire",
+          "Cobalt Strike",
+          "reGeorg",
+          "Kinsing",
+          "Qilin"
+        ],
+        "recommended_mitigations": [
+          "Disable or Remove Feature or Program",
+          "Multi-factor Authentication",
+          "User Account Management"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "64ab009a-6912-4ae7-a271-0d9c98ebb955",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "570e396c-30fe-4b05-add5-b6c3356a5ced",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1021.004",
+        "technique_name": "SSH",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "570e396c-30fe-4b05-add5-b6c3356a5ced",
+        "known_groups": [
+          "FIN7",
+          "Lazarus Group",
+          "Leviathan",
+          "Scattered Spider",
+          "BlackTech",
+          "Aquatic Panda",
+          "GCMAN",
+          "Fox Kitten",
+          "TeamTNT",
+          "Storm-1811",
+          "Salt Typhoon",
+          "OilRig",
+          "APT5",
+          "UNC3886",
+          "FIN13",
+          "menuPass",
+          "Indrik Spider",
+          "Rocke",
+          "APT39"
+        ],
+        "known_software": [
+          "Empire",
+          "Cobalt Strike",
+          "reGeorg",
+          "Kinsing",
+          "Qilin"
+        ],
+        "recommended_mitigations": [
+          "Disable or Remove Feature or Program",
+          "Multi-factor Authentication",
+          "User Account Management"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "d3f9c2a1-4b6e-4f8a-9c2d-7e5b1a6f3c9d",
+      "name": "Unclassified Activity",
+      "objective": "Attempted credential guessing to gain unauthorized SSH access to host ip-172-31-19-70",
+      "timeline": [
+        {
+          "timestamp": "2026-08-02 21:50:16",
+          "event_id": "a78c237e-7ca4-421d-bf20-ea195d23a08d",
+          "description": "Authentication failure logged by sshd for user **labuser** from source IP 172.31.24.217 (evidence event a78c237e-7ca4-421d-bf20-ea195d23a08d, mapped to ATT&CK T1110.001 \u2013 Password Guessing)."
+        },
+        {
+          "timestamp": "2026-08-02 21:50:18",
+          "event_id": "08d262aa-4373-489a-889d-b390001d6bdb",
+          "description": "Failed password for **labuser** from 172.31.24.217 on port 44848 via SSH (event 08d262aa-4373-489a-889d-b390001d6bdb, mapped to T1110.001 and T1021.004 \u2013 SSH)."
+        },
+        {
+          "timestamp": "2026-08-02 21:50:32",
+          "event_id": "c0ebc779-0308-47f5-bcfd-8cfb4767d859",
+          "description": "Authentication failure for user **rania** from 172.31.24.217 (event c0ebc779-0308-47f5-bcfd-8cfb4767d859, mapped to T1110.001)."
+        },
+        {
+          "timestamp": "2026-08-02 21:50:34",
+          "event_id": "1cb333b4-b24d-4e3d-9d0e-c67958b1ddd1",
+          "description": "Failed password for **rania** from 172.31.24.217 on port 40696 via SSH (event 1cb333b4-b24d-4e3d-9d0e-c67958b1ddd1, mapped to T1110.001 and T1021.004)."
+        },
+        {
+          "timestamp": "2026-08-02 21:50:48",
+          "event_id": "d678bf4c-ba7f-4569-b740-b32d596441f8",
+          "description": "Authentication failure for user **anna** from 172.31.24.217 (event d678bf4c-ba7f-4569-b740-b32d596441f8, mapped to T1110.001)."
+        },
+        {
+          "timestamp": "2026-08-02 21:50:50",
+          "event_id": "107c4c99-e3ef-4bc1-bc88-ed73b776d7ad",
+          "description": "Failed password for **anna** from 172.31.24.217 on port 42072 via SSH (event 107c4c99-e3ef-4bc1-bc88-ed73b776d7ad, mapped to T1110.001 and T1021.004)."
+        },
+        {
+          "timestamp": "2026-08-02 21:51:18",
+          "event_id": "64ab009a-6912-4ae7-a271-0d9c98ebb955",
+          "description": "Authentication failure for user **med** from 172.31.24.217 (event 64ab009a-6912-4ae7-a271-0d9c98ebb955, mapped to T1110.001)."
+        },
+        {
+          "timestamp": "2026-08-02 21:51:20",
+          "event_id": "570e396c-30fe-4b05-add5-b6c3356a5ced",
+          "description": "Failed password for **med** from 172.31.24.217 on port 44550 via SSH (event 570e396c-30fe-4b05-add5-b6c3356a5ced, mapped to T1110.001 and T1021.004)."
+        }
+      ],
+      "related_techniques": [
+        "T1110.001",
+        "T1021.004"
+      ],
+      "evidence_summary": "Between 21:50:16 and 21:51:20 on 2026\u201108\u201102, the sshd process on host ip-172-31-19-70 recorded a series of authentication failures for multiple usernames (labuser, rania, anna, med) originating from source IP 172.31.24.217 (events a78c237e\u20117ca4\u2011421d\u2011bf20\u2011ea195d23a08d, 08d262aa\u20114373\u2011489a\u2011889d\u2011b390001d6bdb, c0ebc779\u20110308\u201147f5\u2011bcfd\u20118cfb4767d859, 1cb333b4\u2011b24d\u20114e3d\u20119d0e\u2011c67958b1ddd1, d678bf4c\u2011ba7f\u20114569\u2011b740\u2011b32d596441f8, 107c4c99\u2011e3ef\u20114bc1\u2011bc88\u2011ed73b776d7ad, 64ab009a\u20116912\u20114ae7\u2011a271\u20110d9c98ebb955, 570e396c\u201130fe\u20114b05\u2011add5\u2011b6c3356a5ced). Each failure maps with confidence 1.0 to ATT&CK technique T1110.001 (Password Guessing) and, where a port is shown, to T1021.004 (SSH). No malicious IOC was directly observed; the listed IP 100.120.11.97 is marked benign and unrelated to the failed logins. The pattern indicates a coordinated password\u2011guessing campaign targeting SSH access.",
+      "confidence": 0.7
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1078",
+          "technique_name": "Valid Accounts",
+          "rationale": "The attacker is currently performing password guessing against SSH. If any guess succeeds, the adversary will have a valid account on the target host and will likely use it to maintain access and move laterally."
+        },
+        {
+          "technique_id": "T1003",
+          "technique_name": "OS Credential Dumping",
+          "rationale": "After obtaining a valid SSH session, a common next step is to harvest additional credentials from the compromised system to expand the attack surface."
+        },
+        {
+          "technique_id": "T1059.001",
+          "technique_name": "PowerShell",
+          "rationale": "Attackers often use PowerShell after gaining remote access (via SSH) to execute commands, download additional tools, or perform further reconnaissance and exploitation."
+        }
+      ],
+      "rationale": "The observed activity shows repeated password\u2011guessing attempts over SSH (T1110.001 and T1021.004). Historically, attackers who succeed in this phase transition to using the compromised account (T1078), harvest more credentials locally (T1003), and leverage scripting environments like PowerShell (T1059.001) to execute payloads and continue the intrusion."
+    },
+    "report": "# Threat Intelligence Report  \n\n**Campaign ID:** `d3f9c2a1-4b6e-4f8a-9c2d-7e5b1a6f3c9d`  \n**Report Date:** 2026\u201108\u201102  \n\n---  \n\n## Executive Summary  \nDuring a 1\u2011minute window (21:50:16\u202f\u2013\u202f21:51:20 UTC) the SSH daemon on host **ip\u2011172\u201131\u201119\u201170** recorded **eight failed authentication attempts** for four distinct usernames (labuser, rania, anna, med). All attempts originated from internal source IP **172.31.24.217** and map with confidence\u202f1.0 to ATT&CK techniques **T1110.001 \u2013 Password Guessing** and, where a port is shown, **T1021.004 \u2013 SSH**. No successful login or malicious IOC was observed. The activity aligns with the campaign objective of \u201cAttempted credential guessing to gain unauthorized SSH access.\u201d  \n\n---  \n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Description |\n|-----------------|----------|-------------|\n| 2026\u201108\u201102\u202f21:50:16 | `a78c237e-7ca4-421d-bf20-ea195d23a08d` | Authentication failure for **labuser** (PAM) from 172.31.24.217. |\n| 2026\u201108\u201102\u202f21:50:18 | `08d262aa-4373-489a-889d-b390001d6bdb` | Failed password for **labuser** from 172.31.24.217 **port\u202f44848** (SSH). |\n| 2026\u201108\u201102\u202f21:50:32 | `c0ebc779-0308-47f5-bcfd-8cfb4767d859` | Authentication failure for **rania** (PAM) from 172.31.24.217. |\n| 2026\u201108\u201102\u202f21:50:34 | `1cb333b4-b24d-4e3d-9d0e-c67958b1ddd1` | Failed password for **rania** from 172.31.24.217 **port\u202f40696** (SSH). |\n| 2026\u201108\u201102\u202f21:50:48 | `d678bf4c-ba7f-4569-b740-b32d596441f8` | Authentication failure for **anna** (PAM) from 172.31.24.217. |\n| 2026\u201108\u201102\u202f21:50:50 | `107c4c99-e3ef-4bc1-bc88-ed73b776d7ad` | Failed password for **anna** from 172.31.24.217 **port\u202f42072** (SSH). |\n| 2026\u201108\u201102\u202f21:51:18 | `64ab009a-6912-4ae7-a271-0d9c98ebb955` | Authentication failure for **med** (PAM) from 172.31.24.217. |\n| 2026\u201108\u201102\u202f21:51:20 | `570e396c-30fe-4b05-add5-b6c3356a5ced` | Failed password for **med** from 172.31.24.217 **port\u202f44550** (SSH). |\n\n---  \n\n## IOCs  \n\n| Value | Type | Reputation | Source | Confidence | Tags |\n|-------|------|------------|--------|------------|------|\n| `100.120.11.97` | IP | benign | AbuseIPDB | 0.0 | non_public, reserved |\n| `wazuh.manager` | Domain | unknown | (none) | 0.0 | \u2013 |\n\n*No IOC directly related to the failed logins was observed.*  \n\n---  \n\n## ATT&CK Techniques (Observed)  \n\n| Technique ID | Technique Name | Evidence Event IDs |\n|--------------|----------------|--------------------|\n| **T1110.001** | Password Guessing | a78c237e\u20117ca4\u2011421d\u2011bf20\u2011ea195d23a08d, 08d262aa\u20114373\u2011489a\u2011889d\u2011b390001d6bdb, c0ebc779\u20110308\u201147f5\u2011bcfd\u20118cfb4767d859, 1cb333b4\u2011b24d\u20114e3d\u20119d0e\u2011c67958b1ddd1, d678bf4c\u2011ba7f\u20114569\u2011b740\u2011b32d596441f8, 107c4c99\u2011e3ef\u20114bc1\u2011bc88\u2011ed73b776d7ad, 64ab009a\u20116912\u20114ae7\u2011a271\u20110d9c98ebb955, 570e396c\u201130fe\u20114b05\u2011add5\u2011b6c3356a5ced |\n| **T1021.004** | SSH | 08d262aa\u20114373\u2011489a\u2011889d\u2011b390001d6bdb, 1cb333b4\u2011b24d\u20114e3d\u20119d0e\u2011c67958b1ddd1, 107c4c99\u2011e3ef\u20114bc1\u2011bc88\u2011ed73b776d7ad, 570e396c\u201130fe\u20114b05\u2011add5\u2011b6c3356a5ced |\n\n---  \n\n## Campaign Assessment  \n\n* **Objective:** Attempted credential guessing to gain unauthorized SSH access to host `ip-172-31-19-70`.  \n* **Confidence:** 0.7 (as provided in the campaign object).  \n* **Scope:** Eight failed login attempts targeting four local accounts, all from the internal IP `172.31.24.217`.  \n* **Outcome:** No successful authentication observed; no malicious payloads or additional IOCs detected.  \n* **Related Techniques:** T1110.001 (Password Guessing) and T1021.004 (SSH).  \n\n---  \n\n## Predicted Next Steps (Forecast)  \n\n| Technique ID | Technique Name | Rationale |\n|--------------|----------------|-----------|\n| **T1078** | Valid Accounts | If any guess succeeds, the adversary will have a valid account and may use it to maintain access and move laterally. |\n| **T1003** | OS Credential Dumping | After obtaining a valid SSH session, attackers often harvest additional credentials from the compromised system. |\n| **T1059.001** | PowerShell | PowerShell is commonly used post\u2011compromise to execute commands, download tools, or conduct further reconnaissance. |\n\n*These are probabilistic forecasts based on the observed password\u2011guessing activity.*  \n\n---  \n\n## Recommendations  \n\nMitigations should address the confirmed techniques **T1110.001** and **T1021.004**:\n\n1. **Enforce Strong Password Policies** \u2013 Require complex passwords and regular rotation to reduce the success rate of password\u2011guessing attacks.  \n2. **Account Lockout / Throttling** \u2013 Configure SSH to lock accounts after a limited number of failed attempts (e.g., 5) and introduce exponential back\u2011off.  \n3. **Implement SSH Key\u2011Based Authentication** \u2013 Disable password authentication where possible and require cryptographic keys.  \n4. **Restrict SSH Access** \u2013 Use firewall rules or security groups to allow SSH only from authorized management subnets.  \n5. **Enable Multi\u2011Factor Authentication (MFA)** for privileged accounts accessed via SSH.  \n6. **Monitor and Alert on Repeated Failed Logins** \u2013 Deploy SIEM rules that trigger on multiple authentication failures from a single source within a short window.  \n7. **Log Retention and Review** \u2013 Ensure SSH logs are retained for forensic analysis and reviewed regularly for anomalous patterns.  \n\n---  \n\n## Response Actions  \n\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| *No response actions recorded in the provided evidence.* | \u2013 | \u2013 | \u2013 | \u2013 |\n\n---  \n\n*All statements in this report are derived exclusively from the supplied evidence. No additional data has been inferred or fabricated.*",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "isolate_host",
+          "target": "ip-172-31-19-70",
+          "severity": "high",
+          "rationale": "Multiple high\u2011confidence techniques (Password Guessing T1110.001 and SSH T1021.004) indicate active credential\u2011guessing attempts against this host.",
+          "technique_id": "T1110.001",
+          "confidence": 1.0
+        },
+        "status": "executed_remote",
+        "detail": "Remotely executed on Machine 2 (execution_id=52ccba94-1bb9-4ad6-9923-628022be3892).",
+        "dry_run": false
+      },
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC Team",
+          "severity": "medium",
+          "rationale": "Campaign d3f9c2a1-4b6e-4f8a-9c2d-7e5b1a6f3c9d detected password\u2011guessing over SSH targeting ip-172-31-19-70. No malicious IOCs, but host isolation is recommended.",
+          "technique_id": "T1110.001",
+          "confidence": 1.0
+        },
+        "status": "executed_remote",
+        "detail": "Remotely executed on Machine 2 (execution_id=52ccba94-1bb9-4ad6-9923-628022be3892).",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "isolate_host_5dbb4552",
+        "action_type": "isolate_host",
+        "target": "ip-172-31-19-70",
+        "platform": "linux",
+        "language": "bash",
+        "filename": "isolate_host_ip-172-31-19-70.sh",
+        "script": "#!/bin/bash\n# Isolate host ip-172-31-19-70 while preserving remote management channel\n# NOTE: Keep port 9001 reachable so the remote agent does not self-lock.\nMGMT_IP=\"${REMOTE_MANAGER_IP:-100.76.226.30}\"\nREMOTE_PORT=\"${REMOTE_AGENT_PORT:-9001}\"\nif command -v iptables &> /dev/null; then\n    # Save current rules for rollback\n    iptables-save > /tmp/iptables_backup_5dbb4552.txt 2>/dev/null || true\n    iptables -P INPUT DROP\n    iptables -P OUTPUT DROP\n    iptables -P FORWARD DROP\n    # Allow loopback\n    iptables -A INPUT -i lo -j ACCEPT\n    iptables -A OUTPUT -o lo -j ACCEPT\n    # Keep established connections alive\n    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n    iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n    # Keep control-plane reachable from manager\n    iptables -A INPUT -p tcp --dport \"$REMOTE_PORT\" -s \"$MGMT_IP\" -j ACCEPT\n    # Allow callback webhook traffic to manager\n    iptables -A OUTPUT -p tcp -d \"$MGMT_IP\" --dport 8000 -j ACCEPT\nelif command -v nft &> /dev/null; then\n    nft add table inet isolate 2>/dev/null || true\n    nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true\n    nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true\n    nft add rule inet isolate input iif lo accept\n    nft add rule inet isolate output oif lo accept\n    nft add rule inet isolate input ct state established,related accept\n    nft add rule inet isolate output ct state established,related accept\n    nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept\n    nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept\nelse\n    echo 'ERROR: No firewall tool found' >&2\n    exit 1\nfi\necho 'Host ip-172-31-19-70 isolated with management channel preserved'",
+        "requires_admin": true,
+        "expected_effect": "Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000",
+        "rollback": "# Rollback isolation\nif [ -f /tmp/iptables_backup_5dbb4552.txt ]; then\n    iptables-restore < /tmp/iptables_backup_5dbb4552.txt\n    rm /tmp/iptables_backup_5dbb4552.txt\nfi\n# Fallback: set policies to ACCEPT\niptables -P INPUT ACCEPT 2>/dev/null || true\niptables -P OUTPUT ACCEPT 2>/dev/null || true\niptables -P FORWARD ACCEPT 2>/dev/null || true",
+        "verification": [
+          "iptables -L -n 2>/dev/null | head -5",
+          "ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'"
+        ]
+      },
+      {
+        "action_id": "notify_analyst_bb9ebef1",
+        "action_type": "notify_analyst",
+        "target": "SOC Team",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_bb9ebef1.log",
+        "script": "# Notify analyst about: SOC Team\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: T1110.001\n# Confidence: 1.0\n#\n# Please review the following:\n#   - SOC Team\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC Team",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 2\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: isolate_host\n# Target: ip-172-31-19-70\n# ID: isolate_host_5dbb4552\n# Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000\n# =======================================\naction_1() {\n    echo \"[ACTION 1] isolate_host -> ip-172-31-19-70\"\n    echo \"  Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000\"\n    if [[ $EUID -ne 0 ]]; then\n        echo \"  ERROR: Requires root privileges\" >&2\n        return 1\n    fi\n\n    # Isolate host ip-172-31-19-70 while preserving remote management channel\n    # NOTE: Keep port 9001 reachable so the remote agent does not self-lock.\n    MGMT_IP=\"${REMOTE_MANAGER_IP:-100.76.226.30}\"\n    REMOTE_PORT=\"${REMOTE_AGENT_PORT:-9001}\"\n    if command -v iptables &> /dev/null; then\n        # Save current rules for rollback\n        iptables-save > /tmp/iptables_backup_5dbb4552.txt 2>/dev/null || true\n        iptables -P INPUT DROP\n        iptables -P OUTPUT DROP\n        iptables -P FORWARD DROP\n        # Allow loopback\n        iptables -A INPUT -i lo -j ACCEPT\n        iptables -A OUTPUT -o lo -j ACCEPT\n        # Keep established connections alive\n        iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n        iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n        # Keep control-plane reachable from manager\n        iptables -A INPUT -p tcp --dport \"$REMOTE_PORT\" -s \"$MGMT_IP\" -j ACCEPT\n        # Allow callback webhook traffic to manager\n        iptables -A OUTPUT -p tcp -d \"$MGMT_IP\" --dport 8000 -j ACCEPT\n    elif command -v nft &> /dev/null; then\n        nft add table inet isolate 2>/dev/null || true\n        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true\n        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true\n        nft add rule inet isolate input iif lo accept\n        nft add rule inet isolate output oif lo accept\n        nft add rule inet isolate input ct state established,related accept\n        nft add rule inet isolate output ct state established,related accept\n        nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept\n        nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept\n    else\n        echo 'ERROR: No firewall tool found' >&2\n        exit 1\n    fi\n    echo 'Host ip-172-31-19-70 isolated with management channel preserved'\n    echo \"  [OK] isolate_host completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] isolate_host -> ip-172-31-19-70\"\n    if [ -f /tmp/iptables_backup_5dbb4552.txt ]; then\n        iptables-restore < /tmp/iptables_backup_5dbb4552.txt\n        rm /tmp/iptables_backup_5dbb4552.txt\n    fi\n    # Fallback: set policies to ACCEPT\n    iptables -P INPUT ACCEPT 2>/dev/null || true\n    iptables -P OUTPUT ACCEPT 2>/dev/null || true\n    iptables -P FORWARD ACCEPT 2>/dev/null || true\n    echo \"  [OK] Rollback of isolate_host completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] isolate_host -> ip-172-31-19-70\"\n    iptables -L -n 2>/dev/null | head -5\n    ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'\n}\n\n\n# =======================================\n# Action 2: notify_analyst\n# Target: SOC Team\n# ID: notify_analyst_bb9ebef1\n# Expected: Create analyst notification for SOC Team\n# =======================================\naction_2() {\n    echo \"[ACTION 2] notify_analyst -> SOC Team\"\n    echo \"  Expected: Create analyst notification for SOC Team\"\n\n    # Notify analyst about: SOC Team\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: T1110.001\n    # Confidence: 1.0\n    #\n    # Please review the following:\n    #   - SOC Team\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_2() {\n    echo \"[ROLLBACK 2] notify_analyst -> SOC Team\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_2() {\n    echo \"[VERIFY 2] notify_analyst -> SOC Team\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 2 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_2\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        2) action_2 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\n    action_2\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_2_actions.sh",
+    "remote_execution_result": {
+      "success": true,
+      "execution_id": "52ccba94-1bb9-4ad6-9923-628022be3892",
+      "filename": "52ccba94-1bb9-4ad6-9923-628022be3892_response_actions_2_actions.sh",
+      "campaign_id": "d3f9c2a1-4b6e-4f8a-9c2d-7e5b1a6f3c9d",
+      "exit_code": 0,
+      "stdout": "========================================\n  Response Actions Execution Script\n  Mode: EXECUTE\n========================================\n,\n\nStarting execution of 2 action(s)...\n\n[ACTION 1] isolate_host -> ip-172-31-19-70\n  Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000\nHost ip-172-31-19-70 isolated with management channel preserved\n  [OK] isolate_host completed\n[ACTION 2] notify_analyst -> SOC Team\n  Expected: Create analyst notification for SOC Team\n  [OK] notify_analyst completed\n\nExecution completed.\n",
+      "stderr": "",
+      "status": "completed",
+      "executed_at": "2026-08-02T21:52:03.017981+00:00",
+      "duration_ms": 62.48,
+      "error": null
+    },
+    "remote_execution_error": "",
+    "remote_push_attempted": true,
+    "remote_push_url": "http://100.120.11.97:9001",
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-08-03T07:09:21.390+0000",
+        "rule": {
+          "level": 3,
+          "description": "Wazuh server started.",
+          "id": "502",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "ossec"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "gpg13": [
+            "10.1"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785740961.0",
+        "full_log": "ossec: Manager started.",
+        "decoder": {
+          "name": "ossec"
+        },
+        "location": "wazuh-monitord"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "f2cdc253-af17-4944-8e82-82da37e5dbc9",
+        "source": "wazuh",
+        "event_type": "wazuh_rule_502",
+        "timestamp": "2026-08-03T07:09:21.390+0000",
+        "host": "wazuh.manager",
+        "user": null,
+        "username": null,
+        "process": "ossec",
+        "command_line": "ossec: Manager started.",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "Wazuh server started.",
+        "rule_level": 3,
+        "rule_groups": [
+          "ossec"
+        ],
+        "rule_mitre": [],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-03T07:09:21.390+0000",
+          "rule": {
+            "level": 3,
+            "description": "Wazuh server started.",
+            "id": "502",
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "ossec"
+            ],
+            "pci_dss": [
+              "10.6.1"
+            ],
+            "gpg13": [
+              "10.1"
+            ],
+            "gdpr": [
+              "IV_35.7.d"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.6"
+            ],
+            "tsc": [
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "000",
+            "name": "wazuh.manager"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785740961.0",
+          "full_log": "ossec: Manager started.",
+          "decoder": {
+            "name": "ossec"
+          },
+          "location": "wazuh-monitord"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "f2cdc253-af17-4944-8e82-82da37e5dbc9",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [],
+    "campaign": {
+      "campaign_id": "e3b2f9c1-4a7d-4f2a-9c6e-5d8f1a2b3c4d",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "f2cdc253-af17-4944-8e82-82da37e5dbc9",
+          "description": "The Wazuh manager process (ossec) reported a start event (wazuh_rule_502) on host wazuh.manager (Event ID f2cdc253-af17-4944-8e82-82da37e5dbc9)."
+        }
+      ],
+      "related_techniques": [],
+      "evidence_summary": "The only observed activity is a Wazuh manager start event (Event ID f2cdc253-af17-4944-8e82-82da37e5dbc9) indicating the ossec process launched on host wazuh.manager; the associated IOC lists the same host name with unknown reputation and confidence, providing no additional context or technique mapping.",
+      "confidence": 0.05
+    },
+    "prediction": {
+      "likely_next_techniques": [],
+      "rationale": "No techniques observed yet."
+    },
+    "report": "**Threat Intelligence Report**  \n*Campaign ID:* `e3b2f9c1-4a7d-4f2a-9c6e-5d8f1a2b3c4d`  \n*Report Date:* 2026\u201108\u201103  \n\n---  \n\n## Executive Summary\n- A single low\u2011confidence event was observed: the Wazuh manager (`ossec`) started on host **wazuh.manager** (Event ID `f2cdc253-af17-4944-8e82-82da37e5dbc9`).  \n- No malicious techniques, payloads, or network activity were identified.  \n- The only IOC is the host name `wazuh.manager` with **unknown** reputation and **0\u202f% confidence**.  \n- Given the minimal evidence, the campaign is classified as **\u201cUnclassified Activity\u201d** with a confidence of **5\u202f%**.  \n\n## Timeline\n| Timestamp (UTC) | Event ID | Description |\n|-----------------|----------|-------------|\n| 2026\u201108\u201103\u202f07:09:21.390 | `f2cdc253-af17-4944-8e82-82da37e5dbc9` | Wazuh manager process (`ossec`) reported a start event (rule\u202f502) on host **wazuh.manager**. |\n\n*Note: The timestamp is the only concrete time reference available.*\n\n## IOCs\n| IOC Type | Value | Reputation | Confidence |\n|----------|-------|------------|------------|\n| domain | `wazuh.manager` | unknown | 0.0 |\n\n## ATT&CK Techniques\nNo ATT&CK techniques were observed or mapped to this activity.  \n\n## Campaign Assessment\n- The activity consists solely of a legitimate\u2011looking Wazuh manager start event.  \n- No evidence of compromise, lateral movement, credential abuse, or exfiltration.  \n- The campaign\u2019s objective and impact remain **unknown**.  \n\n## Predicted Next Steps\nThe prediction engine did not identify any likely next techniques.  \n**Forecast:** *None* (no probabilistic techniques available).\n\n## Recommendations\nGiven the lack of concrete malicious indicators, the following precautionary steps are advised:\n\n1. **Maintain continuous monitoring** of the Wazuh manager host for any anomalous processes or log entries.  \n2. **Validate the legitimacy** of the `ossec` service start (e.g., compare against baseline start times).  \n3. **Ensure logging** is comprehensive and retained for at least 30\u202fdays to capture any future activity.  \n4. **Review configuration** of the Wazuh manager to confirm that only authorized users can restart the service.  \n5. **Update threat intelligence feeds** and re\u2011evaluate the host if new IOCs appear.\n\n## Response Actions\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| notify_analyst | SOC Team | executed_remote | low | Campaign confidence is very low (0.05) and the sole IOC has zero confidence and unknown reputation; analyst awareness is required to monitor for any future indicators. |\n\n*Summary counts:* actions\u202f=\u202f1, events\u202f=\u202f1, IOCs\u202f=\u202f1, techniques\u202f=\u202f0 (counts may exceed listed samples when summary_counts are larger than the arrays).  ",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC Team",
+          "severity": "low",
+          "rationale": "Campaign has very low confidence (0.05) and no associated ATT&CK techniques. The only IOC has zero confidence and unknown reputation, providing insufficient evidence for blocking or isolation. Analyst awareness is required to monitor for any future indicators.",
+          "technique_id": "",
+          "confidence": 0.0
+        },
+        "status": "executed_remote",
+        "detail": "Remotely executed on Machine 2 (execution_id=03b4d73c-fdd7-45d6-a683-6b1232c2f1c3).",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "notify_analyst_d3655b15",
+        "action_type": "notify_analyst",
+        "target": "SOC Team",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_d3655b15.log",
+        "script": "# Notify analyst about: SOC Team\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: N/A\n# Confidence: 0.0\n#\n# Please review the following:\n#   - SOC Team\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC Team",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 1\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: notify_analyst\n# Target: SOC Team\n# ID: notify_analyst_d3655b15\n# Expected: Create analyst notification for SOC Team\n# =======================================\naction_1() {\n    echo \"[ACTION 1] notify_analyst -> SOC Team\"\n    echo \"  Expected: Create analyst notification for SOC Team\"\n\n    # Notify analyst about: SOC Team\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: N/A\n    # Confidence: 0.0\n    #\n    # Please review the following:\n    #   - SOC Team\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] notify_analyst -> SOC Team\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] notify_analyst -> SOC Team\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 1 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_1_actions.sh",
+    "remote_execution_result": {
+      "success": true,
+      "execution_id": "03b4d73c-fdd7-45d6-a683-6b1232c2f1c3",
+      "filename": "03b4d73c-fdd7-45d6-a683-6b1232c2f1c3_response_actions_1_actions.sh",
+      "campaign_id": "e3b2f9c1-4a7d-4f2a-9c6e-5d8f1a2b3c4d",
+      "exit_code": 0,
+      "stdout": "========================================\n  Response Actions Execution Script\n  Mode: EXECUTE\n========================================\n,\n\nStarting execution of 1 action(s)...\n\n[ACTION 1] notify_analyst -> SOC Team\n  Expected: Create analyst notification for SOC Team\n  [OK] notify_analyst completed\n\nExecution completed.\n",
+      "stderr": "",
+      "status": "completed",
+      "executed_at": "2026-08-03T09:35:48.059101+00:00",
+      "duration_ms": 8.81,
+      "error": null
+    },
+    "remote_execution_error": "",
+    "remote_push_attempted": true,
+    "remote_push_url": "http://100.120.11.97:9001",
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-08-05T07:13:31.923+0000",
+        "rule": {
+          "level": 3,
+          "description": "Wazuh server started.",
+          "id": "502",
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "ossec"
+          ],
+          "pci_dss": [
+            "10.6.1"
+          ],
+          "gpg13": [
+            "10.1"
+          ],
+          "gdpr": [
+            "IV_35.7.d"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.6"
+          ],
+          "tsc": [
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "000",
+          "name": "wazuh.manager"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1785914011.0",
+        "full_log": "ossec: Manager started.",
+        "decoder": {
+          "name": "ossec"
+        },
+        "location": "wazuh-monitord"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "96321f58-4322-4219-b568-8e335d9a05da",
+        "source": "wazuh",
+        "event_type": "wazuh_rule_502",
+        "timestamp": "2026-08-05T07:13:31.923+0000",
+        "host": "wazuh.manager",
+        "user": null,
+        "username": null,
+        "process": "ossec",
+        "command_line": "ossec: Manager started.",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "Wazuh server started.",
+        "rule_level": 3,
+        "rule_groups": [
+          "ossec"
+        ],
+        "rule_mitre": [],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-05T07:13:31.923+0000",
+          "rule": {
+            "level": 3,
+            "description": "Wazuh server started.",
+            "id": "502",
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "ossec"
+            ],
+            "pci_dss": [
+              "10.6.1"
+            ],
+            "gpg13": [
+              "10.1"
+            ],
+            "gdpr": [
+              "IV_35.7.d"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.6"
+            ],
+            "tsc": [
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "000",
+            "name": "wazuh.manager"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1785914011.0",
+          "full_log": "ossec: Manager started.",
+          "decoder": {
+            "name": "ossec"
+          },
+          "location": "wazuh-monitord"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "96321f58-4322-4219-b568-8e335d9a05da",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [],
+    "campaign": {
+      "campaign_id": "e3b0c442-98fc-1c14-9af8-9d5e6a2b7c3d",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "96321f58-4322-4219-b568-8e335d9a05da",
+          "description": "The Wazuh manager process (ossec) started on host wazuh.manager, as recorded by a wazuh_rule_502 event (Event ID 96321f58-4322-4219-b568-8e335d9a05da)."
+        }
+      ],
+      "related_techniques": [],
+      "evidence_summary": "The only observed activity is the start of the Wazuh manager process on host wazuh.manager (Event ID 96321f58-4322-4219-b568-8e335d9a05da), and the associated IOC \"wazuh.manager\" has unknown reputation and confidence, providing no further context about malicious intent.",
+      "confidence": 0.05
+    },
+    "prediction": {
+      "likely_next_techniques": [],
+      "rationale": "No techniques observed yet."
+    },
+    "report": "**Threat Intelligence Report**  \n*Campaign ID:* `e3b0c442-98fc-1c14-9af8-9d5e6a2b7c3d`  \n*Report Date:* 2026\u201108\u201105  \n\n---  \n\n## Executive Summary\n- A single low\u2011confidence activity was observed: the **Wazuh manager (ossec) process started** on host `wazuh.manager`.  \n- The only indicator associated with the activity is the domain **`wazuh.manager`**, which has an **unknown reputation** and **0\u202f% confidence**.  \n- No ATT&CK techniques were identified, and the campaign confidence is **0.05** (very low).  \n- No malicious intent can be confirmed at this time; the event is currently classified as **Unclassified Activity**.  \n\n## Timeline\n| Timestamp (UTC) | Event ID | Description |\n|-----------------|----------|-------------|\n| 2026\u201108\u201105\u202f07:13:31.923 | 96321f58-4322-4219-b568-8e335d9a05da | The Wazuh manager process (`ossec`) started on host `wazuh.manager` (Wazuh rule 502). |\n\n*Note: The summary count for events is 1, matching the single event listed above.*\n\n## IOCs\n| Value | Type | Reputation | Confidence | Tags |\n|-------|------|------------|------------|------|\n| wazuh.manager | domain | unknown | 0.0 | \u2013 |\n\n*The summary count for IOCs is 1, matching the single IOC listed.*\n\n## ATT&CK Techniques\nNo ATT&CK techniques were observed in the provided evidence.  \n\n*The summary count for techniques is 0, matching the empty techniques list.*\n\n## Campaign Assessment\n- **Objective:** Unknown.  \n- **Confidence:** 0.05 (very low).  \n- The only observable artifact is the start of the Wazuh manager service, which is a normal operation for a Wazuh deployment.  \n- The associated IOC (`wazuh.manager`) lacks reputation or confidence, providing no actionable threat context.  \n- Given the lack of malicious indicators, the activity is treated as **anomalous but benign** pending further correlation.\n\n## Predicted Next Steps\nNo probabilistic forecasts are available because no techniques have been observed.  \n\n*The prediction section reports \u201cNo techniques observed yet.\u201d*\n\n## Recommendations\nAlthough no specific ATT&CK techniques were identified, the following general best\u2011practice actions are advised:\n\n1. **Monitor** the `wazuh.manager` host for any additional unusual processes or network connections.  \n2. **Correlate** future alerts with the domain `wazuh.manager` to detect possible reuse.  \n3. **Validate** that the Wazuh manager service is running the expected version and configuration.  \n4. **Ensure** logging is enabled and retained for at least 30\u202fdays to support retrospective analysis.  \n5. **Review** access controls on the Wazuh manager host to confirm only authorized accounts have privileges.  \n\n## Response Actions\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| notify_analyst | SOC Team | executed_remote | low | Campaign confidence is very low (0.05) and no high\u2011confidence IOCs or techniques were observed. Analysts should be aware of the anomalous indicator `wazuh.manager` for future correlation. |\n\n*The summary count for actions taken is 1, matching the single response action listed.*  ",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC Team",
+          "severity": "low",
+          "rationale": "Campaign has very low confidence (0.05) and no associated ATT&CK techniques or high\u2011confidence IOCs. No disruptive actions meet the required thresholds, but analysts should be aware of the anomalous indicator 'wazuh.manager' for future correlation.",
+          "technique_id": "",
+          "confidence": 0.0
+        },
+        "status": "executed_remote",
+        "detail": "Remotely executed on Machine 2 (execution_id=dfe7ce5f-c467-4596-a844-31f938683f20).",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "notify_analyst_73d2daf4",
+        "action_type": "notify_analyst",
+        "target": "SOC Team",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_73d2daf4.log",
+        "script": "# Notify analyst about: SOC Team\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: N/A\n# Confidence: 0.0\n#\n# Please review the following:\n#   - SOC Team\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC Team",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 1\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: notify_analyst\n# Target: SOC Team\n# ID: notify_analyst_73d2daf4\n# Expected: Create analyst notification for SOC Team\n# =======================================\naction_1() {\n    echo \"[ACTION 1] notify_analyst -> SOC Team\"\n    echo \"  Expected: Create analyst notification for SOC Team\"\n\n    # Notify analyst about: SOC Team\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: N/A\n    # Confidence: 0.0\n    #\n    # Please review the following:\n    #   - SOC Team\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] notify_analyst -> SOC Team\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] notify_analyst -> SOC Team\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 1 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_1_actions.sh",
+    "remote_execution_result": {
+      "success": true,
+      "execution_id": "dfe7ce5f-c467-4596-a844-31f938683f20",
+      "filename": "dfe7ce5f-c467-4596-a844-31f938683f20_response_actions_1_actions.sh",
+      "campaign_id": "e3b0c442-98fc-1c14-9af8-9d5e6a2b7c3d",
+      "exit_code": 0,
+      "stdout": "========================================\n  Response Actions Execution Script\n  Mode: EXECUTE\n========================================\n,\n\nStarting execution of 1 action(s)...\n\n[ACTION 1] notify_analyst -> SOC Team\n  Expected: Create analyst notification for SOC Team\n  [OK] notify_analyst completed\n\nExecution completed.\n",
+      "stderr": "",
+      "status": "completed",
+      "executed_at": "2026-08-05T08:08:48.689347+00:00",
+      "duration_ms": 4.56,
+      "error": null
+    },
+    "remote_execution_error": "",
+    "remote_push_attempted": true,
+    "remote_push_url": "http://100.120.11.97:9001",
+    "errors": [],
+    "metadata": {}
   }
 ]

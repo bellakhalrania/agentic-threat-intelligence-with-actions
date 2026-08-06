@@ -37,7 +37,7 @@ echo "",
 # =======================================
 # Action 1: isolate_host
 # Target: ip-172-31-19-70
-# ID: isolate_host_d98c7f0b
+# ID: isolate_host_5dbb4552
 # Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000
 # =======================================
 action_1() {
@@ -54,7 +54,7 @@ action_1() {
     REMOTE_PORT="${REMOTE_AGENT_PORT:-9001}"
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_d98c7f0b.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_5dbb4552.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
@@ -88,9 +88,9 @@ action_1() {
 
 rollback_1() {
     echo "[ROLLBACK 1] isolate_host -> ip-172-31-19-70"
-    if [ -f /tmp/iptables_backup_d98c7f0b.txt ]; then
-        iptables-restore < /tmp/iptables_backup_d98c7f0b.txt
-        rm /tmp/iptables_backup_d98c7f0b.txt
+    if [ -f /tmp/iptables_backup_5dbb4552.txt ]; then
+        iptables-restore < /tmp/iptables_backup_5dbb4552.txt
+        rm /tmp/iptables_backup_5dbb4552.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -109,7 +109,7 @@ verify_1() {
 # =======================================
 # Action 2: notify_analyst
 # Target: SOC Team
-# ID: notify_analyst_9de4e49e
+# ID: notify_analyst_bb9ebef1
 # Expected: Create analyst notification for SOC Team
 # =======================================
 action_2() {
@@ -120,7 +120,7 @@ action_2() {
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
-    # Related technique: multiple
+    # Related technique: T1110.001
     # Confidence: 1.0
     #
     # Please review the following:
