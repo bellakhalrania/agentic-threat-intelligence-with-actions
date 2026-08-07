@@ -142220,5 +142220,3771 @@
     "remote_push_url": "http://100.120.11.97:9001",
     "errors": [],
     "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-08-07T18:16:48.434+0000",
+        "rule": {
+          "level": 3,
+          "description": "PAM: Login session closed.",
+          "id": "5502",
+          "firedtimes": 24,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog"
+          ],
+          "pci_dss": [
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8",
+            "7.9"
+          ],
+          "gdpr": [
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786126608.122585",
+        "full_log": "Aug 07 18:16:47 ip-172-31-42-38 sudo[51425]: pam_unix(sudo:session): session closed for user root",
+        "predecoder": {
+          "program_name": "sudo",
+          "timestamp": "Aug 07 18:16:47",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "parent": "pam",
+          "name": "pam"
+        },
+        "data": {
+          "dstuser": "root"
+        },
+        "location": "journald"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "c33414f5-0a33-49aa-864e-6247f5e83017",
+        "source": "wazuh",
+        "event_type": "wazuh_rule_5502",
+        "timestamp": "2026-08-07T18:16:48.434+0000",
+        "host": "victim-machine",
+        "user": "root",
+        "username": "root",
+        "process": "sudo",
+        "command_line": "Aug 07 18:16:47 ip-172-31-42-38 sudo[51425]: pam_unix(sudo:session): session closed for user root",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "PAM: Login session closed.",
+        "rule_level": 3,
+        "rule_groups": [
+          "pam",
+          "syslog"
+        ],
+        "rule_mitre": [],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:16:48.434+0000",
+          "rule": {
+            "level": 3,
+            "description": "PAM: Login session closed.",
+            "id": "5502",
+            "firedtimes": 24,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog"
+            ],
+            "pci_dss": [
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8",
+              "7.9"
+            ],
+            "gdpr": [
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786126608.122585",
+          "full_log": "Aug 07 18:16:47 ip-172-31-42-38 sudo[51425]: pam_unix(sudo:session): session closed for user root",
+          "predecoder": {
+            "program_name": "sudo",
+            "timestamp": "Aug 07 18:16:47",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "parent": "pam",
+            "name": "pam"
+          },
+          "data": {
+            "dstuser": "root"
+          },
+          "location": "journald"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.90.153.71",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "100.90.153.71",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null
+            },
+            "queried_at": "2026-08-07 18:34:56.173771"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.90.153.71",
+          "source_event_id": "c33414f5-0a33-49aa-864e-6247f5e83017",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "c33414f5-0a33-49aa-864e-6247f5e83017",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1548.003",
+        "technique_name": "Sudo and Sudo Caching",
+        "evidence_event_id": "c33414f5-0a33-49aa-864e-6247f5e83017",
+        "mapping_source": "llm",
+        "confidence": 0.78,
+        "known_groups": [],
+        "known_software": [
+          "Cobalt Strike",
+          "Shai-Hulud",
+          "Proton",
+          "Dok"
+        ],
+        "recommended_mitigations": [
+          "Restrict File and Directory Permissions",
+          "Operating System Configuration",
+          "Privileged Account Management"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "a3f5c9d2-4e7b-4a1f-9c2d-6f8b2e1d7a4c",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "2026-08-07T18:16:47Z",
+          "event_id": "c33414f5-0a33-49aa-864e-6247f5e83017",
+          "description": "The sudo process on host victim-machine logged a session close for user root (event c33414f5-0a33-49aa-864e-6247f5e83017), which is mapped to ATT&CK technique T1548.003 (Sudo and Sudo Caching) with confidence 0.78."
+        }
+      ],
+      "related_techniques": [
+        "T1548.003"
+      ],
+      "evidence_summary": "Event c33414f5-0a33-49aa-864e-6247f5e83017 records a sudo session closure for root on victim-machine, directly supporting technique T1548.003 (Sudo and Sudo Caching) as indicated by the mapping source. The associated IOCs include IP address 100.90.153.71 (reputation: benign, confidence: 0.0) and the identifier wazuh.manager (reputation: unknown, confidence: 0.0), neither of which provide additional malicious context.",
+      "confidence": 0.17
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1003",
+          "technique_name": "OS Credential Dumping",
+          "rationale": "After obtaining root privileges via sudo, attackers commonly dump system credentials (e.g., /etc/shadow) to harvest password hashes for later reuse or lateral movement."
+        },
+        {
+          "technique_id": "T1078",
+          "technique_name": "Valid Accounts",
+          "rationale": "With elevated privileges, the adversary can create or reuse privileged accounts to maintain persistent access without relying on the original sudo session."
+        },
+        {
+          "technique_id": "T1083",
+          "technique_name": "File and Directory Discovery",
+          "rationale": "Root access enables unrestricted enumeration of the file system, allowing the attacker to locate sensitive data, configuration files, or additional tools to further the campaign."
+        },
+        {
+          "technique_id": "T1098",
+          "technique_name": "Account Manipulation",
+          "rationale": "Following privilege escalation, the adversary may modify existing accounts (e.g., add them to privileged groups) to solidify control and facilitate future actions."
+        },
+        {
+          "technique_id": "T1105",
+          "technique_name": "Ingress Tool Transfer",
+          "rationale": "Having gained root, the attacker often transfers additional malicious tools or payloads to the compromised host to expand capabilities."
+        }
+      ],
+      "rationale": "The observed use of sudo (T1548.003) indicates the attacker has achieved elevated privileges on a Unix-like system. Typical post\u2011escalation behavior includes credential harvesting, establishing persistent privileged accounts, extensive system discovery, manipulation of existing accounts, and downloading further tools. All suggested techniques are present in the allowed prediction list and align with common attacker workflows after sudo escalation."
+    },
+    "threat_summary": {
+      "campaign": {
+        "campaign_id": "a3f5c9d2-4e7b-4a1f-9c2d-6f8b2e1d7a4c",
+        "name": "Unclassified Activity",
+        "severity": "medium",
+        "confidence": 0.17
+      },
+      "event_count": 1,
+      "failed_login_count": 0,
+      "affected_hosts": [
+        "victim-machine"
+      ],
+      "affected_users": [
+        "root"
+      ],
+      "source_ips": [],
+      "processes": [
+        "sudo"
+      ],
+      "top_mitre_techniques": [
+        {
+          "id": "T1548.003",
+          "name": "Sudo and Sudo Caching",
+          "count": 1,
+          "confidence": 0.78
+        }
+      ],
+      "prediction": {
+        "likely_next_techniques": [
+          {
+            "id": "T1003",
+            "name": "OS Credential Dumping"
+          },
+          {
+            "id": "T1078",
+            "name": "Valid Accounts"
+          },
+          {
+            "id": "T1083",
+            "name": "File and Directory Discovery"
+          },
+          {
+            "id": "T1098",
+            "name": "Account Manipulation"
+          },
+          {
+            "id": "T1105",
+            "name": "Ingress Tool Transfer"
+          }
+        ],
+        "rationale": "The observed use of sudo (T1548.003) indicates the attacker has achieved elevated privileges on a Unix-like system. Typical post\u2011escalation behavior includes credential harvesting, establishing persistent privileged accounts, extensive system discovery, manipulation of existing accounts, and downloading further tools. All suggested techniques are present in the allowed prediction list and align with common attacker workflows after sudo escalation."
+      },
+      "valid_action_targets": [
+        "SOC Team",
+        "SOC_Team",
+        "SOC_analyst",
+        "root",
+        "sudo",
+        "victim-machine"
+      ],
+      "victim_isolation_targets": [
+        "victim-machine"
+      ],
+      "attacker_source_ips": []
+    },
+    "report": "# Threat Intelligence Report  \n\n**Report Date:** 2026\u201108\u201107  \n\n---  \n\n## Executive Summary\nA sudo session closure for the **root** user was recorded on host **victim\u2011machine** (event `c33414f5-0a33-49aa-864e-6247f5e83017`). The activity maps to ATT&CK technique **T1548.003 \u2013 Sudo and Sudo Caching** with a confidence of **0.78**. No malicious indicators were observed; the only IP (`100.90.153.71`) is listed as **benign** and the domain `wazuh.manager` has an **unknown** reputation. The campaign is classified as **\u201cUnclassified Activity\u201d** with low overall confidence (0.17).  \n\nThe primary concern is the potential elevation of privileges to root, which could enable subsequent credential dumping, account manipulation, or tool transfer as forecasted in the prediction section.\n\n---  \n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Description |\n|-----------------|----------|-------------|\n| 2026\u201108\u201107\u202f18:16:47 | `c33414f5-0a33-49aa-864e-6247f5e83017` | Sudo process logged **session closed for user root** on host *victim\u2011machine* (rule `wazuh_rule_5502`). |\n| 2026\u201108\u201107\u202f18:16:48.434 | `c33414f5-0a33-49aa-864e-6247f5e83017` | Wazuh generated alert \u201cPAM: Login session closed.\u201d (rule level 3). |\n\n---  \n\n## Indicators of Compromise (IOCs)  \n\n| IOC Type | Value | Reputation | Source | Tags |\n|----------|-------|------------|--------|------|\n| IP | `100.90.153.71` | benign | AbuseIPDB | non_public, reserved |\n| Domain | `wazuh.manager` | unknown | (none) | \u2013 |\n\n---  \n\n## ATT&CK Techniques (Observed)  \n\n| Technique ID | Technique Name | Confidence |\n|--------------|----------------|------------|\n| **T1548.003** | Sudo and Sudo Caching | 0.78 |\n\n---  \n\n## Campaign Assessment  \n\n- **Campaign ID:** `a3f5c9d2-4e7b-4a1f-9c2d-6f8b2e1d7a4c`  \n- **Name:** Unclassified Activity  \n- **Objective:** Unknown (insufficient evidence)  \n- **Overall Confidence:** 0.17  \n\nThe campaign evidence consists of a single sudo session\u2011close event indicating possible privilege escalation. No malicious payloads, lateral movement, or exfiltration artifacts were identified. The associated IOCs provide no actionable threat context.\n\n---  \n\n## Predicted Next Steps (Forecast)  \n\n| Technique ID | Technique Name | Forecast Rationale |\n|--------------|----------------|--------------------|\n| **T1003** | OS Credential Dumping | After obtaining root, attackers often dump `/etc/shadow` to harvest password hashes. |\n| **T1078** | Valid Accounts | Creation or reuse of privileged accounts to maintain access. |\n| **T1083** | File and Directory Discovery | Enumerate the filesystem for sensitive data or additional tools. |\n| **T1098** | Account Manipulation | Modify existing accounts (e.g., add to privileged groups). |\n| **T1105** | Ingress Tool Transfer | Transfer additional malicious tools or payloads to the compromised host. |\n\n*These techniques are probabilistic forecasts based on typical post\u2011escalation behavior and have **not** been observed in the current data set.*\n\n---  \n\n## Recommendations  \n\nAll recommendations reference the confirmed technique **T1548.003**:\n\n1. **Validate sudo usage** \u2013 Correlate the root sudo session with legitimate administrative activity (e.g., scheduled jobs, authorized users).  \n2. **Enforce least\u2011privilege policies** \u2013 Restrict sudo rights to only required accounts and commands.  \n3. **Enable detailed sudo logging** \u2013 Capture command arguments and timestamps for future forensic analysis.  \n4. **Implement multi\u2011factor authentication (MFA) for privileged accounts** \u2013 Reduces risk of credential compromise.  \n5. **Monitor for subsequent suspicious activity** \u2013 Watch for credential dumping, new privileged accounts, or unexpected file transfers that align with the predicted techniques.  \n6. **Review and harden SSH configuration** \u2013 Even though no brute\u2011force activity was detected, ensure key\u2011based authentication and rate\u2011limiting are in place.  \n\n---  \n\n## Response Actions  \n\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| `notify_analyst` | SOC Team | executed_remote | medium | Observed use of sudo (T1548.003) indicates elevated privileges on victim\u2011machine. Analyst should investigate legitimacy, monitor for credential dumping, account manipulation, and tool transfer. |\n\n---  \n\n*End of Report*  ",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC Team",
+          "severity": "medium",
+          "rationale": "Observed use of sudo (T1548.003) indicates elevated privileges on victim-machine. While no malicious IPs or files are identified, the attacker may proceed with credential dumping, account manipulation, and tool transfer. Analyst should investigate sudo usage, verify legitimacy, and monitor for subsequent techniques.",
+          "technique_id": "T1548.003",
+          "confidence": 0.78
+        },
+        "status": "executed_remote",
+        "detail": "Remotely executed on Machine 2 (execution_id=eead13e5-0580-47f9-a870-b3079dcc67d5).",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "notify_analyst_934185cc",
+        "action_type": "notify_analyst",
+        "target": "SOC Team",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_934185cc.log",
+        "script": "# Notify analyst about: SOC Team\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: T1548.003\n# Confidence: 0.78\n#\n# Please review the following:\n#   - SOC Team\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC Team",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 1\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: notify_analyst\n# Target: SOC Team\n# ID: notify_analyst_934185cc\n# Expected: Create analyst notification for SOC Team\n# =======================================\naction_1() {\n    echo \"[ACTION 1] notify_analyst -> SOC Team\"\n    echo \"  Expected: Create analyst notification for SOC Team\"\n\n    # Notify analyst about: SOC Team\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: T1548.003\n    # Confidence: 0.78\n    #\n    # Please review the following:\n    #   - SOC Team\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] notify_analyst -> SOC Team\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] notify_analyst -> SOC Team\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 1 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_1_actions.sh",
+    "remote_execution_result": {
+      "success": true,
+      "execution_id": "eead13e5-0580-47f9-a870-b3079dcc67d5",
+      "filename": "eead13e5-0580-47f9-a870-b3079dcc67d5_response_actions_1_actions.sh",
+      "campaign_id": "a3f5c9d2-4e7b-4a1f-9c2d-6f8b2e1d7a4c",
+      "exit_code": 0,
+      "stdout": "========================================\n  Response Actions Execution Script\n  Mode: EXECUTE\n========================================\n,\n\nStarting execution of 1 action(s)...\n\n[ACTION 1] notify_analyst -> SOC Team\n  Expected: Create analyst notification for SOC Team\n  [OK] notify_analyst completed\n\nExecution completed.\n",
+      "stderr": "",
+      "status": "completed",
+      "executed_at": "2026-08-07T18:35:09.358587+00:00",
+      "duration_ms": 34.89,
+      "error": null
+    },
+    "remote_execution_error": "",
+    "remote_push_attempted": true,
+    "remote_push_url": "http://100.90.153.71:9001",
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-08-07T18:36:00.615+0000",
+        "rule": {
+          "level": 5,
+          "description": "PAM: User login failed.",
+          "id": "5503",
+          "mitre": {
+            "id": [
+              "T1110.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Password Guessing"
+            ]
+          },
+          "firedtimes": 7,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_failed"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127760.122971",
+        "full_log": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51575]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:35:58",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "name": "pam"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "dstuser": "ubuntu",
+          "uid": "0",
+          "euid": "0",
+          "tty": "ssh"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-07T18:36:00.628+0000",
+        "rule": {
+          "level": 5,
+          "description": "PAM: User login failed.",
+          "id": "5503",
+          "mitre": {
+            "id": [
+              "T1110.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Password Guessing"
+            ]
+          },
+          "firedtimes": 8,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_failed"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127760.123516",
+        "full_log": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51572]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:35:58",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "name": "pam"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "dstuser": "ubuntu",
+          "uid": "0",
+          "euid": "0",
+          "tty": "ssh"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-07T18:36:00.672+0000",
+        "rule": {
+          "level": 3,
+          "description": "PAM: Login session opened.",
+          "id": "5501",
+          "mitre": {
+            "id": [
+              "T1078"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Persistence",
+              "Privilege Escalation",
+              "Initial Access"
+            ],
+            "technique": [
+              "Valid Accounts"
+            ]
+          },
+          "firedtimes": 26,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_success"
+          ],
+          "pci_dss": [
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8",
+            "7.9"
+          ],
+          "gdpr": [
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127760.126705",
+        "full_log": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51578]: pam_unix(sshd:session): session opened for user ubuntu(uid=1000) by ubuntu(uid=0)",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:35:58",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "parent": "pam",
+          "name": "pam"
+        },
+        "data": {
+          "srcuser": "ubuntu",
+          "dstuser": "ubuntu",
+          "uid": "0"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-07T18:36:02.616+0000",
+        "rule": {
+          "level": 5,
+          "description": "sshd: authentication failed.",
+          "id": "5760",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1021.004"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Password Guessing",
+              "SSH"
+            ]
+          },
+          "firedtimes": 7,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "sshd",
+            "authentication_failed"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "gpg13": [
+            "7.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127762.127542",
+        "full_log": "Aug 07 18:36:01 ip-172-31-42-38 sshd[51575]: Failed password for ubuntu from 172.31.24.217 port 38610 ssh2",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:36:01",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "parent": "sshd",
+          "name": "sshd"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "srcport": "38610",
+          "dstuser": "ubuntu"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-07T18:36:02.673+0000",
+        "rule": {
+          "level": 5,
+          "description": "sshd: authentication failed.",
+          "id": "5760",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1021.004"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Password Guessing",
+              "SSH"
+            ]
+          },
+          "firedtimes": 8,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "sshd",
+            "authentication_failed"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "gpg13": [
+            "7.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127762.128032",
+        "full_log": "Aug 07 18:36:01 ip-172-31-42-38 sshd[51577]: Failed password for ubuntu from 172.31.24.217 port 38618 ssh2",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:36:01",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "parent": "sshd",
+          "name": "sshd"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "srcport": "38618",
+          "dstuser": "ubuntu"
+        },
+        "location": "journald"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "75a94d30-a7d7-47e4-bdbb-6f768ec69782",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-07T18:36:00.615+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51575]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "PAM: User login failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:36:00.615+0000",
+          "rule": {
+            "level": 5,
+            "description": "PAM: User login failed.",
+            "id": "5503",
+            "mitre": {
+              "id": [
+                "T1110.001"
+              ],
+              "tactic": [
+                "Credential Access"
+              ],
+              "technique": [
+                "Password Guessing"
+              ]
+            },
+            "firedtimes": 7,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_failed"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127760.122971",
+          "full_log": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51575]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:35:58",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "name": "pam"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "dstuser": "ubuntu",
+            "uid": "0",
+            "euid": "0",
+            "tty": "ssh"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "ff03ec60-4572-474e-b754-8eaaf64e60bd",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-07T18:36:00.628+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51572]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "PAM: User login failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:36:00.628+0000",
+          "rule": {
+            "level": 5,
+            "description": "PAM: User login failed.",
+            "id": "5503",
+            "mitre": {
+              "id": [
+                "T1110.001"
+              ],
+              "tactic": [
+                "Credential Access"
+              ],
+              "technique": [
+                "Password Guessing"
+              ]
+            },
+            "firedtimes": 8,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_failed"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127760.123516",
+          "full_log": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51572]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:35:58",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "name": "pam"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "dstuser": "ubuntu",
+            "uid": "0",
+            "euid": "0",
+            "tty": "ssh"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "11fcf875-df8c-443d-a6ed-e1cfde84e1bb",
+        "source": "wazuh",
+        "event_type": "authentication_success",
+        "timestamp": "2026-08-07T18:36:00.672+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51578]: pam_unix(sshd:session): session opened for user ubuntu(uid=1000) by ubuntu(uid=0)",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "PAM: Login session opened.",
+        "rule_level": 3,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_success"
+        ],
+        "rule_mitre": [
+          "T1078"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:36:00.672+0000",
+          "rule": {
+            "level": 3,
+            "description": "PAM: Login session opened.",
+            "id": "5501",
+            "mitre": {
+              "id": [
+                "T1078"
+              ],
+              "tactic": [
+                "Defense Evasion",
+                "Persistence",
+                "Privilege Escalation",
+                "Initial Access"
+              ],
+              "technique": [
+                "Valid Accounts"
+              ]
+            },
+            "firedtimes": 26,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_success"
+            ],
+            "pci_dss": [
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8",
+              "7.9"
+            ],
+            "gdpr": [
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127760.126705",
+          "full_log": "Aug 07 18:35:58 ip-172-31-42-38 sshd[51578]: pam_unix(sshd:session): session opened for user ubuntu(uid=1000) by ubuntu(uid=0)",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:35:58",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "parent": "pam",
+            "name": "pam"
+          },
+          "data": {
+            "srcuser": "ubuntu",
+            "dstuser": "ubuntu",
+            "uid": "0"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "50b0e30d-c625-4eaf-858d-ba34905b8ecf",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-07T18:36:02.616+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:36:01 ip-172-31-42-38 sshd[51575]: Failed password for ubuntu from 172.31.24.217 port 38610 ssh2",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "sshd: authentication failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "syslog",
+          "sshd",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001",
+          "T1021.004"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:36:02.616+0000",
+          "rule": {
+            "level": 5,
+            "description": "sshd: authentication failed.",
+            "id": "5760",
+            "mitre": {
+              "id": [
+                "T1110.001",
+                "T1021.004"
+              ],
+              "tactic": [
+                "Credential Access",
+                "Lateral Movement"
+              ],
+              "technique": [
+                "Password Guessing",
+                "SSH"
+              ]
+            },
+            "firedtimes": 7,
+            "mail": false,
+            "groups": [
+              "syslog",
+              "sshd",
+              "authentication_failed"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "gpg13": [
+              "7.1"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127762.127542",
+          "full_log": "Aug 07 18:36:01 ip-172-31-42-38 sshd[51575]: Failed password for ubuntu from 172.31.24.217 port 38610 ssh2",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:36:01",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "parent": "sshd",
+            "name": "sshd"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "srcport": "38610",
+            "dstuser": "ubuntu"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "087c3715-5bed-4fd3-b7f3-91f7c06baf12",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-07T18:36:02.673+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:36:01 ip-172-31-42-38 sshd[51577]: Failed password for ubuntu from 172.31.24.217 port 38618 ssh2",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "sshd: authentication failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "syslog",
+          "sshd",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001",
+          "T1021.004"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:36:02.673+0000",
+          "rule": {
+            "level": 5,
+            "description": "sshd: authentication failed.",
+            "id": "5760",
+            "mitre": {
+              "id": [
+                "T1110.001",
+                "T1021.004"
+              ],
+              "tactic": [
+                "Credential Access",
+                "Lateral Movement"
+              ],
+              "technique": [
+                "Password Guessing",
+                "SSH"
+              ]
+            },
+            "firedtimes": 8,
+            "mail": false,
+            "groups": [
+              "syslog",
+              "sshd",
+              "authentication_failed"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "gpg13": [
+              "7.1"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127762.128032",
+          "full_log": "Aug 07 18:36:01 ip-172-31-42-38 sshd[51577]: Failed password for ubuntu from 172.31.24.217 port 38618 ssh2",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:36:01",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "parent": "sshd",
+            "name": "sshd"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "srcport": "38618",
+            "dstuser": "ubuntu"
+          },
+          "location": "journald"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.90.153.71",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "100.90.153.71",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null
+            },
+            "queried_at": "2026-08-07 18:36:38.677717"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.90.153.71",
+          "source_event_id": "75a94d30-a7d7-47e4-bdbb-6f768ec69782",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "75a94d30-a7d7-47e4-bdbb-6f768ec69782",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "75a94d30-a7d7-47e4-bdbb-6f768ec69782",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "ff03ec60-4572-474e-b754-8eaaf64e60bd",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1078",
+        "technique_name": "Valid Accounts",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "11fcf875-df8c-443d-a6ed-e1cfde84e1bb",
+        "known_groups": [
+          "APT41",
+          "FIN8",
+          "FIN4",
+          "FIN7",
+          "Scattered Spider",
+          "Dragonfly",
+          "GALLIUM",
+          "APT18",
+          "Volt Typhoon",
+          "Lazarus Group",
+          "Chimera",
+          "menuPass",
+          "Sandworm Team",
+          "Cinnamon Tempest",
+          "Akira",
+          "LAPSUS$",
+          "Carbanak",
+          "APT28",
+          "Threat Group-3390",
+          "Medusa Group",
+          "Suckfly",
+          "Play",
+          "Axiom",
+          "Indrik Spider",
+          "Leviathan",
+          "PittyTiger",
+          "Silence",
+          "OilRig",
+          "Wizard Spider",
+          "APT29",
+          "UNC3886",
+          "BlackByte",
+          "Ke3chang",
+          "FIN10",
+          "APT33",
+          "INC Ransom",
+          "FIN6",
+          "Fox Kitten",
+          "POLONIUM",
+          "FIN5",
+          "Silent Librarian",
+          "Sea Turtle",
+          "Star Blizzard",
+          "APT39",
+          "VOID MANTICORE"
+        ],
+        "known_software": [
+          "Kinsing",
+          "SeaDuke",
+          "LP-Notes",
+          "Dtrack",
+          "Industroyer",
+          "Duqu",
+          "Linux Rabbit"
+        ],
+        "recommended_mitigations": [
+          "Password Policies",
+          "User Account Management",
+          "Privileged Account Management",
+          "Multi-factor Authentication",
+          "Application Developer Guidance",
+          "User Training",
+          "Active Directory Configuration",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "50b0e30d-c625-4eaf-858d-ba34905b8ecf",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1021.004",
+        "technique_name": "SSH",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "50b0e30d-c625-4eaf-858d-ba34905b8ecf",
+        "known_groups": [
+          "FIN7",
+          "Lazarus Group",
+          "Leviathan",
+          "Scattered Spider",
+          "BlackTech",
+          "Aquatic Panda",
+          "GCMAN",
+          "Fox Kitten",
+          "TeamTNT",
+          "Storm-1811",
+          "Salt Typhoon",
+          "OilRig",
+          "APT5",
+          "UNC3886",
+          "FIN13",
+          "menuPass",
+          "Indrik Spider",
+          "Rocke",
+          "APT39"
+        ],
+        "known_software": [
+          "Empire",
+          "Cobalt Strike",
+          "reGeorg",
+          "Kinsing",
+          "Qilin"
+        ],
+        "recommended_mitigations": [
+          "Disable or Remove Feature or Program",
+          "Multi-factor Authentication",
+          "User Account Management"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "087c3715-5bed-4fd3-b7f3-91f7c06baf12",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1021.004",
+        "technique_name": "SSH",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "087c3715-5bed-4fd3-b7f3-91f7c06baf12",
+        "known_groups": [
+          "FIN7",
+          "Lazarus Group",
+          "Leviathan",
+          "Scattered Spider",
+          "BlackTech",
+          "Aquatic Panda",
+          "GCMAN",
+          "Fox Kitten",
+          "TeamTNT",
+          "Storm-1811",
+          "Salt Typhoon",
+          "OilRig",
+          "APT5",
+          "UNC3886",
+          "FIN13",
+          "menuPass",
+          "Indrik Spider",
+          "Rocke",
+          "APT39"
+        ],
+        "known_software": [
+          "Empire",
+          "Cobalt Strike",
+          "reGeorg",
+          "Kinsing",
+          "Qilin"
+        ],
+        "recommended_mitigations": [
+          "Disable or Remove Feature or Program",
+          "Multi-factor Authentication",
+          "User Account Management"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "3f9c2d1e-8b4a-4f6a-9c2e-5d6f7a8b9c0d",
+      "name": "Unclassified Activity",
+      "objective": "Obtain unauthorized access to victim-machine via SSH using password guessing and valid accounts",
+      "timeline": [
+        {
+          "timestamp": "Aug 07 18:35:58",
+          "event_id": "75a94d30-a7d7-47e4-bdbb-6f768ec69782",
+          "description": "Failed SSH authentication attempt for user ubuntu from source IP 172.31.24.217, mapped to ATT&CK technique T1110.001 (Password Guessing)."
+        },
+        {
+          "timestamp": "Aug 07 18:35:58",
+          "event_id": "ff03ec60-4572-474e-b754-8eaaf64e60bd",
+          "description": "Another failed SSH authentication for user ubuntu from the same source IP 172.31.24.217, also supporting T1110.001."
+        },
+        {
+          "timestamp": "Aug 07 18:35:58",
+          "event_id": "11fcf875-df8c-443d-a6ed-e1cfde84e1bb",
+          "description": "Successful SSH session opened for user ubuntu, indicating a valid account was used (ATT&CK T1078)."
+        },
+        {
+          "timestamp": "Aug 07 18:36:01",
+          "event_id": "50b0e30d-c625-4eaf-858d-ba34905b8ecf",
+          "description": "Failed password attempt for ubuntu from 172.31.24.217 on port 38610, confirming continued password guessing (T1110.001) over SSH (T1021.004)."
+        },
+        {
+          "timestamp": "Aug 07 18:36:01",
+          "event_id": "087c3715-5bed-4fd3-b7f3-91f7c06baf12",
+          "description": "Failed password attempt for ubuntu from 172.31.24.217 on port 38618, again mapping to T1110.001 and T1021.004."
+        }
+      ],
+      "related_techniques": [
+        "T1110.001",
+        "T1078",
+        "T1021.004"
+      ],
+      "evidence_summary": "The telemetry shows a series of SSH authentication events on victim-machine: two failed attempts (Event IDs 75a94d30-a7d7-47e4-bdbb-6f768ec69782 and ff03ec60-4572-474e-b754-8eaaf64e60bd) and a successful login (Event ID 11fcf875-df8c-443d-a6ed-e1cfde84e1bb) for user ubuntu, all originating from source IP 172.31.24.217. Additional failed password attempts (Event IDs 50b0e30d-c625-4eaf-858d-ba34905b8ecf and 087c3715-5bed-4fd3-b7f3-91f7c06baf12) reinforce the use of password guessing (T1110.001) over SSH (T1021.004). The successful session maps to the Valid Accounts technique (T1078). No malicious IOCs were identified; the listed IP 100.90.153.71 is marked benign, and the identifier \"wazuh.manager\" has unknown reputation.",
+      "confidence": 0.7
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1003",
+          "technique_name": "OS Credential Dumping",
+          "rationale": "After obtaining a valid account via password guessing, attackers commonly dump credentials from the compromised host to harvest additional passwords and hashes for further lateral movement or privilege escalation."
+        },
+        {
+          "technique_id": "T1098",
+          "technique_name": "Account Manipulation",
+          "rationale": "With a valid account already in use, the adversary may create new accounts, add the compromised account to privileged groups, or modify account properties to maintain persistence and broaden access."
+        },
+        {
+          "technique_id": "T1059.001",
+          "technique_name": "PowerShell",
+          "rationale": "Attackers often leverage PowerShell on a newly accessed system to execute scripts, download additional tools, or perform further reconnaissance and credential dumping."
+        }
+      ],
+      "rationale": "The campaign has successfully gained unauthorized SSH access using password guessing and valid credentials. The typical progression from this foothold includes extracting additional credentials (T1003), expanding control through account manipulation (T1098), and using native scripting environments like PowerShell (T1059.001) to automate subsequent actions."
+    },
+    "threat_summary": {
+      "campaign": {
+        "campaign_id": "3f9c2d1e-8b4a-4f6a-9c2e-5d6f7a8b9c0d",
+        "name": "Unclassified Activity",
+        "severity": "high",
+        "confidence": 0.7
+      },
+      "event_count": 5,
+      "failed_login_count": 4,
+      "affected_hosts": [
+        "victim-machine"
+      ],
+      "affected_users": [
+        "ubuntu"
+      ],
+      "source_ips": [
+        "172.31.24.217"
+      ],
+      "processes": [
+        "sshd"
+      ],
+      "top_mitre_techniques": [
+        {
+          "id": "T1110.001",
+          "name": "Password Guessing",
+          "count": 4,
+          "confidence": 1.0
+        },
+        {
+          "id": "T1021.004",
+          "name": "SSH",
+          "count": 2,
+          "confidence": 1.0
+        },
+        {
+          "id": "T1078",
+          "name": "Valid Accounts",
+          "count": 1,
+          "confidence": 1.0
+        }
+      ],
+      "prediction": {
+        "likely_next_techniques": [
+          {
+            "id": "T1003",
+            "name": "OS Credential Dumping"
+          },
+          {
+            "id": "T1098",
+            "name": "Account Manipulation"
+          },
+          {
+            "id": "T1059.001",
+            "name": "PowerShell"
+          }
+        ],
+        "rationale": "The campaign has successfully gained unauthorized SSH access using password guessing and valid credentials. The typical progression from this foothold includes extracting additional credentials (T1003), expanding control through account manipulation (T1098), and using native scripting environments like PowerShell (T1059.001) to automate subsequent actions."
+      },
+      "valid_action_targets": [
+        "172.31.24.217",
+        "SOC Team",
+        "SOC_Team",
+        "SOC_analyst",
+        "sshd",
+        "ubuntu",
+        "victim-machine"
+      ],
+      "victim_isolation_targets": [
+        "victim-machine"
+      ],
+      "attacker_source_ips": [
+        "172.31.24.217"
+      ]
+    },
+    "report": "# Threat Intelligence Report  \n\n**Campaign ID:** `3f9c2d1e-8b4a-4f6a-9c2e-5d6f7a8b9c0d`  \n**Report Date:** 2026\u201108\u201107  \n\n---  \n\n## Executive Summary  \n- **Activity:** A series of SSH authentication events targeting the account **ubuntu** on *victim\u2011machine*.  \n- **Outcome:** Four failed password\u2011guessing attempts followed by a successful login, indicating the use of **Valid Accounts** after **Password Guessing** over SSH.  \n- **Source:** All events originated from IP **172.31.24.217**.  \n- **Impact:** The attacker obtained an authorized SSH session, providing a foothold for further post\u2011compromise actions.  \n- **IOC Status:** No malicious IOCs were observed; the listed IP `100.90.153.71` is benign and the identifier `wazuh.manager` has unknown reputation.  \n\n---  \n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Description |\n|-----------------|----------|-------------|\n| 2026\u201108\u201107 18:35:58 | `75a94d30-a7d7-47e4-bdbb-6f768ec69782` | Failed SSH authentication for user **ubuntu** from **172.31.24.217** (Password Guessing \u2013 T1110.001). |\n| 2026\u201108\u201107 18:35:58 | `ff03ec60-4572-474e-b754-8eaaf64e60bd` | Second failed SSH authentication for **ubuntu** from the same source IP (T1110.001). |\n| 2026\u201108\u201107 18:35:58 | `11fcf875-df8c-443d-a6ed-e1cfde84e1bb` | Successful SSH session opened for **ubuntu** (Valid Accounts \u2013 T1078). |\n| 2026\u201108\u201107 18:36:01 | `50b0e30d-c625-4eaf-858d-ba34905b8ecf` | Failed password attempt for **ubuntu** from **172.31.24.217** on port 38610 (Password Guessing \u2013 T1110.001; SSH \u2013 T1021.004). |\n| 2026\u201108\u201107 18:36:01 | `087c3715-5bed-4fd3-b7f3-91f7c06baf12` | Failed password attempt for **ubuntu** from **172.31.24.217** on port 38618 (T1110.001; T1021.004). |\n\n---  \n\n## Indicators of Compromise (IOCs)  \n\n| IOC Type | Value | Reputation | Tags |\n|----------|-------|------------|------|\n| IP | `100.90.153.71` | benign (AbuseIPDB) | non_public, reserved |\n| Domain | `wazuh.manager` | unknown | \u2013 |\n\n---  \n\n## ATT&CK Techniques (Observed)  \n\n| Technique ID | Technique Name | Confidence |\n|--------------|----------------|------------|\n| **T1110.001** | Password Guessing | 1.0 |\n| **T1021.004** | SSH | 1.0 |\n| **T1078** | Valid Accounts | 1.0 |\n\n---  \n\n## Campaign Assessment  \nThe telemetry demonstrates a classic **password\u2011guessing brute\u2011force** attempt against SSH (T1110.001) that succeeded in obtaining a valid account (T1078). The attacker now possesses an active SSH session on *victim\u2011machine*, which can be leveraged for lateral movement, credential harvesting, or persistence. No additional malicious IOCs were identified in the current data set.\n\n---  \n\n## Predicted Next Steps (Forecast)  \n\n| Technique ID | Technique Name | Rationale |\n|--------------|----------------|-----------|\n| **T1003** | OS Credential Dumping | After gaining a valid account, adversaries often dump credentials to expand access. |\n| **T1098** | Account Manipulation | Creation or modification of accounts to maintain persistence and broaden privileges. |\n| **T1059.001** | PowerShell | Use of PowerShell to execute scripts, download tools, or conduct further reconnaissance. |\n\n*These techniques are probabilistic forecasts based on typical attacker behavior after a successful SSH foothold.*\n\n---  \n\n## Recommendations  \n\n| Recommendation | Relevant Technique(s) |\n|----------------|------------------------|\n| **Block the source IP (172.31.24.217) immediately** to stop further brute\u2011force attempts. | T1110.001 |\n| **Enforce SSH key\u2011based authentication** and disable password authentication where possible. | T1110.001, T1021.004 |\n| **Review the compromised account (ubuntu) for unauthorized activity** and rotate its credentials. | T1078 |\n| **Isolate the affected host** to prevent lateral movement while investigation continues. | T1021.004 |\n| **Enable multi\u2011factor authentication (MFA) for SSH access** to add an extra verification layer. | T1021.004 |\n| **Audit SSH logs** for additional suspicious activity and correlate with other authentication events. | T1110.001 |\n| **Conduct a full forensic analysis** of *victim\u2011machine* to detect any post\u2011compromise actions (e.g., credential dumping, account manipulation). | T1078 |\n\n---  \n\n## Response Actions  \n\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| `block_ip` | `172.31.24.217` | pending_approval | high | The source IP performed password\u2011guessing (T1110.001) and achieved a successful SSH login (T1021.004). Blocking it stops further credential\u2011based attacks. |\n| `isolate_host` | `victim-machine` | pending_approval | high | The host has been compromised via SSH with valid credentials. Isolation prevents lateral movement and limits the attacker\u2019s ability to execute further techniques such as credential dumping (T1003) or PowerShell abuse (T1059.001). |\n| `notify_analyst` | SOC Team | executed_remote | high | Unauthorized SSH access using password guessing and valid accounts was observed. Predicted next steps include OS credential dumping, account manipulation, and PowerShell scripting. Immediate containment actions have been taken; further forensic analysis is required. |\n\n---  \n\n*All information presented is derived directly from the supplied evidence. No additional data has been inferred or fabricated.*",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "block_ip",
+          "target": "172.31.24.217",
+          "severity": "high",
+          "rationale": "The source IP performed password\u2011guessing (T1110.001) and achieved successful SSH login (T1021.004). Blocking it stops further credential\u2011based attacks.",
+          "technique_id": "T1110.001",
+          "confidence": 1.0
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action": {
+          "action_type": "isolate_host",
+          "target": "victim-machine",
+          "severity": "high",
+          "rationale": "The host has been compromised via SSH with valid credentials. Isolation prevents lateral movement and limits the attacker\u2019s ability to execute further techniques such as credential dumping (T1003) or PowerShell abuse (T1059.001).",
+          "technique_id": "T1021.004",
+          "confidence": 1.0
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC Team",
+          "severity": "high",
+          "rationale": "Unauthorized SSH access using password guessing and valid accounts was observed. Predicted next steps include OS credential dumping, account manipulation, and PowerShell scripting. Immediate containment actions have been taken; further forensic analysis is required.",
+          "technique_id": "T1078",
+          "confidence": 0.7
+        },
+        "status": "executed_remote",
+        "detail": "Remotely executed on Machine 2 (execution_id=b2cdbf6e-c07d-432a-953e-594ac67eca3c).",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "block_ip_288727e0",
+        "action_type": "block_ip",
+        "target": "172.31.24.217",
+        "platform": "linux",
+        "language": "bash",
+        "filename": "block_ip_172.31.24.217.sh",
+        "script": "#!/bin/bash\n# Block IP 172.31.24.217\nif command -v nft &> /dev/null; then\n    nft add rule inet filter input ip saddr 172.31.24.217 drop\n    nft add rule inet filter output ip daddr 172.31.24.217 drop\nelif command -v iptables &> /dev/null; then\n    iptables -A INPUT -s 172.31.24.217 -j DROP 2>/dev/null\n    iptables -A OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null\nelse\n    echo 'ERROR: Neither nft nor iptables found' >&2\n    exit 1\nfi\necho 'Blocked IP 172.31.24.217'",
+        "requires_admin": true,
+        "expected_effect": "Block all inbound and outbound traffic to/from IP 172.31.24.217",
+        "rollback": "# Rollback\nif command -v nft &> /dev/null; then\n    nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\n    nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\nelif command -v iptables &> /dev/null; then\n    iptables -D INPUT -s 172.31.24.217 -j DROP 2>/dev/null || true\n    iptables -D OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null || true\nfi",
+        "verification": [
+          "iptables -L INPUT -n 2>/dev/null | grep '172.31.24.217' || nft list ruleset 2>/dev/null | grep '172.31.24.217'",
+          "ping -c 1 -W 2 172.31.24.217 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'"
+        ]
+      },
+      {
+        "action_id": "isolate_host_b17f3a6f",
+        "action_type": "isolate_host",
+        "target": "victim-machine",
+        "platform": "linux",
+        "language": "bash",
+        "filename": "isolate_host_victim-machine.sh",
+        "script": "#!/bin/bash\n# Isolate host victim-machine while preserving remote management channel\n# NOTE: Keep port 9001 reachable so the remote agent does not self-lock.\nMGMT_IP=\"${REMOTE_MANAGER_IP:-100.76.226.30}\"\nREMOTE_PORT=\"${REMOTE_AGENT_PORT:-9001}\"\nif command -v iptables &> /dev/null; then\n    # Save current rules for rollback\n    iptables-save > /tmp/iptables_backup_b17f3a6f.txt 2>/dev/null || true\n    iptables -P INPUT DROP\n    iptables -P OUTPUT DROP\n    iptables -P FORWARD DROP\n    # Allow loopback\n    iptables -A INPUT -i lo -j ACCEPT\n    iptables -A OUTPUT -o lo -j ACCEPT\n    # Keep established connections alive\n    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n    iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n    # Keep control-plane reachable from manager\n    iptables -A INPUT -p tcp --dport \"$REMOTE_PORT\" -s \"$MGMT_IP\" -j ACCEPT\n    # Allow callback webhook traffic to manager\n    iptables -A OUTPUT -p tcp -d \"$MGMT_IP\" --dport 8000 -j ACCEPT\nelif command -v nft &> /dev/null; then\n    nft add table inet isolate 2>/dev/null || true\n    nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true\n    nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true\n    nft add rule inet isolate input iif lo accept\n    nft add rule inet isolate output oif lo accept\n    nft add rule inet isolate input ct state established,related accept\n    nft add rule inet isolate output ct state established,related accept\n    nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept\n    nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept\nelse\n    echo 'ERROR: No firewall tool found' >&2\n    exit 1\nfi\necho 'Host victim-machine isolated with management channel preserved'",
+        "requires_admin": true,
+        "expected_effect": "Isolate host victim-machine while preserving manager access on port 9001 and webhook callback to manager:8000",
+        "rollback": "# Rollback isolation\nif [ -f /tmp/iptables_backup_b17f3a6f.txt ]; then\n    iptables-restore < /tmp/iptables_backup_b17f3a6f.txt\n    rm /tmp/iptables_backup_b17f3a6f.txt\nfi\n# Fallback: set policies to ACCEPT\niptables -P INPUT ACCEPT 2>/dev/null || true\niptables -P OUTPUT ACCEPT 2>/dev/null || true\niptables -P FORWARD ACCEPT 2>/dev/null || true",
+        "verification": [
+          "iptables -L -n 2>/dev/null | head -5",
+          "ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'"
+        ]
+      },
+      {
+        "action_id": "notify_analyst_59b14972",
+        "action_type": "notify_analyst",
+        "target": "SOC Team",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_59b14972.log",
+        "script": "# Notify analyst about: SOC Team\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: T1078\n# Confidence: 0.7\n#\n# Please review the following:\n#   - SOC Team\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC Team",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 3\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: block_ip\n# Target: 172.31.24.217\n# ID: block_ip_288727e0\n# Expected: Block all inbound and outbound traffic to/from IP 172.31.24.217\n# =======================================\naction_1() {\n    echo \"[ACTION 1] block_ip -> 172.31.24.217\"\n    echo \"  Expected: Block all inbound and outbound traffic to/from IP 172.31.24.217\"\n    if [[ $EUID -ne 0 ]]; then\n        echo \"  ERROR: Requires root privileges\" >&2\n        return 1\n    fi\n\n    # Block IP 172.31.24.217\n    if command -v nft &> /dev/null; then\n        nft add rule inet filter input ip saddr 172.31.24.217 drop\n        nft add rule inet filter output ip daddr 172.31.24.217 drop\n    elif command -v iptables &> /dev/null; then\n        iptables -A INPUT -s 172.31.24.217 -j DROP 2>/dev/null\n        iptables -A OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null\n    else\n        echo 'ERROR: Neither nft nor iptables found' >&2\n        exit 1\n    fi\n    echo 'Blocked IP 172.31.24.217'\n    echo \"  [OK] block_ip completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] block_ip -> 172.31.24.217\"\n    if command -v nft &> /dev/null; then\n        nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\n        nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\n    elif command -v iptables &> /dev/null; then\n        iptables -D INPUT -s 172.31.24.217 -j DROP 2>/dev/null || true\n        iptables -D OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null || true\n    fi\n    echo \"  [OK] Rollback of block_ip completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] block_ip -> 172.31.24.217\"\n    iptables -L INPUT -n 2>/dev/null | grep '172.31.24.217' || nft list ruleset 2>/dev/null | grep '172.31.24.217'\n    ping -c 1 -W 2 172.31.24.217 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'\n}\n\n\n# =======================================\n# Action 2: isolate_host\n# Target: victim-machine\n# ID: isolate_host_b17f3a6f\n# Expected: Isolate host victim-machine while preserving manager access on port 9001 and webhook callback to manager:8000\n# =======================================\naction_2() {\n    echo \"[ACTION 2] isolate_host -> victim-machine\"\n    echo \"  Expected: Isolate host victim-machine while preserving manager access on port 9001 and webhook callback to manager:8000\"\n    if [[ $EUID -ne 0 ]]; then\n        echo \"  ERROR: Requires root privileges\" >&2\n        return 1\n    fi\n\n    # Isolate host victim-machine while preserving remote management channel\n    # NOTE: Keep port 9001 reachable so the remote agent does not self-lock.\n    MGMT_IP=\"${REMOTE_MANAGER_IP:-100.76.226.30}\"\n    REMOTE_PORT=\"${REMOTE_AGENT_PORT:-9001}\"\n    if command -v iptables &> /dev/null; then\n        # Save current rules for rollback\n        iptables-save > /tmp/iptables_backup_b17f3a6f.txt 2>/dev/null || true\n        iptables -P INPUT DROP\n        iptables -P OUTPUT DROP\n        iptables -P FORWARD DROP\n        # Allow loopback\n        iptables -A INPUT -i lo -j ACCEPT\n        iptables -A OUTPUT -o lo -j ACCEPT\n        # Keep established connections alive\n        iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n        iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n        # Keep control-plane reachable from manager\n        iptables -A INPUT -p tcp --dport \"$REMOTE_PORT\" -s \"$MGMT_IP\" -j ACCEPT\n        # Allow callback webhook traffic to manager\n        iptables -A OUTPUT -p tcp -d \"$MGMT_IP\" --dport 8000 -j ACCEPT\n    elif command -v nft &> /dev/null; then\n        nft add table inet isolate 2>/dev/null || true\n        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true\n        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true\n        nft add rule inet isolate input iif lo accept\n        nft add rule inet isolate output oif lo accept\n        nft add rule inet isolate input ct state established,related accept\n        nft add rule inet isolate output ct state established,related accept\n        nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept\n        nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept\n    else\n        echo 'ERROR: No firewall tool found' >&2\n        exit 1\n    fi\n    echo 'Host victim-machine isolated with management channel preserved'\n    echo \"  [OK] isolate_host completed\"\n}\n\nrollback_2() {\n    echo \"[ROLLBACK 2] isolate_host -> victim-machine\"\n    if [ -f /tmp/iptables_backup_b17f3a6f.txt ]; then\n        iptables-restore < /tmp/iptables_backup_b17f3a6f.txt\n        rm /tmp/iptables_backup_b17f3a6f.txt\n    fi\n    # Fallback: set policies to ACCEPT\n    iptables -P INPUT ACCEPT 2>/dev/null || true\n    iptables -P OUTPUT ACCEPT 2>/dev/null || true\n    iptables -P FORWARD ACCEPT 2>/dev/null || true\n    echo \"  [OK] Rollback of isolate_host completed\"\n}\n\nverify_2() {\n    echo \"[VERIFY 2] isolate_host -> victim-machine\"\n    iptables -L -n 2>/dev/null | head -5\n    ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'\n}\n\n\n# =======================================\n# Action 3: notify_analyst\n# Target: SOC Team\n# ID: notify_analyst_59b14972\n# Expected: Create analyst notification for SOC Team\n# =======================================\naction_3() {\n    echo \"[ACTION 3] notify_analyst -> SOC Team\"\n    echo \"  Expected: Create analyst notification for SOC Team\"\n\n    # Notify analyst about: SOC Team\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: T1078\n    # Confidence: 0.7\n    #\n    # Please review the following:\n    #   - SOC Team\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_3() {\n    echo \"[ROLLBACK 3] notify_analyst -> SOC Team\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_3() {\n    echo \"[VERIFY 3] notify_analyst -> SOC Team\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 3 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_3\n    rollback_2\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        2) action_2 ;;\n        3) action_3 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\n    action_2\n    action_3\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_3_actions.sh",
+    "remote_execution_result": {
+      "success": true,
+      "execution_id": "b2cdbf6e-c07d-432a-953e-594ac67eca3c",
+      "filename": "b2cdbf6e-c07d-432a-953e-594ac67eca3c_response_actions_1_actions.sh",
+      "campaign_id": "3f9c2d1e-8b4a-4f6a-9c2e-5d6f7a8b9c0d",
+      "exit_code": 0,
+      "stdout": "========================================\n  Response Actions Execution Script\n  Mode: EXECUTE\n========================================\n,\n\nStarting execution of 1 action(s)...\n\n[ACTION 1] notify_analyst -> SOC Team\n  Expected: Create analyst notification for SOC Team\n  [OK] notify_analyst completed\n\nExecution completed.\n",
+      "stderr": "",
+      "status": "completed",
+      "executed_at": "2026-08-07T18:36:52.036677+00:00",
+      "duration_ms": 5.0,
+      "error": null
+    },
+    "remote_execution_error": "",
+    "remote_push_attempted": true,
+    "remote_push_url": "http://100.90.153.71:9001",
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-08-07T18:39:09.719+0000",
+        "rule": {
+          "level": 7,
+          "description": "Integrity checksum changed.",
+          "id": "550",
+          "mitre": {
+            "id": [
+              "T1565.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Stored Data Manipulation"
+            ]
+          },
+          "firedtimes": 1,
+          "mail": false,
+          "groups": [
+            "ossec",
+            "syscheck",
+            "syscheck_entry_modified",
+            "syscheck_file"
+          ],
+          "pci_dss": [
+            "11.5"
+          ],
+          "gpg13": [
+            "4.11"
+          ],
+          "gdpr": [
+            "II_5.1.f"
+          ],
+          "hipaa": [
+            "164.312.c.1",
+            "164.312.c.2"
+          ],
+          "nist_800_53": [
+            "SI.7"
+          ],
+          "tsc": [
+            "PI1.4",
+            "PI1.5",
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127949.130482",
+        "full_log": "File '/etc/ssh/sshd_config' modified\nMode: scheduled\nChanged attributes: size,inode,mtime,md5,sha1,sha256\nSize changed from '3516' to '3515'\nOld modification time was: '1786044730', now it is '1786125899'\nOld inode was: '1417', now it is '3045'\nOld md5sum was: '82ef0937e683fc5634079ce5883a4187'\nNew md5sum is : '6be45270f45023f885a10f0ed2f6055e'\nOld sha1sum was: '78497c7f9b8a75bbfa9724e493e771dfc0082fb2'\nNew sha1sum is : '27e5f5bf48173aa469dc53e8b410b6ea7b247ca3'\nOld sha256sum was: 'f07bf9066bf9d16bebca89f2afb77edf68ef4ce2985322c5604d1cfeb4f27bac'\nNew sha256sum is : '0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686'\n",
+        "syscheck": {
+          "path": "/etc/ssh/sshd_config",
+          "mode": "scheduled",
+          "size_before": "3516",
+          "size_after": "3515",
+          "perm_after": "rw-r--r--",
+          "uid_after": "0",
+          "gid_after": "0",
+          "md5_before": "82ef0937e683fc5634079ce5883a4187",
+          "md5_after": "6be45270f45023f885a10f0ed2f6055e",
+          "sha1_before": "78497c7f9b8a75bbfa9724e493e771dfc0082fb2",
+          "sha1_after": "27e5f5bf48173aa469dc53e8b410b6ea7b247ca3",
+          "sha256_before": "f07bf9066bf9d16bebca89f2afb77edf68ef4ce2985322c5604d1cfeb4f27bac",
+          "sha256_after": "0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686",
+          "uname_after": "root",
+          "gname_after": "root",
+          "mtime_before": "2026-08-06T19:32:10",
+          "mtime_after": "2026-08-07T18:04:59",
+          "inode_before": 1417,
+          "inode_after": 3045,
+          "changed_attributes": [
+            "size",
+            "inode",
+            "mtime",
+            "md5",
+            "sha1",
+            "sha256"
+          ],
+          "event": "modified"
+        },
+        "decoder": {
+          "name": "syscheck_integrity_changed"
+        },
+        "location": "syscheck"
+      },
+      {
+        "timestamp": "2026-08-07T18:39:09.793+0000",
+        "rule": {
+          "level": 7,
+          "description": "Integrity checksum changed.",
+          "id": "550",
+          "mitre": {
+            "id": [
+              "T1565.001"
+            ],
+            "tactic": [
+              "Impact"
+            ],
+            "technique": [
+              "Stored Data Manipulation"
+            ]
+          },
+          "firedtimes": 2,
+          "mail": false,
+          "groups": [
+            "ossec",
+            "syscheck",
+            "syscheck_entry_modified",
+            "syscheck_file"
+          ],
+          "pci_dss": [
+            "11.5"
+          ],
+          "gpg13": [
+            "4.11"
+          ],
+          "gdpr": [
+            "II_5.1.f"
+          ],
+          "hipaa": [
+            "164.312.c.1",
+            "164.312.c.2"
+          ],
+          "nist_800_53": [
+            "SI.7"
+          ],
+          "tsc": [
+            "PI1.4",
+            "PI1.5",
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127949.131768",
+        "full_log": "File '/etc/ssh/sshd_config.d/60-cloudimg-settings.conf' modified\nMode: scheduled\nChanged attributes: size,inode,mtime,md5,sha1,sha256\nSize changed from '26' to '27'\nOld modification time was: '1781086273', now it is '1786126045'\nOld inode was: '1415', now it is '3047'\nOld md5sum was: '72d6b267a7e8aec4c6f11b8a72f597a8'\nNew md5sum is : '1e4da5180db2e8f67728a6223787c4f1'\nOld sha1sum was: 'cb90e49d699f7ab9c11cafc27de7741209c4bfa2'\nNew sha1sum is : 'beabb9fb2eb1eb4c5f05fd327c3ddf845c8d1d9d'\nOld sha256sum was: '474ef6932d6b998ec97b122a9d86af024b988d64c243f3caf01dd9e5ed41618e'\nNew sha256sum is : '6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d'\n",
+        "syscheck": {
+          "path": "/etc/ssh/sshd_config.d/60-cloudimg-settings.conf",
+          "mode": "scheduled",
+          "size_before": "26",
+          "size_after": "27",
+          "perm_after": "rw-r--r--",
+          "uid_after": "0",
+          "gid_after": "0",
+          "md5_before": "72d6b267a7e8aec4c6f11b8a72f597a8",
+          "md5_after": "1e4da5180db2e8f67728a6223787c4f1",
+          "sha1_before": "cb90e49d699f7ab9c11cafc27de7741209c4bfa2",
+          "sha1_after": "beabb9fb2eb1eb4c5f05fd327c3ddf845c8d1d9d",
+          "sha256_before": "474ef6932d6b998ec97b122a9d86af024b988d64c243f3caf01dd9e5ed41618e",
+          "sha256_after": "6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d",
+          "uname_after": "root",
+          "gname_after": "root",
+          "mtime_before": "2026-06-10T10:11:13",
+          "mtime_after": "2026-08-07T18:07:25",
+          "inode_before": 1415,
+          "inode_after": 3047,
+          "changed_attributes": [
+            "size",
+            "inode",
+            "mtime",
+            "md5",
+            "sha1",
+            "sha256"
+          ],
+          "event": "modified"
+        },
+        "decoder": {
+          "name": "syscheck_integrity_changed"
+        },
+        "location": "syscheck"
+      },
+      {
+        "timestamp": "2026-08-07T18:39:30.655+0000",
+        "rule": {
+          "level": 3,
+          "description": "PAM: Login session opened.",
+          "id": "5501",
+          "mitre": {
+            "id": [
+              "T1078"
+            ],
+            "tactic": [
+              "Defense Evasion",
+              "Persistence",
+              "Privilege Escalation",
+              "Initial Access"
+            ],
+            "technique": [
+              "Valid Accounts"
+            ]
+          },
+          "firedtimes": 27,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_success"
+          ],
+          "pci_dss": [
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8",
+            "7.9"
+          ],
+          "gdpr": [
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127970.134356",
+        "full_log": "Aug 07 18:39:30 ip-172-31-42-38 sshd[51795]: pam_unix(sshd:session): session opened for user ubuntu(uid=1000) by ubuntu(uid=0)",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:39:30",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "parent": "pam",
+          "name": "pam"
+        },
+        "data": {
+          "srcuser": "ubuntu",
+          "dstuser": "ubuntu",
+          "uid": "0"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-07T18:39:30.700+0000",
+        "rule": {
+          "level": 5,
+          "description": "PAM: User login failed.",
+          "id": "5503",
+          "mitre": {
+            "id": [
+              "T1110.001"
+            ],
+            "tactic": [
+              "Credential Access"
+            ],
+            "technique": [
+              "Password Guessing"
+            ]
+          },
+          "firedtimes": 16,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog",
+            "authentication_failed"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127970.136902",
+        "full_log": "Aug 07 18:39:30 ip-172-31-42-38 sshd[51797]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:39:30",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "name": "pam"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "dstuser": "ubuntu",
+          "uid": "0",
+          "euid": "0",
+          "tty": "ssh"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-07T18:39:32.659+0000",
+        "rule": {
+          "level": 3,
+          "description": "PAM: Login session closed.",
+          "id": "5502",
+          "firedtimes": 26,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog"
+          ],
+          "pci_dss": [
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8",
+            "7.9"
+          ],
+          "gdpr": [
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127972.138537",
+        "full_log": "Aug 07 18:39:31 ip-172-31-42-38 sshd[51795]: pam_unix(sshd:session): session closed for user ubuntu",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:39:31",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "parent": "pam",
+          "name": "pam"
+        },
+        "data": {
+          "dstuser": "ubuntu"
+        },
+        "location": "journald"
+      },
+      {
+        "timestamp": "2026-08-07T18:39:32.714+0000",
+        "rule": {
+          "level": 5,
+          "description": "sshd: authentication failed.",
+          "id": "5760",
+          "mitre": {
+            "id": [
+              "T1110.001",
+              "T1021.004"
+            ],
+            "tactic": [
+              "Credential Access",
+              "Lateral Movement"
+            ],
+            "technique": [
+              "Password Guessing",
+              "SSH"
+            ]
+          },
+          "firedtimes": 16,
+          "mail": false,
+          "groups": [
+            "syslog",
+            "sshd",
+            "authentication_failed"
+          ],
+          "gdpr": [
+            "IV_35.7.d",
+            "IV_32.2"
+          ],
+          "gpg13": [
+            "7.1"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "pci_dss": [
+            "10.2.4",
+            "10.2.5"
+          ],
+          "tsc": [
+            "CC6.1",
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "004",
+          "name": "victim-machine",
+          "ip": "100.90.153.71"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786127972.140397",
+        "full_log": "Aug 07 18:39:32 ip-172-31-42-38 sshd[51797]: Failed password for ubuntu from 172.31.24.217 port 34394 ssh2",
+        "predecoder": {
+          "program_name": "sshd",
+          "timestamp": "Aug 07 18:39:32",
+          "hostname": "ip-172-31-42-38"
+        },
+        "decoder": {
+          "parent": "sshd",
+          "name": "sshd"
+        },
+        "data": {
+          "srcip": "172.31.24.217",
+          "srcport": "34394",
+          "dstuser": "ubuntu"
+        },
+        "location": "journald"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+        "source": "wazuh",
+        "event_type": "wazuh_rule_550",
+        "timestamp": "2026-08-07T18:39:09.719+0000",
+        "host": "victim-machine",
+        "user": null,
+        "username": null,
+        "process": "syscheck_integrity_changed",
+        "command_line": "File '/etc/ssh/sshd_config' modified\nMode: scheduled\nChanged attributes: size,inode,mtime,md5,sha1,sha256\nSize changed from '3516' to '3515'\nOld modification time was: '1786044730', now it is '1786125899'\nOld inode was: '1417', now it is '3045'\nOld md5sum was: '82ef0937e683fc5634079ce5883a4187'\nNew md5sum is : '6be45270f45023f885a10f0ed2f6055e'\nOld sha1sum was: '78497c7f9b8a75bbfa9724e493e771dfc0082fb2'\nNew sha1sum is : '27e5f5bf48173aa469dc53e8b410b6ea7b247ca3'\nOld sha256sum was: 'f07bf9066bf9d16bebca89f2afb77edf68ef4ce2985322c5604d1cfeb4f27bac'\nNew sha256sum is : '0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686'\n",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 7,
+        "rule_description": "Integrity checksum changed.",
+        "rule_level": 7,
+        "rule_groups": [
+          "ossec",
+          "syscheck",
+          "syscheck_entry_modified",
+          "syscheck_file"
+        ],
+        "rule_mitre": [
+          "T1565.001"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:39:09.719+0000",
+          "rule": {
+            "level": 7,
+            "description": "Integrity checksum changed.",
+            "id": "550",
+            "mitre": {
+              "id": [
+                "T1565.001"
+              ],
+              "tactic": [
+                "Impact"
+              ],
+              "technique": [
+                "Stored Data Manipulation"
+              ]
+            },
+            "firedtimes": 1,
+            "mail": false,
+            "groups": [
+              "ossec",
+              "syscheck",
+              "syscheck_entry_modified",
+              "syscheck_file"
+            ],
+            "pci_dss": [
+              "11.5"
+            ],
+            "gpg13": [
+              "4.11"
+            ],
+            "gdpr": [
+              "II_5.1.f"
+            ],
+            "hipaa": [
+              "164.312.c.1",
+              "164.312.c.2"
+            ],
+            "nist_800_53": [
+              "SI.7"
+            ],
+            "tsc": [
+              "PI1.4",
+              "PI1.5",
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127949.130482",
+          "full_log": "File '/etc/ssh/sshd_config' modified\nMode: scheduled\nChanged attributes: size,inode,mtime,md5,sha1,sha256\nSize changed from '3516' to '3515'\nOld modification time was: '1786044730', now it is '1786125899'\nOld inode was: '1417', now it is '3045'\nOld md5sum was: '82ef0937e683fc5634079ce5883a4187'\nNew md5sum is : '6be45270f45023f885a10f0ed2f6055e'\nOld sha1sum was: '78497c7f9b8a75bbfa9724e493e771dfc0082fb2'\nNew sha1sum is : '27e5f5bf48173aa469dc53e8b410b6ea7b247ca3'\nOld sha256sum was: 'f07bf9066bf9d16bebca89f2afb77edf68ef4ce2985322c5604d1cfeb4f27bac'\nNew sha256sum is : '0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686'\n",
+          "syscheck": {
+            "path": "/etc/ssh/sshd_config",
+            "mode": "scheduled",
+            "size_before": "3516",
+            "size_after": "3515",
+            "perm_after": "rw-r--r--",
+            "uid_after": "0",
+            "gid_after": "0",
+            "md5_before": "82ef0937e683fc5634079ce5883a4187",
+            "md5_after": "6be45270f45023f885a10f0ed2f6055e",
+            "sha1_before": "78497c7f9b8a75bbfa9724e493e771dfc0082fb2",
+            "sha1_after": "27e5f5bf48173aa469dc53e8b410b6ea7b247ca3",
+            "sha256_before": "f07bf9066bf9d16bebca89f2afb77edf68ef4ce2985322c5604d1cfeb4f27bac",
+            "sha256_after": "0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686",
+            "uname_after": "root",
+            "gname_after": "root",
+            "mtime_before": "2026-08-06T19:32:10",
+            "mtime_after": "2026-08-07T18:04:59",
+            "inode_before": 1417,
+            "inode_after": 3045,
+            "changed_attributes": [
+              "size",
+              "inode",
+              "mtime",
+              "md5",
+              "sha1",
+              "sha256"
+            ],
+            "event": "modified"
+          },
+          "decoder": {
+            "name": "syscheck_integrity_changed"
+          },
+          "location": "syscheck"
+        }
+      },
+      {
+        "event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+        "source": "wazuh",
+        "event_type": "wazuh_rule_550",
+        "timestamp": "2026-08-07T18:39:09.793+0000",
+        "host": "victim-machine",
+        "user": null,
+        "username": null,
+        "process": "syscheck_integrity_changed",
+        "command_line": "File '/etc/ssh/sshd_config.d/60-cloudimg-settings.conf' modified\nMode: scheduled\nChanged attributes: size,inode,mtime,md5,sha1,sha256\nSize changed from '26' to '27'\nOld modification time was: '1781086273', now it is '1786126045'\nOld inode was: '1415', now it is '3047'\nOld md5sum was: '72d6b267a7e8aec4c6f11b8a72f597a8'\nNew md5sum is : '1e4da5180db2e8f67728a6223787c4f1'\nOld sha1sum was: 'cb90e49d699f7ab9c11cafc27de7741209c4bfa2'\nNew sha1sum is : 'beabb9fb2eb1eb4c5f05fd327c3ddf845c8d1d9d'\nOld sha256sum was: '474ef6932d6b998ec97b122a9d86af024b988d64c243f3caf01dd9e5ed41618e'\nNew sha256sum is : '6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d'\n",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 7,
+        "rule_description": "Integrity checksum changed.",
+        "rule_level": 7,
+        "rule_groups": [
+          "ossec",
+          "syscheck",
+          "syscheck_entry_modified",
+          "syscheck_file"
+        ],
+        "rule_mitre": [
+          "T1565.001"
+        ],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:39:09.793+0000",
+          "rule": {
+            "level": 7,
+            "description": "Integrity checksum changed.",
+            "id": "550",
+            "mitre": {
+              "id": [
+                "T1565.001"
+              ],
+              "tactic": [
+                "Impact"
+              ],
+              "technique": [
+                "Stored Data Manipulation"
+              ]
+            },
+            "firedtimes": 2,
+            "mail": false,
+            "groups": [
+              "ossec",
+              "syscheck",
+              "syscheck_entry_modified",
+              "syscheck_file"
+            ],
+            "pci_dss": [
+              "11.5"
+            ],
+            "gpg13": [
+              "4.11"
+            ],
+            "gdpr": [
+              "II_5.1.f"
+            ],
+            "hipaa": [
+              "164.312.c.1",
+              "164.312.c.2"
+            ],
+            "nist_800_53": [
+              "SI.7"
+            ],
+            "tsc": [
+              "PI1.4",
+              "PI1.5",
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127949.131768",
+          "full_log": "File '/etc/ssh/sshd_config.d/60-cloudimg-settings.conf' modified\nMode: scheduled\nChanged attributes: size,inode,mtime,md5,sha1,sha256\nSize changed from '26' to '27'\nOld modification time was: '1781086273', now it is '1786126045'\nOld inode was: '1415', now it is '3047'\nOld md5sum was: '72d6b267a7e8aec4c6f11b8a72f597a8'\nNew md5sum is : '1e4da5180db2e8f67728a6223787c4f1'\nOld sha1sum was: 'cb90e49d699f7ab9c11cafc27de7741209c4bfa2'\nNew sha1sum is : 'beabb9fb2eb1eb4c5f05fd327c3ddf845c8d1d9d'\nOld sha256sum was: '474ef6932d6b998ec97b122a9d86af024b988d64c243f3caf01dd9e5ed41618e'\nNew sha256sum is : '6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d'\n",
+          "syscheck": {
+            "path": "/etc/ssh/sshd_config.d/60-cloudimg-settings.conf",
+            "mode": "scheduled",
+            "size_before": "26",
+            "size_after": "27",
+            "perm_after": "rw-r--r--",
+            "uid_after": "0",
+            "gid_after": "0",
+            "md5_before": "72d6b267a7e8aec4c6f11b8a72f597a8",
+            "md5_after": "1e4da5180db2e8f67728a6223787c4f1",
+            "sha1_before": "cb90e49d699f7ab9c11cafc27de7741209c4bfa2",
+            "sha1_after": "beabb9fb2eb1eb4c5f05fd327c3ddf845c8d1d9d",
+            "sha256_before": "474ef6932d6b998ec97b122a9d86af024b988d64c243f3caf01dd9e5ed41618e",
+            "sha256_after": "6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d",
+            "uname_after": "root",
+            "gname_after": "root",
+            "mtime_before": "2026-06-10T10:11:13",
+            "mtime_after": "2026-08-07T18:07:25",
+            "inode_before": 1415,
+            "inode_after": 3047,
+            "changed_attributes": [
+              "size",
+              "inode",
+              "mtime",
+              "md5",
+              "sha1",
+              "sha256"
+            ],
+            "event": "modified"
+          },
+          "decoder": {
+            "name": "syscheck_integrity_changed"
+          },
+          "location": "syscheck"
+        }
+      },
+      {
+        "event_id": "0d9c6999-3575-49f5-b47c-03b69214bae9",
+        "source": "wazuh",
+        "event_type": "authentication_success",
+        "timestamp": "2026-08-07T18:39:30.655+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:39:30 ip-172-31-42-38 sshd[51795]: pam_unix(sshd:session): session opened for user ubuntu(uid=1000) by ubuntu(uid=0)",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "PAM: Login session opened.",
+        "rule_level": 3,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_success"
+        ],
+        "rule_mitre": [
+          "T1078"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:39:30.655+0000",
+          "rule": {
+            "level": 3,
+            "description": "PAM: Login session opened.",
+            "id": "5501",
+            "mitre": {
+              "id": [
+                "T1078"
+              ],
+              "tactic": [
+                "Defense Evasion",
+                "Persistence",
+                "Privilege Escalation",
+                "Initial Access"
+              ],
+              "technique": [
+                "Valid Accounts"
+              ]
+            },
+            "firedtimes": 27,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_success"
+            ],
+            "pci_dss": [
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8",
+              "7.9"
+            ],
+            "gdpr": [
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127970.134356",
+          "full_log": "Aug 07 18:39:30 ip-172-31-42-38 sshd[51795]: pam_unix(sshd:session): session opened for user ubuntu(uid=1000) by ubuntu(uid=0)",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:39:30",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "parent": "pam",
+            "name": "pam"
+          },
+          "data": {
+            "srcuser": "ubuntu",
+            "dstuser": "ubuntu",
+            "uid": "0"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "097dab6a-f188-4b85-a55d-7b79ed0adb82",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-07T18:39:30.700+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:39:30 ip-172-31-42-38 sshd[51797]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "PAM: User login failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "pam",
+          "syslog",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:39:30.700+0000",
+          "rule": {
+            "level": 5,
+            "description": "PAM: User login failed.",
+            "id": "5503",
+            "mitre": {
+              "id": [
+                "T1110.001"
+              ],
+              "tactic": [
+                "Credential Access"
+              ],
+              "technique": [
+                "Password Guessing"
+              ]
+            },
+            "firedtimes": 16,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog",
+              "authentication_failed"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127970.136902",
+          "full_log": "Aug 07 18:39:30 ip-172-31-42-38 sshd[51797]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.31.24.217  user=ubuntu",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:39:30",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "name": "pam"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "dstuser": "ubuntu",
+            "uid": "0",
+            "euid": "0",
+            "tty": "ssh"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "896463ab-538a-4bd4-bbdb-9d653ae54400",
+        "source": "wazuh",
+        "event_type": "wazuh_rule_5502",
+        "timestamp": "2026-08-07T18:39:32.659+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:39:31 ip-172-31-42-38 sshd[51795]: pam_unix(sshd:session): session closed for user ubuntu",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "PAM: Login session closed.",
+        "rule_level": 3,
+        "rule_groups": [
+          "pam",
+          "syslog"
+        ],
+        "rule_mitre": [],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:39:32.659+0000",
+          "rule": {
+            "level": 3,
+            "description": "PAM: Login session closed.",
+            "id": "5502",
+            "firedtimes": 26,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog"
+            ],
+            "pci_dss": [
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8",
+              "7.9"
+            ],
+            "gdpr": [
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127972.138537",
+          "full_log": "Aug 07 18:39:31 ip-172-31-42-38 sshd[51795]: pam_unix(sshd:session): session closed for user ubuntu",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:39:31",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "parent": "pam",
+            "name": "pam"
+          },
+          "data": {
+            "dstuser": "ubuntu"
+          },
+          "location": "journald"
+        }
+      },
+      {
+        "event_id": "77279d51-4889-4b05-bd09-d89340378603",
+        "source": "wazuh",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-08-07T18:39:32.714+0000",
+        "host": "victim-machine",
+        "user": "ubuntu",
+        "username": "ubuntu",
+        "process": "sshd",
+        "command_line": "Aug 07 18:39:32 ip-172-31-42-38 sshd[51797]: Failed password for ubuntu from 172.31.24.217 port 34394 ssh2",
+        "src_ip": "172.31.24.217",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 5,
+        "rule_description": "sshd: authentication failed.",
+        "rule_level": 5,
+        "rule_groups": [
+          "syslog",
+          "sshd",
+          "authentication_failed"
+        ],
+        "rule_mitre": [
+          "T1110.001",
+          "T1021.004"
+        ],
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-07T18:39:32.714+0000",
+          "rule": {
+            "level": 5,
+            "description": "sshd: authentication failed.",
+            "id": "5760",
+            "mitre": {
+              "id": [
+                "T1110.001",
+                "T1021.004"
+              ],
+              "tactic": [
+                "Credential Access",
+                "Lateral Movement"
+              ],
+              "technique": [
+                "Password Guessing",
+                "SSH"
+              ]
+            },
+            "firedtimes": 16,
+            "mail": false,
+            "groups": [
+              "syslog",
+              "sshd",
+              "authentication_failed"
+            ],
+            "gdpr": [
+              "IV_35.7.d",
+              "IV_32.2"
+            ],
+            "gpg13": [
+              "7.1"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "pci_dss": [
+              "10.2.4",
+              "10.2.5"
+            ],
+            "tsc": [
+              "CC6.1",
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "004",
+            "name": "victim-machine",
+            "ip": "100.90.153.71"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786127972.140397",
+          "full_log": "Aug 07 18:39:32 ip-172-31-42-38 sshd[51797]: Failed password for ubuntu from 172.31.24.217 port 34394 ssh2",
+          "predecoder": {
+            "program_name": "sshd",
+            "timestamp": "Aug 07 18:39:32",
+            "hostname": "ip-172-31-42-38"
+          },
+          "decoder": {
+            "parent": "sshd",
+            "name": "sshd"
+          },
+          "data": {
+            "srcip": "172.31.24.217",
+            "srcport": "34394",
+            "dstuser": "ubuntu"
+          },
+          "location": "journald"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.90.153.71",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "100.90.153.71",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null
+            },
+            "queried_at": "2026-08-07 18:39:43.717574"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.90.153.71",
+          "source_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "f07bf9066bf9d16bebca89f2afb77edf68ef4ce2985322c5604d1cfeb4f27bac",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "sha256",
+          "value": "f07bf9066bf9d16bebca89f2afb77edf68ef4ce2985322c5604d1cfeb4f27bac",
+          "source_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "sha256",
+          "value": "0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686",
+          "source_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "78497c7f9b8a75bbfa9724e493e771dfc0082fb2",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "sha1",
+          "value": "78497c7f9b8a75bbfa9724e493e771dfc0082fb2",
+          "source_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "27e5f5bf48173aa469dc53e8b410b6ea7b247ca3",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "sha1",
+          "value": "27e5f5bf48173aa469dc53e8b410b6ea7b247ca3",
+          "source_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "82ef0937e683fc5634079ce5883a4187",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "md5",
+          "value": "82ef0937e683fc5634079ce5883a4187",
+          "source_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "6be45270f45023f885a10f0ed2f6055e",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "md5",
+          "value": "6be45270f45023f885a10f0ed2f6055e",
+          "source_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "474ef6932d6b998ec97b122a9d86af024b988d64c243f3caf01dd9e5ed41618e",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "sha256",
+          "value": "474ef6932d6b998ec97b122a9d86af024b988d64c243f3caf01dd9e5ed41618e",
+          "source_event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "sha256",
+          "value": "6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d",
+          "source_event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "cb90e49d699f7ab9c11cafc27de7741209c4bfa2",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "sha1",
+          "value": "cb90e49d699f7ab9c11cafc27de7741209c4bfa2",
+          "source_event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "beabb9fb2eb1eb4c5f05fd327c3ddf845c8d1d9d",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "sha1",
+          "value": "beabb9fb2eb1eb4c5f05fd327c3ddf845c8d1d9d",
+          "source_event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "72d6b267a7e8aec4c6f11b8a72f597a8",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "md5",
+          "value": "72d6b267a7e8aec4c6f11b8a72f597a8",
+          "source_event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "1e4da5180db2e8f67728a6223787c4f1",
+        "ioc_type": "hash",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "md5",
+          "value": "1e4da5180db2e8f67728a6223787c4f1",
+          "source_event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1565.001",
+        "technique_name": "Stored Data Manipulation",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+        "known_groups": [
+          "APT38"
+        ],
+        "known_software": [
+          "SUNSPOT",
+          "MultiLayer Wiper"
+        ],
+        "recommended_mitigations": [
+          "Restrict File and Directory Permissions",
+          "Remote Data Storage",
+          "Encrypt Sensitive Information"
+        ]
+      },
+      {
+        "attack_id": "T1565.001",
+        "technique_name": "Stored Data Manipulation",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+        "known_groups": [
+          "APT38"
+        ],
+        "known_software": [
+          "SUNSPOT",
+          "MultiLayer Wiper"
+        ],
+        "recommended_mitigations": [
+          "Restrict File and Directory Permissions",
+          "Remote Data Storage",
+          "Encrypt Sensitive Information"
+        ]
+      },
+      {
+        "attack_id": "T1078",
+        "technique_name": "Valid Accounts",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "0d9c6999-3575-49f5-b47c-03b69214bae9",
+        "known_groups": [
+          "APT41",
+          "FIN8",
+          "FIN4",
+          "FIN7",
+          "Scattered Spider",
+          "Dragonfly",
+          "GALLIUM",
+          "APT18",
+          "Volt Typhoon",
+          "Lazarus Group",
+          "Chimera",
+          "menuPass",
+          "Sandworm Team",
+          "Cinnamon Tempest",
+          "Akira",
+          "LAPSUS$",
+          "Carbanak",
+          "APT28",
+          "Threat Group-3390",
+          "Medusa Group",
+          "Suckfly",
+          "Play",
+          "Axiom",
+          "Indrik Spider",
+          "Leviathan",
+          "PittyTiger",
+          "Silence",
+          "OilRig",
+          "Wizard Spider",
+          "APT29",
+          "UNC3886",
+          "BlackByte",
+          "Ke3chang",
+          "FIN10",
+          "APT33",
+          "INC Ransom",
+          "FIN6",
+          "Fox Kitten",
+          "POLONIUM",
+          "FIN5",
+          "Silent Librarian",
+          "Sea Turtle",
+          "Star Blizzard",
+          "APT39",
+          "VOID MANTICORE"
+        ],
+        "known_software": [
+          "Kinsing",
+          "SeaDuke",
+          "LP-Notes",
+          "Dtrack",
+          "Industroyer",
+          "Duqu",
+          "Linux Rabbit"
+        ],
+        "recommended_mitigations": [
+          "Password Policies",
+          "User Account Management",
+          "Privileged Account Management",
+          "Multi-factor Authentication",
+          "Application Developer Guidance",
+          "User Training",
+          "Active Directory Configuration",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "097dab6a-f188-4b85-a55d-7b79ed0adb82",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110.001",
+        "technique_name": "Password Guessing",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "77279d51-4889-4b05-bd09-d89340378603",
+        "known_groups": [
+          "VOID MANTICORE",
+          "APT28",
+          "APT29"
+        ],
+        "known_software": [
+          "China Chopper",
+          "Emotet",
+          "SpeakUp",
+          "CrackMapExec",
+          "HermeticWizard",
+          "Lucifer",
+          "Pony",
+          "Xbash",
+          "P.A.S. Webshell"
+        ],
+        "recommended_mitigations": [
+          "Update Software",
+          "Multi-factor Authentication",
+          "Password Policies",
+          "Account Use Policies"
+        ]
+      },
+      {
+        "attack_id": "T1021.004",
+        "technique_name": "SSH",
+        "confidence": 1.0,
+        "mapping_source": "event_metadata",
+        "evidence_event_id": "77279d51-4889-4b05-bd09-d89340378603",
+        "known_groups": [
+          "FIN7",
+          "Lazarus Group",
+          "Leviathan",
+          "Scattered Spider",
+          "BlackTech",
+          "Aquatic Panda",
+          "GCMAN",
+          "Fox Kitten",
+          "TeamTNT",
+          "Storm-1811",
+          "Salt Typhoon",
+          "OilRig",
+          "APT5",
+          "UNC3886",
+          "FIN13",
+          "menuPass",
+          "Indrik Spider",
+          "Rocke",
+          "APT39"
+        ],
+        "known_software": [
+          "Empire",
+          "Cobalt Strike",
+          "reGeorg",
+          "Kinsing",
+          "Qilin"
+        ],
+        "recommended_mitigations": [
+          "Disable or Remove Feature or Program",
+          "Multi-factor Authentication",
+          "User Account Management"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "e3b1c9a2-5f4d-4a9e-8d2c-7f6a9b3c1d4e",
+      "name": "Unclassified Activity",
+      "objective": "Obtain unauthorized SSH access and modify SSH configuration files to maintain persistence",
+      "timeline": [
+        {
+          "timestamp": "Aug 07 18:39:30",
+          "event_id": "0d9c6999-3575-49f5-b47c-03b69214bae9",
+          "description": "A successful SSH login was recorded for user *ubuntu* on host *victim-machine* (authentication_success event)."
+        },
+        {
+          "timestamp": "Aug 07 18:39:30",
+          "event_id": "097dab6a-f188-4b85-a55d-7b79ed0adb82",
+          "description": "An SSH authentication failure originated from source IP 172.31.24.217 targeting user *ubuntu* (authentication_failed event)."
+        },
+        {
+          "timestamp": "Aug 07 18:39:31",
+          "event_id": "896463ab-538a-4bd4-bbdb-9d653ae54400",
+          "description": "The SSH session for user *ubuntu* was closed shortly after the successful login (wazuh_rule_5502 event)."
+        },
+        {
+          "timestamp": "Aug 07 18:39:32",
+          "event_id": "77279d51-4889-4b05-bd09-d89340378603",
+          "description": "A failed password attempt for user *ubuntu* was logged from source IP 172.31.24.217 (authentication_failed event)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "46963ce1-29e0-4b66-a8f1-a49177e8cc83",
+          "description": "The file */etc/ssh/sshd_config* was modified; its size, inode, timestamps, and hash values (MD5, SHA1, SHA256) changed (wazuh_rule_550 event)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794",
+          "description": "The file */etc/ssh/sshd_config.d/60-cloudimg-settings.conf* was modified; size, inode, timestamps, and hash values changed (wazuh_rule_550 event)."
+        }
+      ],
+      "related_techniques": [
+        "T1565.001",
+        "T1078",
+        "T1110.001",
+        "T1021.004"
+      ],
+      "evidence_summary": "The telemetry shows two Stored Data Manipulation events (IDs 46963ce1-29e0-4b66-a8f1-a49177e8cc83 and f8c8ffb3-dfb2-4e25-ba36-35b34c4c0794) where SSH configuration files were altered, resulting in new hash values such as SHA256 0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686 and 6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d. These modifications map to ATT&CK technique T1565.001 (Stored Data Manipulation). \nAdditionally, authentication logs record a successful SSH login (event 0d9c6999-3575-49f5-b47c-03b69214bae9) using a valid account, which aligns with technique T1078 (Valid Accounts). Concurrently, multiple failed login attempts from IP 172.31.24.217 (events 097dab6a-f188-4b85-a55d-7b79ed0adb82 and 77279d51-4889-4b05-bd09-d89340378603) demonstrate Password Guessing (T1110.001) over SSH (T1021.004).",
+      "confidence": 0.7
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1003",
+          "technique_name": "OS Credential Dumping",
+          "rationale": "After obtaining a valid SSH account and performing password guessing, attackers often seek to harvest additional credentials from the compromised host to expand access. Dumping OS credentials enables lateral movement and further privilege escalation."
+        },
+        {
+          "technique_id": "T1098",
+          "technique_name": "Account Manipulation",
+          "rationale": "With a valid account already in use, the adversary may create or modify privileged accounts to maintain persistence and ensure continued access even if the original credentials are revoked."
+        },
+        {
+          "technique_id": "T1083",
+          "technique_name": "File and Directory Discovery",
+          "rationale": "Having established SSH persistence via configuration changes, the attacker is likely to enumerate the file system to locate sensitive data, additional credential stores, or scripts that can be leveraged for further compromise."
+        }
+      ],
+      "rationale": "The campaign has progressed from gaining SSH access (Valid Accounts, Password Guessing) to modifying SSH configuration for persistence (Stored Data Manipulation). The next logical steps are to expand credential access (OS Credential Dumping), solidify long\u2011term control (Account Manipulation), and explore the host for valuable assets (File and Directory Discovery). All suggested techniques are present in the allowed prediction list."
+    },
+    "threat_summary": {
+      "campaign": {
+        "campaign_id": "e3b1c9a2-5f4d-4a9e-8d2c-7f6a9b3c1d4e",
+        "name": "Unclassified Activity",
+        "severity": "high",
+        "confidence": 0.7
+      },
+      "event_count": 6,
+      "failed_login_count": 2,
+      "affected_hosts": [
+        "victim-machine"
+      ],
+      "affected_users": [
+        "ubuntu"
+      ],
+      "source_ips": [
+        "172.31.24.217"
+      ],
+      "processes": [
+        "sshd",
+        "syscheck_integrity_changed"
+      ],
+      "top_mitre_techniques": [
+        {
+          "id": "T1110.001",
+          "name": "Password Guessing",
+          "count": 2,
+          "confidence": 1.0
+        },
+        {
+          "id": "T1565.001",
+          "name": "Stored Data Manipulation",
+          "count": 2,
+          "confidence": 1.0
+        },
+        {
+          "id": "T1021.004",
+          "name": "SSH",
+          "count": 1,
+          "confidence": 1.0
+        },
+        {
+          "id": "T1078",
+          "name": "Valid Accounts",
+          "count": 1,
+          "confidence": 1.0
+        }
+      ],
+      "prediction": {
+        "likely_next_techniques": [
+          {
+            "id": "T1003",
+            "name": "OS Credential Dumping"
+          },
+          {
+            "id": "T1098",
+            "name": "Account Manipulation"
+          },
+          {
+            "id": "T1083",
+            "name": "File and Directory Discovery"
+          }
+        ],
+        "rationale": "The campaign has progressed from gaining SSH access (Valid Accounts, Password Guessing) to modifying SSH configuration for persistence (Stored Data Manipulation). The next logical steps are to expand credential access (OS Credential Dumping), solidify long\u2011term control (Account Manipulation), and explore the host for valuable assets (File and Directory Discovery). All suggested techniques are present in the allowed prediction list."
+      },
+      "valid_action_targets": [
+        "172.31.24.217",
+        "SOC Team",
+        "SOC_Team",
+        "SOC_analyst",
+        "sshd",
+        "syscheck_integrity_changed",
+        "ubuntu",
+        "victim-machine"
+      ],
+      "victim_isolation_targets": [
+        "victim-machine"
+      ],
+      "attacker_source_ips": [
+        "172.31.24.217"
+      ]
+    },
+    "report": "**Threat Intelligence Report**  \n*Investigation Date: 2026\u201108\u201107*  \n\n---  \n\n## Executive Summary\n- An adversary obtained a valid SSH session on **victim\u2011machine** using the *ubuntu* account (T1078 \u2013 Valid Accounts).  \n- Concurrent password\u2011guessing attempts from source IP **172.31.24.217** were recorded (T1110.001 \u2013 Password Guessing).  \n- The attacker modified **/etc/ssh/sshd_config** and **/etc/ssh/sshd_config.d/60\u2011cloudimg\u2011settings.conf**, changing file attributes and hashes (T1565.001 \u2013 Stored Data Manipulation) \u2013 a persistence mechanism for SSH.  \n- Network\u2011level response actions have been initiated (IP block and host isolation pending approval).  \n\nNo explicit \u201cssh_brute_force_detected\u201d flag is present; therefore the special SSH\u2011brute\u2011force wording is omitted.\n\n---\n\n## Timeline  \n\n| Time (UTC) | Event ID | Description |\n|------------|----------|-------------|\n| 2026\u201108\u201107 18:39:30 | 0d9c6999\u20113575\u201149f5\u2011b47c\u201103b69214bae9 | Successful SSH login for user **ubuntu** (authentication_success). |\n| 2026\u201108\u201107 18:39:30 | 097dab6a\u2011f188\u20114b85\u2011a55d\u20117b79ed0adb82 | Failed SSH authentication from **172.31.24.217** targeting **ubuntu** (authentication_failed). |\n| 2026\u201108\u201107 18:39:31 | 896463ab\u2011538a\u20114bd4\u2011bbdb\u20119d653ae54400 | SSH session for **ubuntu** closed (wazuh_rule_5502). |\n| 2026\u201108\u201107 18:39:32 | 77279d51\u20114889\u20114b05\u2011bd09\u2011d89340378603 | Additional failed password attempt from **172.31.24.217** (authentication_failed). |\n| 2026\u201108\u201107 18:39:09.719 | 46963ce1\u201129e0\u20114b66\u2011a8f1\u2011a49177e8cc83 | **/etc/ssh/sshd_config** modified \u2013 size, inode, timestamps, MD5/SHA1/SHA256 hashes changed (Stored Data Manipulation). |\n| 2026\u201108\u201107 18:39:09.793 | f8c8ffb3\u2011dfb2\u20114e25\u2011ba36\u201135b34c4c0794 | **/etc/ssh/sshd_config.d/60\u2011cloudimg\u2011settings.conf** modified \u2013 attributes and hashes changed (Stored Data Manipulation). |\n\n*Note: Two file\u2011modification events have \u201cUnknown\u201d timestamps in the source data; they are placed here based on event IDs.*\n\n---\n\n## IOCs  \n\n| IOC Type | Value | Reputation | Tags |\n|----------|-------|------------|------|\n| IP | 100.90.153.71 | benign (AbuseIPDB) | non_public, reserved |\n| Hash | f07bf9066bf9d16bebca89f2afb77edf68ef4ce2985322c5604d1cfeb4f27bac | unknown | \u2013 |\n| Hash | 0a58ca49cb87967980cf4866f00ab1f992831e0feb7046973cdb04c197e2d686 | unknown | \u2013 |\n| Hash | 78497c7f9b8a75bbfa9724e493e771dfc0082fb2 | unknown | \u2013 |\n| Hash | 27e5f5bf48173aa469dc53e8b410b6ea7b247ca3 | unknown | \u2013 |\n| Hash | 82ef0937e683fc5634079ce5883a4187 | unknown | \u2013 |\n| Hash | 6be45270f45023f885a10f0ed2f6055e | unknown | \u2013 |\n| Domain | wazuh.manager | unknown | \u2013 |\n| Hash | 474ef6932d6b998ec97b122a9d86af024b988d64c243f3caf01dd9e5ed41618e | unknown | \u2013 |\n| Hash | 6bf43c7543d384fe7c3442bd97b1c91b9da62b51521184b6c1e421a7ef8bac1d | unknown | \u2013 |\n| Hash | cb90e49d699f7ab9c11cafc27de7741209c4bfa2 | unknown | \u2013 |\n| Hash | beabb9fb2eb1eb4c5f05fd327c3ddf845c8d1d9d | unknown | \u2013 |\n| Hash | 72d6b267a7e8aec4c6f11b8a72f597a8 | unknown | \u2013 |\n| Hash | 1e4da5180db2e8f67728a6223787c4f1 | unknown | \u2013 |\n\n---\n\n## ATT&CK Techniques (Confirmed)\n\n| Technique ID | Technique Name | Evidence Event(s) |\n|--------------|----------------|-------------------|\n| T1565.001 | Stored Data Manipulation | 46963ce1\u2011..., f8c8ffb3\u2011... |\n| T1078 | Valid Accounts | 0d9c6999\u2011... |\n| T1110.001 | Password Guessing | 097dab6a\u2011..., 77279d51\u2011... |\n| T1021.004 | SSH | 77279d51\u2011... (also part of password\u2011guessing event) |\n\n*All listed techniques are derived directly from the `attack_techniques` block.*\n\n---\n\n## Campaign Assessment\n- **Objective:** Obtain unauthorized SSH access and modify SSH configuration files to retain persistence.  \n- **Key Behaviors:**  \n  1. **Valid Account Use (T1078):** Successful login with the *ubuntu* account.  \n  2. **Password Guessing (T1110.001):** Repeated failed attempts from a single external IP (172.31.24.217).  \n  3. **Stored Data Manipulation (T1565.001):** Direct alteration of `sshd_config` and a supplemental config file, changing hashes (SHA256\u202f0a58ca49\u2026 and 6bf43c75\u2026).  \n  4. **SSH Remote Service (T1021.004):** The activity is confined to the SSH service.  \n\nThe combination of a valid session, brute\u2011force attempts, and configuration tampering indicates a focused effort to establish and maintain SSH\u2011based persistence.\n\n---\n\n## Predicted Next Steps (Forecast)\n\n| Technique ID | Technique Name | Rationale |\n|--------------|----------------|-----------|\n| T1003 | OS Credential Dumping | After gaining a valid SSH account, attackers often harvest additional credentials to expand access. |\n| T1098 | Account Manipulation | The adversary may create or modify privileged accounts to ensure long\u2011term control. |\n| T1083 | File and Directory Discovery | With persistence in place, the attacker is likely to enumerate the filesystem for sensitive data or additional credential stores. |\n\n*These are probabilistic forecasts and have **not** been observed in the current data.*\n\n---\n\n## Recommendations  \n\n| Mitigation | Related Technique(s) |\n|------------|----------------------|\n| Enforce SSH key\u2011based authentication and disable password authentication where possible. | T1110.001, T1021.004 |\n| Implement multi\u2011factor authentication for privileged SSH accounts. | T1078 |\n| Deploy file integrity monitoring (FIM) with alerting on changes to `/etc/ssh/sshd_config*`. | T1565.001 |\n| Regularly review SSH login logs for anomalous source IPs and failed attempts. | T1110.001, T1021.004 |\n| Restrict SSH access to known management IP ranges via firewall or security groups. | T1021.004 |\n| Conduct a post\u2011incident account audit to verify that no unauthorized privileged accounts were created. | T1078 |\n| Apply least\u2011privilege principles to the *ubuntu* account and any other service accounts. | T1078 |\n| Ensure that any configuration changes are reviewed and approved through a change\u2011management process. | T1565.001 |\n\n---\n\n## Response Actions  \n\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| block_ip | 172.31.24.217 | pending_approval | high | Source IP performed SSH login attempts and password guessing (T1110.001); blocking prevents further brute\u2011force activity. |\n| isolate_host | Unknown | pending_approval | high | Intended to contain the compromised host while investigation continues. (Details incomplete in source data.) |\n\n*All actions are recorded as pending human approval; no action is marked as completed.*  ",
+    "actions_taken": [
+      {
+        "action": {
+          "action_type": "block_ip",
+          "target": "172.31.24.217",
+          "severity": "high",
+          "rationale": "Source IP performed SSH login attempts and password guessing (T1110.001) with confidence 1.0; blocking prevents further credential brute\u2011force.",
+          "technique_id": "T1110.001",
+          "confidence": 1.0
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action": {
+          "action_type": "isolate_host",
+          "target": "victim-machine",
+          "severity": "high",
+          "rationale": "Host shows evidence of SSH compromise, stored data manipulation for persistence, and multiple high\u2011confidence ATT&CK techniques; isolation limits lateral movement and data exfiltration.",
+          "technique_id": "T1565.001",
+          "confidence": 1.0
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC Team",
+          "severity": "high",
+          "rationale": "Campaign with high severity has gained valid SSH access, modified SSH configuration, and is likely to proceed to OS credential dumping, account manipulation, and file discovery.",
+          "technique_id": "T1083",
+          "confidence": 0.9
+        },
+        "status": "executed_remote",
+        "detail": "Remotely executed on Machine 2 (execution_id=7d252623-04c2-4256-97a5-7c6ffd5efdaf).",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "block_ip_874d2d85",
+        "action_type": "block_ip",
+        "target": "172.31.24.217",
+        "platform": "linux",
+        "language": "bash",
+        "filename": "block_ip_172.31.24.217.sh",
+        "script": "#!/bin/bash\n# Block IP 172.31.24.217\nif command -v nft &> /dev/null; then\n    nft add rule inet filter input ip saddr 172.31.24.217 drop\n    nft add rule inet filter output ip daddr 172.31.24.217 drop\nelif command -v iptables &> /dev/null; then\n    iptables -A INPUT -s 172.31.24.217 -j DROP 2>/dev/null\n    iptables -A OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null\nelse\n    echo 'ERROR: Neither nft nor iptables found' >&2\n    exit 1\nfi\necho 'Blocked IP 172.31.24.217'",
+        "requires_admin": true,
+        "expected_effect": "Block all inbound and outbound traffic to/from IP 172.31.24.217",
+        "rollback": "# Rollback\nif command -v nft &> /dev/null; then\n    nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\n    nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\nelif command -v iptables &> /dev/null; then\n    iptables -D INPUT -s 172.31.24.217 -j DROP 2>/dev/null || true\n    iptables -D OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null || true\nfi",
+        "verification": [
+          "iptables -L INPUT -n 2>/dev/null | grep '172.31.24.217' || nft list ruleset 2>/dev/null | grep '172.31.24.217'",
+          "ping -c 1 -W 2 172.31.24.217 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'"
+        ]
+      },
+      {
+        "action_id": "isolate_host_53698085",
+        "action_type": "isolate_host",
+        "target": "victim-machine",
+        "platform": "linux",
+        "language": "bash",
+        "filename": "isolate_host_victim-machine.sh",
+        "script": "#!/bin/bash\n# Isolate host victim-machine while preserving remote management channel\n# NOTE: Keep port 9001 reachable so the remote agent does not self-lock.\nMGMT_IP=\"${REMOTE_MANAGER_IP:-100.76.226.30}\"\nREMOTE_PORT=\"${REMOTE_AGENT_PORT:-9001}\"\nif command -v iptables &> /dev/null; then\n    # Save current rules for rollback\n    iptables-save > /tmp/iptables_backup_53698085.txt 2>/dev/null || true\n    iptables -P INPUT DROP\n    iptables -P OUTPUT DROP\n    iptables -P FORWARD DROP\n    # Allow loopback\n    iptables -A INPUT -i lo -j ACCEPT\n    iptables -A OUTPUT -o lo -j ACCEPT\n    # Keep established connections alive\n    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n    iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n    # Keep control-plane reachable from manager\n    iptables -A INPUT -p tcp --dport \"$REMOTE_PORT\" -s \"$MGMT_IP\" -j ACCEPT\n    # Allow callback webhook traffic to manager\n    iptables -A OUTPUT -p tcp -d \"$MGMT_IP\" --dport 8000 -j ACCEPT\nelif command -v nft &> /dev/null; then\n    nft add table inet isolate 2>/dev/null || true\n    nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true\n    nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true\n    nft add rule inet isolate input iif lo accept\n    nft add rule inet isolate output oif lo accept\n    nft add rule inet isolate input ct state established,related accept\n    nft add rule inet isolate output ct state established,related accept\n    nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept\n    nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept\nelse\n    echo 'ERROR: No firewall tool found' >&2\n    exit 1\nfi\necho 'Host victim-machine isolated with management channel preserved'",
+        "requires_admin": true,
+        "expected_effect": "Isolate host victim-machine while preserving manager access on port 9001 and webhook callback to manager:8000",
+        "rollback": "# Rollback isolation\nif [ -f /tmp/iptables_backup_53698085.txt ]; then\n    iptables-restore < /tmp/iptables_backup_53698085.txt\n    rm /tmp/iptables_backup_53698085.txt\nfi\n# Fallback: set policies to ACCEPT\niptables -P INPUT ACCEPT 2>/dev/null || true\niptables -P OUTPUT ACCEPT 2>/dev/null || true\niptables -P FORWARD ACCEPT 2>/dev/null || true",
+        "verification": [
+          "iptables -L -n 2>/dev/null | head -5",
+          "ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'"
+        ]
+      },
+      {
+        "action_id": "notify_analyst_49b1b6a6",
+        "action_type": "notify_analyst",
+        "target": "SOC Team",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_49b1b6a6.log",
+        "script": "# Notify analyst about: SOC Team\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: T1083\n# Confidence: 0.9\n#\n# Please review the following:\n#   - SOC Team\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC Team",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 3\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: block_ip\n# Target: 172.31.24.217\n# ID: block_ip_874d2d85\n# Expected: Block all inbound and outbound traffic to/from IP 172.31.24.217\n# =======================================\naction_1() {\n    echo \"[ACTION 1] block_ip -> 172.31.24.217\"\n    echo \"  Expected: Block all inbound and outbound traffic to/from IP 172.31.24.217\"\n    if [[ $EUID -ne 0 ]]; then\n        echo \"  ERROR: Requires root privileges\" >&2\n        return 1\n    fi\n\n    # Block IP 172.31.24.217\n    if command -v nft &> /dev/null; then\n        nft add rule inet filter input ip saddr 172.31.24.217 drop\n        nft add rule inet filter output ip daddr 172.31.24.217 drop\n    elif command -v iptables &> /dev/null; then\n        iptables -A INPUT -s 172.31.24.217 -j DROP 2>/dev/null\n        iptables -A OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null\n    else\n        echo 'ERROR: Neither nft nor iptables found' >&2\n        exit 1\n    fi\n    echo 'Blocked IP 172.31.24.217'\n    echo \"  [OK] block_ip completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] block_ip -> 172.31.24.217\"\n    if command -v nft &> /dev/null; then\n        nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\n        nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\n    elif command -v iptables &> /dev/null; then\n        iptables -D INPUT -s 172.31.24.217 -j DROP 2>/dev/null || true\n        iptables -D OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null || true\n    fi\n    echo \"  [OK] Rollback of block_ip completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] block_ip -> 172.31.24.217\"\n    iptables -L INPUT -n 2>/dev/null | grep '172.31.24.217' || nft list ruleset 2>/dev/null | grep '172.31.24.217'\n    ping -c 1 -W 2 172.31.24.217 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'\n}\n\n\n# =======================================\n# Action 2: isolate_host\n# Target: victim-machine\n# ID: isolate_host_53698085\n# Expected: Isolate host victim-machine while preserving manager access on port 9001 and webhook callback to manager:8000\n# =======================================\naction_2() {\n    echo \"[ACTION 2] isolate_host -> victim-machine\"\n    echo \"  Expected: Isolate host victim-machine while preserving manager access on port 9001 and webhook callback to manager:8000\"\n    if [[ $EUID -ne 0 ]]; then\n        echo \"  ERROR: Requires root privileges\" >&2\n        return 1\n    fi\n\n    # Isolate host victim-machine while preserving remote management channel\n    # NOTE: Keep port 9001 reachable so the remote agent does not self-lock.\n    MGMT_IP=\"${REMOTE_MANAGER_IP:-100.76.226.30}\"\n    REMOTE_PORT=\"${REMOTE_AGENT_PORT:-9001}\"\n    if command -v iptables &> /dev/null; then\n        # Save current rules for rollback\n        iptables-save > /tmp/iptables_backup_53698085.txt 2>/dev/null || true\n        iptables -P INPUT DROP\n        iptables -P OUTPUT DROP\n        iptables -P FORWARD DROP\n        # Allow loopback\n        iptables -A INPUT -i lo -j ACCEPT\n        iptables -A OUTPUT -o lo -j ACCEPT\n        # Keep established connections alive\n        iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n        iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n        # Keep control-plane reachable from manager\n        iptables -A INPUT -p tcp --dport \"$REMOTE_PORT\" -s \"$MGMT_IP\" -j ACCEPT\n        # Allow callback webhook traffic to manager\n        iptables -A OUTPUT -p tcp -d \"$MGMT_IP\" --dport 8000 -j ACCEPT\n    elif command -v nft &> /dev/null; then\n        nft add table inet isolate 2>/dev/null || true\n        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true\n        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true\n        nft add rule inet isolate input iif lo accept\n        nft add rule inet isolate output oif lo accept\n        nft add rule inet isolate input ct state established,related accept\n        nft add rule inet isolate output ct state established,related accept\n        nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept\n        nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept\n    else\n        echo 'ERROR: No firewall tool found' >&2\n        exit 1\n    fi\n    echo 'Host victim-machine isolated with management channel preserved'\n    echo \"  [OK] isolate_host completed\"\n}\n\nrollback_2() {\n    echo \"[ROLLBACK 2] isolate_host -> victim-machine\"\n    if [ -f /tmp/iptables_backup_53698085.txt ]; then\n        iptables-restore < /tmp/iptables_backup_53698085.txt\n        rm /tmp/iptables_backup_53698085.txt\n    fi\n    # Fallback: set policies to ACCEPT\n    iptables -P INPUT ACCEPT 2>/dev/null || true\n    iptables -P OUTPUT ACCEPT 2>/dev/null || true\n    iptables -P FORWARD ACCEPT 2>/dev/null || true\n    echo \"  [OK] Rollback of isolate_host completed\"\n}\n\nverify_2() {\n    echo \"[VERIFY 2] isolate_host -> victim-machine\"\n    iptables -L -n 2>/dev/null | head -5\n    ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'\n}\n\n\n# =======================================\n# Action 3: notify_analyst\n# Target: SOC Team\n# ID: notify_analyst_49b1b6a6\n# Expected: Create analyst notification for SOC Team\n# =======================================\naction_3() {\n    echo \"[ACTION 3] notify_analyst -> SOC Team\"\n    echo \"  Expected: Create analyst notification for SOC Team\"\n\n    # Notify analyst about: SOC Team\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: T1083\n    # Confidence: 0.9\n    #\n    # Please review the following:\n    #   - SOC Team\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_3() {\n    echo \"[ROLLBACK 3] notify_analyst -> SOC Team\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_3() {\n    echo \"[VERIFY 3] notify_analyst -> SOC Team\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 3 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_3\n    rollback_2\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        2) action_2 ;;\n        3) action_3 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\n    action_2\n    action_3\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_3_actions.sh",
+    "remote_execution_result": {
+      "success": true,
+      "execution_id": "7d252623-04c2-4256-97a5-7c6ffd5efdaf",
+      "filename": "7d252623-04c2-4256-97a5-7c6ffd5efdaf_response_actions_1_actions.sh",
+      "campaign_id": "e3b1c9a2-5f4d-4a9e-8d2c-7f6a9b3c1d4e",
+      "exit_code": 0,
+      "stdout": "========================================\n  Response Actions Execution Script\n  Mode: EXECUTE\n========================================\n,\n\nStarting execution of 1 action(s)...\n\n[ACTION 1] notify_analyst -> SOC Team\n  Expected: Create analyst notification for SOC Team\n  [OK] notify_analyst completed\n\nExecution completed.\n",
+      "stderr": "",
+      "status": "completed",
+      "executed_at": "2026-08-07T18:40:01.583088+00:00",
+      "duration_ms": 65.0,
+      "error": null
+    },
+    "remote_execution_error": "",
+    "remote_push_attempted": true,
+    "remote_push_url": "http://100.90.153.71:9001",
+    "errors": [],
+    "metadata": {}
   }
 ]

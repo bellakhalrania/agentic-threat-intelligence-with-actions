@@ -16,6 +16,7 @@ from agents.reporting_agent import ReportingAgent
 from agents.response_agent import ResponseAgent
 from agents.execution_translation_agent import ExecutionTranslationAgent
 from intelligence.threat_intel.registry import ProviderRegistry
+from intelligence.threat_summary import build_threat_summary
 
 # Initialize provider registry with available threat intelligence sources
 provider_registry = ProviderRegistry()
@@ -83,13 +84,20 @@ def reporting_node(state: InvestigationState) -> dict:
 
 
 def response_node(state: InvestigationState) -> dict:
-    results = response_agent.run(
+    threat_summary = build_threat_summary(
         campaign=state.get("campaign", {}),
         techniques=state.get("techniques", []),
-        iocs=state.get("iocs", []),
+        prediction=state.get("prediction", {}),
         events=state.get("events", []),
     )
-    return {"actions_taken": [r.model_dump() for r in results]}
+    results = response_agent.run(
+        threat_summary=threat_summary,
+        iocs=state.get("iocs", []),
+    )
+    return {
+        "threat_summary": threat_summary,
+        "actions_taken": [r.model_dump() for r in results],
+    }
 
 
 def execution_translation_node(state: InvestigationState) -> dict:

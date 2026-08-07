@@ -36,73 +36,73 @@ echo "",
 
 # =======================================
 # Action 1: block_ip
-# Target: 101.206.211.72
-# ID: block_ip_0c7e7462
-# Expected: Block all inbound and outbound traffic to/from IP 101.206.211.72
+# Target: 172.31.24.217
+# ID: block_ip_874d2d85
+# Expected: Block all inbound and outbound traffic to/from IP 172.31.24.217
 # =======================================
 action_1() {
-    echo "[ACTION 1] block_ip -> 101.206.211.72"
-    echo "  Expected: Block all inbound and outbound traffic to/from IP 101.206.211.72"
+    echo "[ACTION 1] block_ip -> 172.31.24.217"
+    echo "  Expected: Block all inbound and outbound traffic to/from IP 172.31.24.217"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Block IP 101.206.211.72
+    # Block IP 172.31.24.217
     if command -v nft &> /dev/null; then
-        nft add rule inet filter input ip saddr 101.206.211.72 drop
-        nft add rule inet filter output ip daddr 101.206.211.72 drop
+        nft add rule inet filter input ip saddr 172.31.24.217 drop
+        nft add rule inet filter output ip daddr 172.31.24.217 drop
     elif command -v iptables &> /dev/null; then
-        iptables -A INPUT -s 101.206.211.72 -j DROP 2>/dev/null
-        iptables -A OUTPUT -d 101.206.211.72 -j DROP 2>/dev/null
+        iptables -A INPUT -s 172.31.24.217 -j DROP 2>/dev/null
+        iptables -A OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null
     else
         echo 'ERROR: Neither nft nor iptables found' >&2
         exit 1
     fi
-    echo 'Blocked IP 101.206.211.72'
+    echo 'Blocked IP 172.31.24.217'
     echo "  [OK] block_ip completed"
 }
 
 rollback_1() {
-    echo "[ROLLBACK 1] block_ip -> 101.206.211.72"
+    echo "[ROLLBACK 1] block_ip -> 172.31.24.217"
     if command -v nft &> /dev/null; then
-        nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '101.206.211.72' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
-        nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '101.206.211.72' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
+        nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
+        nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | grep '172.31.24.217' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)
     elif command -v iptables &> /dev/null; then
-        iptables -D INPUT -s 101.206.211.72 -j DROP 2>/dev/null || true
-        iptables -D OUTPUT -d 101.206.211.72 -j DROP 2>/dev/null || true
+        iptables -D INPUT -s 172.31.24.217 -j DROP 2>/dev/null || true
+        iptables -D OUTPUT -d 172.31.24.217 -j DROP 2>/dev/null || true
     fi
     echo "  [OK] Rollback of block_ip completed"
 }
 
 verify_1() {
-    echo "[VERIFY 1] block_ip -> 101.206.211.72"
-    iptables -L INPUT -n 2>/dev/null | grep '101.206.211.72' || nft list ruleset 2>/dev/null | grep '101.206.211.72'
-    ping -c 1 -W 2 101.206.211.72 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'
+    echo "[VERIFY 1] block_ip -> 172.31.24.217"
+    iptables -L INPUT -n 2>/dev/null | grep '172.31.24.217' || nft list ruleset 2>/dev/null | grep '172.31.24.217'
+    ping -c 1 -W 2 172.31.24.217 2>&1 | grep -q '100% packet loss' && echo 'BLOCKED'
 }
 
 
 # =======================================
 # Action 2: isolate_host
-# Target: ip-172-31-19-70
-# ID: isolate_host_8f48bac8
-# Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000
+# Target: victim-machine
+# ID: isolate_host_53698085
+# Expected: Isolate host victim-machine while preserving manager access on port 9001 and webhook callback to manager:8000
 # =======================================
 action_2() {
-    echo "[ACTION 2] isolate_host -> ip-172-31-19-70"
-    echo "  Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000"
+    echo "[ACTION 2] isolate_host -> victim-machine"
+    echo "  Expected: Isolate host victim-machine while preserving manager access on port 9001 and webhook callback to manager:8000"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Isolate host ip-172-31-19-70 while preserving remote management channel
+    # Isolate host victim-machine while preserving remote management channel
     # NOTE: Keep port 9001 reachable so the remote agent does not self-lock.
     MGMT_IP="${REMOTE_MANAGER_IP:-100.76.226.30}"
     REMOTE_PORT="${REMOTE_AGENT_PORT:-9001}"
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_8f48bac8.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_53698085.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
@@ -130,15 +130,15 @@ action_2() {
         echo 'ERROR: No firewall tool found' >&2
         exit 1
     fi
-    echo 'Host ip-172-31-19-70 isolated with management channel preserved'
+    echo 'Host victim-machine isolated with management channel preserved'
     echo "  [OK] isolate_host completed"
 }
 
 rollback_2() {
-    echo "[ROLLBACK 2] isolate_host -> ip-172-31-19-70"
-    if [ -f /tmp/iptables_backup_8f48bac8.txt ]; then
-        iptables-restore < /tmp/iptables_backup_8f48bac8.txt
-        rm /tmp/iptables_backup_8f48bac8.txt
+    echo "[ROLLBACK 2] isolate_host -> victim-machine"
+    if [ -f /tmp/iptables_backup_53698085.txt ]; then
+        iptables-restore < /tmp/iptables_backup_53698085.txt
+        rm /tmp/iptables_backup_53698085.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -148,7 +148,7 @@ rollback_2() {
 }
 
 verify_2() {
-    echo "[VERIFY 2] isolate_host -> ip-172-31-19-70"
+    echo "[VERIFY 2] isolate_host -> victim-machine"
     iptables -L -n 2>/dev/null | head -5
     ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'
 }
@@ -157,7 +157,7 @@ verify_2() {
 # =======================================
 # Action 3: notify_analyst
 # Target: SOC Team
-# ID: notify_analyst_347a9745
+# ID: notify_analyst_49b1b6a6
 # Expected: Create analyst notification for SOC Team
 # =======================================
 action_3() {
@@ -168,8 +168,8 @@ action_3() {
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
-    # Related technique: T1110
-    # Confidence: 0.85
+    # Related technique: T1083
+    # Confidence: 0.9
     #
     # Please review the following:
     #   - SOC Team
