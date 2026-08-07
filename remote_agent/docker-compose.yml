@@ -5,7 +5,7 @@
 # response scripts from the Threat Intelligence Platform (Machine 1).
 #
 # Usage:
-#   docker-compose -f remote_agent/docker-compose.yml up -d
+#   cd remote_agent && docker compose up -d --build
 #
 # For production, set REMOTE_AGENT_API_KEY in a .env file or environment.
 
@@ -14,8 +14,9 @@ version: '3.8'
 services:
   remote-response-agent:
     build:
-      context: ..
-      dockerfile: remote_agent/Dockerfile
+      # Keep this deployable as a standalone directory on Machine 2.
+      context: .
+      dockerfile: Dockerfile
     container_name: remote-response-agent
     network_mode: host
     environment:
