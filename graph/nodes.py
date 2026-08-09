@@ -150,13 +150,11 @@ def execution_translation_node(state: InvestigationState) -> dict:
             api_key = config.REMOTE_AGENT_API_KEY
             timeout = config.REMOTE_AGENT_TIMEOUT
 
-            # Safe default: only policy-approved actions are pushed remotely.
-            # Optional override exists for labs via REMOTE_ALLOW_PENDING_EXECUTION.
-            allow_pending = config.REMOTE_ALLOW_PENDING_EXECUTION
+            # Only actions already executed through policy or the human
+            # approval workflow may be pushed to the remote execution agent.
             remotely_executable_actions = [
                 action for action in actions_taken
                 if action.get("status") == "executed"
-                or (allow_pending and action.get("status") == "pending_approval")
             ]
 
             if not remotely_executable_actions:

@@ -9,8 +9,9 @@ decides whether that action is allowed to run automatically.
 """
 
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
+from uuid import uuid4
 
 
 class ActionType(str, Enum):
@@ -38,6 +39,9 @@ class ProposedAction(BaseModel):
 
 
 class ActionResult(BaseModel):
+    # Stable identifier links the initial proposal, reviewer decision, and
+    # final execution result in the append-only audit log.
+    action_id: str = Field(default_factory=lambda: str(uuid4()))
     action: ProposedAction
     status: str            # "executed" | "skipped_low_confidence" | "pending_approval" | "denied" | "failed"
     detail: str = ""

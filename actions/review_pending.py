@@ -1,49 +1,40 @@
 """
 actions/review_pending.py
-Human-in-the-loop CLI: lists every action currently sitting in
-"pending_approval" status and lets an analyst approve or deny each one.
+Human-in-the-loop CLI: lists unresolved pending actions and records an
+append-only approve/deny decision with the reviewer's identity.
 
 Usage:
     python -m actions.review_pending
 """
 
-from actions.audit_log import read_pending_approvals, record
-from actions.connectors import ACTION_DISPATCH
-from actions.action_models import ProposedAction, ActionResult, ActionType, ActionSeverity
-from config import config
+from actions.approval_service import ApprovalError, decide_pending_action, list_pending_actions
 
 
 def main():
-    pending = read_pending_approvals()
+    pending = list_pending_actions()
     if not pending:
         print("No pending actions.")
         return
 
     for entry in pending:
         print("\n" + "=" * 60)
+        print(f"Action ID:   {entry['action_id']}")
         print(f"Campaign:    {entry['campaign_id']}")
         print(f"Action:      {entry['action_type']} -> {entry['target']}")
         print(f"Severity:    {entry['severity']}  Confidence: {entry['confidence']}")
         print(f"Rationale:   {entry['rationale']}")
 
-        choice = input("Approve and execute? [y/N/skip]: ").strip().lower()
-        if choice != "y":
+        choice = input("Decision [approve/deny/skip]: ").strip().lower()
+        if choice not in {"approve", "deny"}:
             print("Skipped.")
             continue
-
-        action = ProposedAction(
-            action_type=ActionType(entry["action_type"]),
-            target=entry["target"],
-            severity=ActionSeverity(entry["severity"]),
-            rationale=entry["rationale"],
-            confidence=entry["confidence"],
-        )
-        handler = ACTION_DISPATCH.get(action.action_type)
-        detail = handler(action.target) if handler else "No connector registered."
-
-        result = ActionResult(action=action, status="executed", detail=detail, dry_run=config.DRY_RUN)
-        record(result, campaign_id=entry["campaign_id"])
-        print(f"-> {detail}")
+        reviewer = input("Reviewer identity: ").strip()
+        note = input("Decision note (optional): ").strip()
+        try:
+            result = decide_pending_action(entry["action_id"], choice, reviewer, note)
+            print(f"-> {result['status']}: {result['detail']}")
+        except ApprovalError as exc:
+            print(f"Could not apply decision: {exc}")
 
 
 if __name__ == "__main__":

@@ -28,6 +28,7 @@ from datetime import datetime, timezone
 from graph.workflow import threat_intel_workflow
 from graph.state import new_investigation_state
 from connectors.wazuh_connector import WazuhConnector
+from actions.approval_service import ApprovalError, decide_pending_action, list_pending_actions
 import config
 
 # Configure logging
@@ -127,6 +128,19 @@ class ActionOnlyResponse(BaseModel):
     remote_push_url: str = ""
     remote_execution_result: Optional[Dict[str, Any]] = None
     remote_execution_error: str = ""
+    error: Optional[str] = None
+
+
+class ApprovalDecisionRequest(BaseModel):
+    """A human review decision for one pending response action."""
+    decision: str = Field(..., pattern="^(approve|deny)$")
+    reviewer: str = Field(..., min_length=1, max_length=200)
+    note: str = Field("", max_length=2000)
+
+
+class ApprovalDecisionResponse(BaseModel):
+    success: bool
+    action: Optional[Dict[str, Any]] = None
     error: Optional[str] = None
 
 
@@ -530,6 +544,35 @@ async def response_actions(request: ActionOnlyRequest):
             success=False,
             error=str(e)
         )
+
+
+@app.get("/response/pending-actions")
+async def get_pending_response_actions():
+    """List pending actions that still require a human reviewer decision."""
+    return {"actions": list_pending_actions()}
+
+
+@app.post(
+    "/response/pending-actions/{action_id}/decision",
+    response_model=ApprovalDecisionResponse,
+)
+async def decide_response_action(action_id: str, request: ApprovalDecisionRequest):
+    """Approve-and-execute or deny a single pending action.
+
+    The caller supplies a reviewer identity for the audit trail. Deployments
+    should place this endpoint behind their existing authenticated analyst UI
+    or API gateway so that the identity is trustworthy.
+    """
+    try:
+        action = decide_pending_action(
+            action_id=action_id,
+            decision=request.decision,
+            reviewer=request.reviewer,
+            note=request.note,
+        )
+        return ApprovalDecisionResponse(success=True, action=action)
+    except ApprovalError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
 @app.post("/attack/search", response_model=SearchResponse)

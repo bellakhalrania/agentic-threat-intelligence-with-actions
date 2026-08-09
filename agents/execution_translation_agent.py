@@ -45,7 +45,8 @@ class ExecutionTranslationAgent:
 
         Args:
             actions_taken: List of ActionResult dicts from the Response Agent.
-                Each must have a status of "executed" or "pending_approval"
+                Each must have a status of "executed". Pending actions remain
+                unavailable until a human reviewer approves them.
                 to be translated.
             platform: Target OS platform (linux, windows, macos).
 
@@ -70,8 +71,9 @@ class ExecutionTranslationAgent:
             print(f"  Processing action {idx}: {action.get('action_type')} "
                   f"(status: {status})")
 
-            # Only translate approved/pending actions
-            if status not in ("executed", "pending_approval"):
+            # Pending actions must not become executable artifacts before a
+            # human decision is recorded in the approval workflow.
+            if status != "executed":
                 print(f"    Skipping action {idx} (status: {status})")
                 continue
 
