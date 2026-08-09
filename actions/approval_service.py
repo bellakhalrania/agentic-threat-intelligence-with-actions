@@ -1,12 +1,12 @@
 """Deterministic human approval lifecycle for pending response actions."""
 
-import json
 from threading import Lock
 from typing import Any, Dict, List
 
 from actions import audit_log, policy
 from actions.action_models import ActionResult, ActionSeverity, ActionType, ProposedAction
-from actions.connectors import ACTION_DISPATCH
+from actions.approval_execution_service import execute_approved_action
+from actions.approval_notifications import notify_approval_outcome
 from config import config
 
 
@@ -55,11 +55,16 @@ def decide_pending_action(
         metadata = {"reviewer": reviewer, "decision": decision, "note": note.strip()}
 
         if decision == "deny":
+            detail = f"Denied by reviewer {reviewer}."
+            notification = notify_approval_outcome(
+                action, action_id, campaign_id, reviewer, "denied", detail
+            )
+            metadata["notification"] = notification
             result = ActionResult(
                 action_id=action_id,
                 action=action,
                 status="denied",
-                detail=f"Denied by reviewer {reviewer}.",
+                detail=detail,
                 dry_run=config.DRY_RUN,
             )
             return audit_log.record(result, campaign_id=campaign_id, metadata=metadata)
@@ -68,14 +73,18 @@ def decide_pending_action(
         # crafted or stale pending record. Other pending policy outcomes are the
         # explicit purpose of this human review step and may be approved.
         if action.target in policy.PROTECTED_TARGETS:
+            detail = "Target is protected and cannot be approved."
             result = ActionResult(
                 action_id=action_id,
                 action=action,
                 status="denied",
-                detail="Target is protected and cannot be approved.",
+                detail=detail,
                 dry_run=config.DRY_RUN,
             )
             metadata["decision"] = "denied_protected_target"
+            metadata["notification"] = notify_approval_outcome(
+                action, action_id, campaign_id, reviewer, "denied", detail
+            )
             return audit_log.record(result, campaign_id=campaign_id, metadata=metadata)
 
         approval_result = ActionResult(
@@ -87,24 +96,25 @@ def decide_pending_action(
         )
         audit_log.record(approval_result, campaign_id=campaign_id, metadata=metadata)
 
-        try:
-            raw_output = _dispatch(action)
-            detail, failed = _connector_detail(raw_output)
-            result = ActionResult(
-                action_id=action_id,
-                action=action,
-                status="failed" if failed else "executed",
-                detail=detail,
-                dry_run=config.DRY_RUN,
-            )
-        except Exception as exc:
-            result = ActionResult(
-                action_id=action_id,
-                action=action,
-                status="failed",
-                detail=str(exc),
-                dry_run=config.DRY_RUN,
-            )
+        execution = execute_approved_action(action, campaign_id)
+        notification = notify_approval_outcome(
+            action=action,
+            action_id=action_id,
+            campaign_id=campaign_id,
+            reviewer=reviewer,
+            decision=execution["status"],
+            detail=execution["detail"],
+            remote_metadata=execution.get("metadata", {}),
+        )
+        metadata.update(execution.get("metadata", {}))
+        metadata["notification"] = notification
+        result = ActionResult(
+            action_id=action_id,
+            action=action,
+            status=execution["status"],
+            detail=execution["detail"],
+            dry_run=config.DRY_RUN,
+        )
         return audit_log.record(result, campaign_id=campaign_id, metadata=metadata)
 
 
@@ -120,23 +130,3 @@ def _to_proposed_action(entry: Dict[str, Any]) -> ProposedAction:
         )
     except (KeyError, TypeError, ValueError) as exc:
         raise ApprovalError(f"stored action is invalid: {exc}") from exc
-
-
-def _dispatch(action: ProposedAction) -> str:
-    handler = ACTION_DISPATCH.get(action.action_type)
-    if handler is None:
-        raise ApprovalError("no connector is registered for this action")
-    if action.action_type == ActionType.NOTIFY_ANALYST:
-        return handler(
-            f"Notify target: {action.target} | Technique: {action.technique_id or 'N/A'} | "
-            f"Confidence: {action.confidence:.2f} | Rationale: {action.rationale}"
-        )
-    return handler(action.target)
-
-
-def _connector_detail(raw_output: str) -> tuple[str, bool]:
-    try:
-        parsed = json.loads(raw_output)
-    except (TypeError, json.JSONDecodeError):
-        return str(raw_output), False
-    return parsed.get("detail", raw_output), parsed.get("status") == "failed"

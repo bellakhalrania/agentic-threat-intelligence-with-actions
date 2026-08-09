@@ -5,6 +5,7 @@ import pytest
 from actions import audit_log
 from actions.action_models import ActionResult, ActionSeverity, ActionType, ProposedAction
 from actions.approval_service import ApprovalError, decide_pending_action, list_pending_actions
+import actions.approval_service as approval_service
 from agents.execution_translation_agent import ExecutionTranslationAgent
 
 
@@ -38,45 +39,50 @@ def _pending_action() -> ActionResult:
     )
 
 
-def test_approval_executes_once_and_resolves_pending_action(monkeypatch):
+def test_approval_pushes_remotely_once_and_resolves_pending_action(monkeypatch):
     pending = _pending_action()
     audit_log.record(pending, campaign_id="campaign-1")
 
-    monkeypatch.setitem(
-        __import__("actions.approval_service", fromlist=["ACTION_DISPATCH"]).ACTION_DISPATCH,
-        ActionType.BLOCK_IP,
-        lambda target: '{"status":"simulated","detail":"would block ' + target + '"}',
+    monkeypatch.setattr(
+        approval_service,
+        "execute_approved_action",
+        lambda action, campaign_id: {
+            "status": "executed_remote",
+            "detail": "Remote script completed successfully (execution_id=remote-1).",
+            "metadata": {"remote_execution_id": "remote-1", "remote_status": "completed", "remote_exit_code": 0},
+        },
     )
+    monkeypatch.setattr(approval_service, "notify_approval_outcome", lambda *args, **kwargs: {"sent": True, "status": "simulated"})
 
     result = decide_pending_action(pending.action_id, "approve", "analyst@example.test", "Verified alert")
 
-    assert result["status"] == "executed"
+    assert result["status"] == "executed_remote"
     assert result["action_id"] == pending.action_id
-    assert result["approval"] == {
-        "reviewer": "analyst@example.test",
-        "decision": "approve",
-        "note": "Verified alert",
-    }
+    assert result["approval"]["reviewer"] == "analyst@example.test"
+    assert result["approval"]["decision"] == "approve"
+    assert result["approval"]["note"] == "Verified alert"
     assert list_pending_actions() == []
-    assert audit_log.get_latest_action(pending.action_id)["status"] == "executed"
+    assert result["approval"]["remote_execution_id"] == "remote-1"
+    assert result["approval"]["notification"]["sent"] is True
+    assert audit_log.get_latest_action(pending.action_id)["status"] == "executed_remote"
 
     with pytest.raises(ApprovalError, match="already been decided"):
         decide_pending_action(pending.action_id, "approve", "second@example.test")
 
 
-def test_denial_is_audited_and_does_not_call_connector(monkeypatch):
+def test_denial_is_audited_and_emails_the_analyst(monkeypatch):
     pending = _pending_action()
     audit_log.record(pending, campaign_id="campaign-1")
-    monkeypatch.setitem(
-        __import__("actions.approval_service", fromlist=["ACTION_DISPATCH"]).ACTION_DISPATCH,
-        ActionType.BLOCK_IP,
-        lambda _: pytest.fail("denied action must not execute"),
-    )
+    sent = []
+    monkeypatch.setattr(approval_service, "execute_approved_action", lambda *_: pytest.fail("denied action must not execute"))
+    monkeypatch.setattr(approval_service, "notify_approval_outcome", lambda *args, **kwargs: sent.append(args) or {"sent": True, "status": "simulated"})
 
     result = decide_pending_action(pending.action_id, "deny", "analyst@example.test", "False positive")
 
     assert result["status"] == "denied"
     assert result["approval"]["decision"] == "deny"
+    assert result["approval"]["notification"]["sent"] is True
+    assert sent
     assert list_pending_actions() == []
 
 

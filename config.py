@@ -103,6 +103,8 @@ class Config:
     REMOTE_AGENT_ENABLED = os.getenv("REMOTE_AGENT_ENABLED", "false").lower() == "true"
     # Timeout (seconds) for remote script execution.
     REMOTE_AGENT_TIMEOUT = int(os.getenv("REMOTE_AGENT_TIMEOUT", "3600"))
+    # Target platform used when an analyst approves one action for remote execution.
+    APPROVAL_REMOTE_PLATFORM = os.getenv("APPROVAL_REMOTE_PLATFORM", "linux")
     # If true, allow pushing pending_approval actions remotely (unsafe).
     # Keep false in safe-mode lab/testing to avoid accidental disruptive actions.
     REMOTE_ALLOW_PENDING_EXECUTION = os.getenv("REMOTE_ALLOW_PENDING_EXECUTION", "false").lower() == "true"
