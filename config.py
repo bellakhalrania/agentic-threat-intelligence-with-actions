@@ -136,6 +136,13 @@ class Config:
         for item in os.getenv("PROTECTED_MANAGEMENT_IPS", "").split(",")
         if item.strip()
     ]
+    # Protected target hostnames (e.g. control nodes) that must never be treated
+    # as malicious IOCs, isolated, or otherwise acted against.
+    PROTECTED_TARGET_HOSTS = [
+        item.strip().lower()
+        for item in os.getenv("PROTECTED_TARGET_HOSTS", "").split(",")
+        if item.strip()
+    ]
     REMOTE_AGENT_PORT = int(os.getenv("REMOTE_AGENT_PORT", "9001"))
 
     @classmethod
@@ -197,3 +204,28 @@ def get_protected_management_ips() -> set[str]:
             candidates.add(first_token)
 
     return {ip for ip in candidates if ip and not ip.startswith("$")}
+
+
+def is_protected_target(value: str) -> bool:
+    """Return True if the value matches a protected management IP or a protected target hostname.
+
+    Matches exact IPs from the protected management set, as well as configured
+    protected hostnames case-insensitively. Subdomains of a protected hostname
+    (e.g. "worker-1.control-node1") are also treated as protected so they cannot
+    be used to bypass the guardrail.
+    """
+    if not value:
+        return False
+    value = value.strip()
+    if not value:
+        return False
+
+    if value in get_protected_management_ips():
+        return True
+
+    hostname = value.lower()
+    protected_hosts = getattr(config, "PROTECTED_TARGET_HOSTS", [])
+    for protected in protected_hosts:
+        if hostname == protected or hostname.endswith("." + protected):
+            return True
+    return False
