@@ -5,7 +5,7 @@ from typing import Any, Dict
 from actions.action_models import ProposedAction
 from actions.remote_push import RemotePushError, push_script_to_remote, verify_remote_connection
 from agents.execution_translation_agent import ExecutionTranslationAgent
-from config import config
+from config import config, get_protected_management_ips
 
 
 def execute_approved_action(
@@ -30,6 +30,19 @@ def execute_approved_action(
             "detail": "Remote execution URL is not configured.",
             "metadata": {},
         }
+
+    if action.action_type == "block_ip":
+        protected_ips = get_protected_management_ips()
+        if action.target in protected_ips:
+            return {
+                "status": "denied",
+                "detail": f"Rejected: target {action.target} matches a protected management/SSH IP.",
+                "metadata": {
+                    "platform": config.APPROVAL_REMOTE_PLATFORM,
+                    "protected_target": True,
+                    "protected_ips": sorted(protected_ips),
+                },
+            }
 
     platform = config.APPROVAL_REMOTE_PLATFORM
     translation = ExecutionTranslationAgent().run(

@@ -27,6 +27,7 @@ def decide_pending_action(
     decision: str,
     reviewer: str,
     note: str = "",
+    send_notification: bool = True,
 ) -> Dict[str, Any]:
     """Approve-and-execute or deny one pending action exactly once.
 
@@ -56,10 +57,12 @@ def decide_pending_action(
 
         if decision == "deny":
             detail = f"Denied by reviewer {reviewer}."
-            notification = notify_approval_outcome(
-                action, action_id, campaign_id, reviewer, "denied", detail
-            )
-            metadata["notification"] = notification
+            notification = None
+            if send_notification:
+                notification = notify_approval_outcome(
+                    action, action_id, campaign_id, reviewer, "denied", detail
+                )
+            metadata["notification"] = notification or {"sent": False, "status": "suppressed", "detail": "notification suppressed"}
             result = ActionResult(
                 action_id=action_id,
                 action=action,
@@ -82,9 +85,12 @@ def decide_pending_action(
                 dry_run=config.DRY_RUN,
             )
             metadata["decision"] = "denied_protected_target"
-            metadata["notification"] = notify_approval_outcome(
-                action, action_id, campaign_id, reviewer, "denied", detail
-            )
+            if send_notification:
+                metadata["notification"] = notify_approval_outcome(
+                    action, action_id, campaign_id, reviewer, "denied", detail
+                )
+            else:
+                metadata["notification"] = {"sent": False, "status": "suppressed", "detail": "notification suppressed"}
             return audit_log.record(result, campaign_id=campaign_id, metadata=metadata)
 
         approval_result = ActionResult(
@@ -97,17 +103,19 @@ def decide_pending_action(
         audit_log.record(approval_result, campaign_id=campaign_id, metadata=metadata)
 
         execution = execute_approved_action(action, campaign_id)
-        notification = notify_approval_outcome(
-            action=action,
-            action_id=action_id,
-            campaign_id=campaign_id,
-            reviewer=reviewer,
-            decision=execution["status"],
-            detail=execution["detail"],
-            remote_metadata=execution.get("metadata", {}),
-        )
+        notification = None
+        if send_notification:
+            notification = notify_approval_outcome(
+                action=action,
+                action_id=action_id,
+                campaign_id=campaign_id,
+                reviewer=reviewer,
+                decision=execution["status"],
+                detail=execution["detail"],
+                remote_metadata=execution.get("metadata", {}),
+            )
         metadata.update(execution.get("metadata", {}))
-        metadata["notification"] = notification
+        metadata["notification"] = notification or {"sent": False, "status": "suppressed", "detail": "notification suppressed"}
         result = ActionResult(
             action_id=action_id,
             action=action,

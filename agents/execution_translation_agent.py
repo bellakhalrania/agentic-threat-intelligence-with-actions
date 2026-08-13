@@ -19,6 +19,7 @@ Output:
 
 from typing import List, Dict, Any, Optional
 from actions.action_models import ProposedAction
+from config import config
 
 
 class ExecutionTranslationAgent:
@@ -466,41 +467,56 @@ class ExecutionTranslationAgent:
             ]
         else:
             # Linux / macOS / cross-platform via bash
+            management_source_ip = (config.REMOTE_MANAGER_IP or "").strip()
+            management_port = str(getattr(config, "REMOTE_AGENT_PORT", "9001"))
             script = (
                 f"#!/bin/bash\n"
-                f"# Block IP {target}\n"
+                f"set -euo pipefail\n"
+                f"# Block only IP {target} without altering global firewall policy\n"
+                f"target_ip='{target}'\n"
+                f"management_source_ip='{management_source_ip}'\n"
+                f"if [ -z \"$management_source_ip\" ] && [ -n \"${{SSH_CLIENT:-}}\" ]; then\n"
+                f"    management_source_ip=$(printf '%s\n' \"$SSH_CLIENT\" | awk '{{print $1}}')\n"
+                f"fi\n"
+                f"if [ -n \"$management_source_ip\" ] && [ \"$target_ip\" = \"$management_source_ip\" ]; then\n"
+                f"    echo 'REJECTED: target_ip matches management_source_ip' >&2\n"
+                f"    exit 2\n"
+                f"fi\n"
                 f"if command -v nft &> /dev/null; then\n"
-                f"    nft add rule inet filter input ip saddr {target} drop\n"
-                f"    nft add rule inet filter output ip daddr {target} drop\n"
+                f"    nft add rule inet filter input ip saddr \"$target_ip\" drop 2>/dev/null || true\n"
+                f"    nft add rule inet filter output ip daddr \"$target_ip\" drop 2>/dev/null || true\n"
                 f"elif command -v iptables &> /dev/null; then\n"
-                f"    iptables -A INPUT -s {target} -j DROP 2>/dev/null\n"
-                f"    iptables -A OUTPUT -d {target} -j DROP 2>/dev/null\n"
+                f"    iptables -C INPUT -s \"$target_ip\" -j DROP 2>/dev/null || iptables -I INPUT -s \"$target_ip\" -j DROP\n"
+                f"    iptables -C OUTPUT -d \"$target_ip\" -j DROP 2>/dev/null || iptables -I OUTPUT -d \"$target_ip\" -j DROP\n"
                 f"else\n"
                 f"    echo 'ERROR: Neither nft nor iptables found' >&2\n"
                 f"    exit 1\n"
                 f"fi\n"
-                f"echo 'Blocked IP {target}'"
+                f"if command -v nft &> /dev/null; then\n"
+                f"    nft list ruleset 2>/dev/null | grep -F \"ip saddr $target_ip drop\" >/dev/null 2>&1 || {{ echo 'ERROR: Firewall rule not installed' >&2; exit 1; }}\n"
+                f"elif command -v iptables &> /dev/null; then\n"
+                f"    iptables -C INPUT -s \"$target_ip\" -j DROP 2>/dev/null && iptables -C OUTPUT -d \"$target_ip\" -j DROP 2>/dev/null || {{ echo 'ERROR: Firewall rule not installed' >&2; exit 1; }}\n"
+                f"fi\n"
+                f"echo 'Blocked IP {target}'\n"
             )
             filename = f"block_ip_{target}.sh"
             admin_required = True
-            expected = f"Block all inbound and outbound traffic to/from IP {target}"
+            expected = f"Block only inbound and outbound traffic to/from IP {target} without altering global firewall policy"
             rollback = (
                 f"# Rollback\n"
                 f"if command -v nft &> /dev/null; then\n"
                 f"    nft delete rule inet filter input handle $(nft -a list ruleset 2>/dev/null | "
-                f"grep '{target}' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\n"
+                f"grep '{target}' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1) 2>/dev/null || true\n"
                 f"    nft delete rule inet filter output handle $(nft -a list ruleset 2>/dev/null | "
-                f"grep '{target}' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1)\n"
+                f"grep '{target}' | grep -o 'handle [0-9]*' | cut -d' ' -f2 | tail -1) 2>/dev/null || true\n"
                 f"elif command -v iptables &> /dev/null; then\n"
                 f"    iptables -D INPUT -s {target} -j DROP 2>/dev/null || true\n"
                 f"    iptables -D OUTPUT -d {target} -j DROP 2>/dev/null || true\n"
                 f"fi"
             )
             verification = [
-                f"iptables -L INPUT -n 2>/dev/null | grep '{target}' || "
+                f"iptables -C INPUT -s '{target}' -j DROP 2>/dev/null || "
                 f"nft list ruleset 2>/dev/null | grep '{target}'",
-                f"ping -c 1 -W 2 {target} 2>&1 | grep -q '100% packet loss' && "
-                f"echo 'BLOCKED'",
             ]
 
         return {

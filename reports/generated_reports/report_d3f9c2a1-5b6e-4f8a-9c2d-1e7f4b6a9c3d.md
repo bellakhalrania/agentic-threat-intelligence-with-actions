@@ -2,74 +2,108 @@
 
 **Campaign:** Unclassified Activity
 **Campaign ID:** d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d
-**Generated:** 2026-08-02T17:59:29.766716+00:00
+**Generated:** 2026-08-11T08:44:49.070135+00:00
 
 ---
 
 **Threat Intelligence Report**  
-*Investigation ID: d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d*  
-*Date: 2026‑08‑02*  
+*Campaign ID:* `d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d`  
+*Report Date:* 2026‑08‑11  
 
 ---  
 
 ## Executive Summary
-During a short window on 2026‑08‑02, the host **ip‑172‑31‑19‑70** exhibited a series of privileged‑access events. An attacker used valid credentials (technique **T1078 – Valid Accounts**) to obtain root via `sudo`, then repeatedly executed `iptables` commands to set the **INPUT**, **OUTPUT**, and **FORWARD** policies to **ACCEPT** and finally flushed all firewall rules. The activity is internal to the host; the only external IOC (`100.120.11.97`) is marked **benign**, and the domain `wazuh.manager` has an **unknown** reputation. No external malicious IPs were observed.
+- On 2026‑08‑11 the victim host received **two failed SSH password attempts** for the `root` account from the **malicious IP 47.113.113.162**.  
+- Shortly thereafter a **successful SSH login** was observed for the user `ubuntu` from the **benign IP 102.28.108.32** using a valid public‑key.  
+- The activity maps to the following ATT&CK techniques: **T1110.001 (Password Guessing)**, **T1021.004 (SSH)**, **T1078 (Valid Accounts)** and **T1021 (Remote Services)**.  
+- No additional malicious file creation or process execution was observed beyond the normal system‑health events.  
 
-## Timeline
-| Time (UTC) | Event ID | Description |
-|------------|----------|-------------|
-| 2026‑08‑02T17:50:33.567 | 6b6453eb-12b1-4f92-9316-b6a021d0eb1d | `sudo` executed `docker logs --tail 120 remote-response-agent` (root command). |
-| 2026‑08‑02T17:50:33.581 | 0e1e5c85-79b1-406a-8a6e-ecadca60af72 | Authentication success – session opened for **root** by user **ubuntu** (Valid Accounts). |
-| 2026‑08‑02T17:50:33.636 | 03bb23a0-3fe8-422d-ae52-a47933bc0b26 | Session closed for **root** (sudo caching). |
-| 2026‑08‑02T17:51:23.650 | e4d18d5c-502d-4228-a62f-69472804a78e | `iptables -P INPUT ACCEPT` – firewall INPUT chain set to ACCEPT. |
-| 2026‑08‑02T17:51:23.752 | c4d279bb-e871-42cb-a1f9-12264e6dff22 | Session closed for **root** (sudo caching). |
-| 2026‑08‑02T17:51:45.578 | 6ada7986-82cb-4502-9803-582947e44d23 | `iptables -P OUTPUT ACCEPT` – firewall OUTPUT chain set to ACCEPT. |
-| 2026‑08‑02T17:51:45.672 | 45bdcff5-0b0d-4c1d-9001-7f185491e148 | Authentication success – another root session opened. |
-| 2026‑08‑02T17:51:53.624 | 3435c2f1-b9bb-420d-9fef-28c23f327e4f | `iptables -P FORWARD ACCEPT` – firewall FORWARD chain set to ACCEPT. |
-| 2026‑08‑02T17:51:53.811 | 0665b449-0ee6-4d3f-b002-046b2c515c40 | Session closed for **root** (sudo caching). |
-| 2026‑08‑02T17:52:03.577 | 5c3e3a41-7e4c-4303-96be-0d99e12b9ed5 | `iptables -F` – all firewall rules flushed. |
-| 2026‑08‑02T17:52:03.630 | 0955a1ac-28b7-46ae-8e97-3510b2f2047e | Final root session closed. |
+---  
+
+## Timeline  
+
+| Timestamp (UTC) | Event ID | Description |
+|-----------------|----------|-------------|
+| 2026‑08‑11T08:42:23 | `7f768cbb-b804-47b6-8cd3-42f45f2e9887` | Failed SSH password authentication for `root` from **47.113.113.162** (Password Guessing – T1110.001). |
+| 2026‑08‑11T08:42:25 | `276122e7-763b-4250-9004-f16724311470` | Second failed SSH password attempt for `root` from **47.113.113.162** (Password Guessing – T1110.001, SSH – T1021.004). |
+| 2026‑08‑11T08:42:47 | `3056a917-bb52-4d48-9f6b-6d17e3d81caf` | Successful SSH login for user `ubuntu` from **102.28.108.32** using a public‑key (Valid Accounts – T1078, Remote Services – T1021). |
+| 2026‑08‑11T08:42:47 | `b26a2f07-87ec-40b8-83b5-9a4c549c7d9d` | Session opened for `ubuntu` (continuation of Valid Accounts activity). |
+| 2026‑08‑11T05:48:55.819 | `24ae68da-80e4-4149-9a8e-11b9082bb010` | File `/etc/systemd/system/snapd.mounts.target.wants/snap-snapd-27591.mount` added (scheduled). |
+| 2026‑08‑11T05:48:55.852 | `01ab4477-cbd0-4850-974b-c2a22accdd32` | File `/etc/systemd/system/snap-snapd-27591.mount` added (scheduled). |
+| 2026‑08‑11T08:15:33.952 | `c585ecbf-a0e9-4b3e-944c-cf6f57c408ac` | Wazuh manager started (system health event). |
+
+---  
 
 ## Indicators of Compromise (IOCs)
-| Type | Value | Reputation | Source | Tags |
-|------|-------|------------|--------|------|
-| IP | 100.120.11.97 | benign | AbuseIPDB | non_public, reserved |
-| Domain | wazuh.manager | unknown | – | – |
+
+| IOC Type | Value | Reputation | Source | Tags |
+|----------|-------|------------|--------|------|
+| IP | `47.113.113.162` | malicious | AbuseIPDB | country:CN, data_center/web_hosting/transit, domain:alibabacloud.com, isp:Aliyun Computing Co., LTD |
+| IP | `102.28.108.32` | benign | AbuseIPDB | country:TN, domain:tunisietelecom.tn, fixed_line_isp, isp:SOCIETE NATIONALE DES TELECOMMUNICATIONS (Tunisie Telecom) |
+| IP | `100.90.153.71` | benign | AbuseIPDB | non_public, reserved |
+| Hash | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` | unknown | – | – |
+| Hash | `da39a3ee5e6b4b0d3255bfef95601890afd80709` | unknown | – | – |
+| Hash | `d41d8cd98f00b204e9800998ecf8427e` | unknown | – | – |
+| Hash | `1c18b233045f56e0300f00659417b869c5550a7fa96340300a869a5c79aaebb4` | unknown | – | – |
+| Hash | `f1bd644bec2bb0f4ae297bb9d9719699970e844d` | unknown | – | – |
+| Hash | `6ca583aa6b398d6a1de1ab2fca9ee542` | unknown | – | – |
+| Domain | `snapd.mounts.target.wants` | unknown | – | – |
+| Domain | `snap-snapd-27591.mount` | unknown | – | – |
+| Domain | `wazuh.manager` | unknown | – | – |
+
+---  
 
 ## ATT&CK Techniques (Observed)
-| Technique ID | Technique Name | Confidence (average) | Evidence Event IDs |
-|--------------|----------------|----------------------|--------------------|
-| **T1548.003** | Sudo and Sudo Caching | 0.91* | 6b6453eb, e4d18d5c, 6ada7986, 3435c2f1, 5c3e3a41, 0955a1ac, 03bb23a0, c4d279bb, 0665b449 |
-| **T1078** | Valid Accounts | 1.0 | 0e1e5c85, 45bdcff5 |
 
-\*Average confidence calculated from the nine mappings (values 1.0, 0.78, 1.0, 0.72, 1.0, 0.65, 1.0, 0.82) → **0.91**.
+| Technique ID | Technique Name | Confidence |
+|--------------|----------------|------------|
+| T1110.001 | Password Guessing | 1.0 |
+| T1021.004 | SSH | 1.0 |
+| T1078 | Valid Accounts | 1.0 |
+| T1021 | Remote Services | 1.0 |
+
+---  
 
 ## Campaign Assessment
-The activity aligns with the **“Unclassified Activity”** campaign description: an adversary leveraged legitimate credentials (user *ubuntu*) to obtain root via `sudo` (T1078) and then used sudo to modify the host’s firewall configuration (T1548.003). The sequence of `iptables` policy changes and a final rule flush effectively disables host‑based network filtering, exposing the system to lateral movement and data exfiltration. No external malicious IPs or domains were involved; the behavior appears to be **internal** to the compromised host.
+The adversary’s objective was to **obtain unauthorized remote access via SSH**. Initial activity consisted of **password‑guessing attempts** against the `root` account from a known malicious IP (47.113.113.162). After two failures, the attacker succeeded in establishing a **valid SSH session** using a public‑key for the `ubuntu` account from a benign‑looking IP (102.28.108.32). The transition from brute‑force probing to a legitimate‑looking key‑based login indicates a **two‑stage approach**: reconnaissance/brute‑force followed by exploitation of a valid credential (or key) to gain persistence. No further post‑compromise actions (e.g., credential dumping, tool transfer) were observed in the current data set.
 
-## Predicted Next Steps (Probabilistic Forecast)
+---  
+
+## Predicted Next Steps (Forecast)
+
 | Technique ID | Technique Name | Rationale |
 |--------------|----------------|-----------|
-| **T1098** | Account Manipulation | Having gained persistent root access and disabled the firewall, the adversary is likely to create or modify accounts to maintain long‑term access and broaden privileges. |
+| T1003 | OS Credential Dumping | After obtaining a valid SSH session, attackers often dump credentials to expand foothold. |
+| T1059.001 | PowerShell | Remote access is frequently leveraged to run PowerShell for command execution or downloading tools. |
+| T1105 | Ingress Tool Transfer | Attackers may transfer additional payloads to the compromised host. |
+| T1547 | Boot or Logon Autostart Execution | Persistence mechanisms such as systemd services are a common follow‑up. |
+| T1098 | Account Manipulation | Creation or modification of accounts to ensure continued access. |
 
-*Only technique IDs from the prediction block are listed here; they are not confirmed observations.*
+*These techniques are probabilistic forecasts based on the observed sequence and are **not** confirmed in the current evidence.*
+
+---  
 
 ## Recommendations
 | Recommendation | Related ATT&CK Technique(s) |
 |----------------|-----------------------------|
-| Enforce **least‑privilege** policies: restrict `sudo` rights to only required commands and users. | T1078, T1548.003 |
-| Deploy **sudo logging and alerting** (e.g., real‑time monitoring of `sudo` events) to detect abnormal usage. | T1078, T1548.003 |
-| Implement **iptables change monitoring** (e.g., auditd rules, configuration management) and generate alerts on policy modifications. | T1548.003 |
-| Conduct a **post‑incident account audit**: verify that no new privileged accounts were created and that existing accounts have not been altered. | T1078 |
-| Apply **host‑based firewall hardening**: set default DROP policies and use immutable firewall rules where possible. | T1548.003 |
-| Review **container logs** accessed via the initial `docker logs` command for signs of data exfiltration or further malicious activity. | – |
-| Ensure **regular backups** of firewall configurations and system state to enable rapid restoration after unauthorized changes. | – |
+| Enforce strong, complex passwords for all local and remote accounts. | T1110.001 |
+| Implement account lockout or rate‑limiting after a small number of failed SSH attempts. | T1110.001 |
+| Deploy SSH key‑based authentication only and disable password authentication where possible. | T1021.004 |
+| Restrict SSH access to a limited set of trusted source IPs (e.g., via firewall or security groups). | T1021.004 |
+| Monitor and alert on repeated authentication failures for privileged accounts. | T1110.001 |
+| Regularly review authorized SSH keys and remove any that are unnecessary or unknown. | T1078 |
+| Apply host‑based intrusion detection rules to detect anomalous remote service usage. | T1021 |
+| Conduct periodic audits of user accounts for unexpected privilege escalations. | T1078 |
+| Ensure systemd service directories are monitored for unauthorized additions. | T1021 |
 
-## Response Actions
+---  
+
+## Response Actions  
+
 | Action Type | Target | Status | Severity | Rationale |
 |-------------|--------|--------|----------|-----------|
 | *No response actions recorded in the provided evidence.* | – | – | – | – |
 
 ---  
 
-*All statements in this report are derived directly from the supplied evidence. No additional data or assumptions have been introduced.*
+*All statements in this report are derived exclusively from the supplied evidence. No additional data or assumptions have been introduced.*

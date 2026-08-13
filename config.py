@@ -6,9 +6,26 @@ never live in source control.
 """
 
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+ROOT_DIR = Path(__file__).resolve().parent
+load_dotenv(dotenv_path=ROOT_DIR / ".env", override=False)
+load_dotenv(dotenv_path=ROOT_DIR / "remote_agent" / ".env", override=False)
+
+
+def _read_env_file(path: str) -> dict[str, str]:
+    values: dict[str, str] = {}
+    env_path = Path(path)
+    if not env_path.exists():
+        return values
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        key, value = stripped.split("=", 1)
+        values[key.strip()] = value.strip().strip('"').strip("'")
+    return values
 
 
 class Config:
@@ -111,6 +128,15 @@ class Config:
     # HMAC-SHA256 shared secret for payload signing.
     # Must be the same on Machine 1 and Machine 2.
     REMOTE_AGENT_HMAC_SECRET = os.getenv("REMOTE_AGENT_HMAC_SECRET", "")
+    # Management source IP that should never be blocked by response actions.
+    REMOTE_MANAGER_IP = os.getenv("REMOTE_MANAGER_IP", "")
+    MANAGEMENT_SOURCE_IP = os.getenv("MANAGEMENT_SOURCE_IP", "")
+    PROTECTED_MANAGEMENT_IPS = [
+        item.strip()
+        for item in os.getenv("PROTECTED_MANAGEMENT_IPS", "").split(",")
+        if item.strip()
+    ]
+    REMOTE_AGENT_PORT = int(os.getenv("REMOTE_AGENT_PORT", "9001"))
 
     @classmethod
     def validate(cls):
@@ -125,3 +151,49 @@ class Config:
 
 
 config = Config()
+
+
+def get_protected_management_ips() -> set[str]:
+    """Return protected management/SSH IPs derived from config, env files, and the current SSH context."""
+    candidates: set[str] = set()
+
+    for key in ("REMOTE_MANAGER_IP", "REMOTE_AGENT_NODE_IP", "MANAGEMENT_SOURCE_IP"):
+        value = os.getenv(key, "")
+        if value:
+            candidates.add(value.strip())
+
+    for key in ("REMOTE_MANAGER_IP", "REMOTE_AGENT_NODE_IP", "MANAGEMENT_SOURCE_IP"):
+        value = getattr(config, key, "") if "config" in globals() else ""
+        if isinstance(value, str) and value:
+            candidates.add(value.strip())
+
+    for item in getattr(config, "PROTECTED_MANAGEMENT_IPS", []) if "config" in globals() else []:
+        if item:
+            candidates.add(item.strip())
+
+    remote_agent_env = _read_env_file(ROOT_DIR / "remote_agent" / ".env")
+    for key in ("REMOTE_MANAGER_IP", "REMOTE_AGENT_NODE_IP", "MANAGEMENT_SOURCE_IP"):
+        value = remote_agent_env.get(key, "")
+        if value:
+            candidates.add(value.strip())
+
+    protected_env = os.getenv("PROTECTED_MANAGEMENT_IPS", "")
+    if protected_env:
+        for item in protected_env.split(","):
+            item = item.strip()
+            if item:
+                candidates.add(item)
+
+    ssh_client = os.getenv("SSH_CLIENT", "")
+    if ssh_client:
+        first_token = ssh_client.split()[0].strip()
+        if first_token:
+            candidates.add(first_token)
+
+    ssh_connection = os.getenv("SSH_CONNECTION", "")
+    if ssh_connection:
+        first_token = ssh_connection.split()[0].strip()
+        if first_token:
+            candidates.add(first_token)
+
+    return {ip for ip in candidates if ip and not ip.startswith("$")}

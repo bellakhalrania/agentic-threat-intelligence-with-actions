@@ -2,94 +2,100 @@
 
 **Campaign:** Unclassified Activity
 **Campaign ID:** a3f5c9e2-7b4d-4f1a-9c2e-6d8f3b1a2c7d
-**Generated:** 2026-07-27T13:15:00.389033+00:00
+**Generated:** 2026-08-10T19:01:44.592121+00:00
 
 ---
 
 **Threat Intelligence Report**  
 *Campaign ID:* `a3f5c9e2-7b4d-4f1a-9c2e-6d8f3b1a2c7d`  
-*Report Date:* 2026‑07‑27  
+*Report Date:* 2026‑08‑10  
 
 ---  
 
 ## Executive Summary
-- **Possible SSH Brute Force Attack (T1110)** was observed against **SERVER‑01**.  
-- Three consecutive failed SSH authentication attempts for the **root** account originated from **IP 203.0.113.50**, followed by a successful login from the same source.  
-- The source IP is flagged as **suspicious** (AbuseIPDB) with a reputation tag of *non_public / reserved*.  
-- No high‑confidence IOCs were identified beyond the suspicious IP.  
-- A **notify‑analyst** action has been queued (pending approval).  
+A rapid series of SSH login attempts targeting the non‑existent user **“debian”** was observed on host **victim‑machine**. All attempts originated from source IP **59.185.230.105** and were logged as “Invalid user” and “Failed password” events, indicating a credential‑guessing (brute‑force) campaign against the SSH service. The activity maps to ATT&CK techniques **T1110.001 (Password Guessing)**, **T1021.004 (SSH)** and the generic **T1110 (Brute Force)**. No successful authentication was recorded.
 
 ---  
 
-## Timeline
-| Time (UTC) | Event ID | Description |
-|------------|----------|-------------|
-| 2026‑07‑20 09:00:00 | `1c715bab-dd74-48ee-a9f9-e50248ef0b34` | SSH authentication **failed** for user *root* from 203.0.113.50 |
-| 2026‑07‑20 09:00:03 | `e9d57a2d-a8f6-4b84-94ff-11b9e9a27757` | SSH authentication **failed** for user *root* from 203.0.113.50 |
-| 2026‑07‑20 09:00:06 | `0cc5fc71-b28f-4cda-a099-dd5bf3d68c34` | SSH authentication **failed** for user *root* from 203.0.113.50 |
-| 2026‑07‑20 09:00:10 | `0f373578-c28e-4cf9-ab8b-9de2af88dafb` | SSH authentication **succeeded** for user *root* from 203.0.113.50 |
+## Timeline  
+
+| Timestamp (UTC) | Event ID | Description |
+|-----------------|----------|-------------|
+| 2023‑08‑10T18:02:12Z | ee23062c-54e4-407a-b676-fd459dea778f | Failed password for invalid user “debian” from 59.185.230.105 (port 53203). |
+| 2023‑08‑10T18:02:14Z | c3086206-81cd-45f5-b1be-7f9c56843b43 | Invalid user “debian” from 59.185.230.105 (port 2944). |
+| 2023‑08‑10T18:02:16Z | bd7f75b3-2297-43ce-afcf-0d19b7ac4474 | Failed password for invalid user “debian” from 59.185.230.105 (port 2944). |
+| 2023‑08‑10T18:02:21Z | 1d48051d-f2df-43f1-99fa-7435909d12fd | Failed password for invalid user “debian” from 59.185.230.105 (port 57586). |
+| 2023‑08‑10T18:02:25Z | 831121cf-702a-450a-9a4a-98135b4ef750 | Failed password for invalid user “debian” from 59.185.230.105 (port 13426). |
+| 2023‑08‑10T18:02:31Z | 7d4cf211-ed30-4243-8387-39b0d4c4b92b | Failed password for invalid user “debian” from 59.185.230.105 (port 15979). |
+| 2023‑08‑10T18:02:37Z | 8799a848-46cc-421d-ba26-ac136ec21c79 | Failed password for invalid user “debian” from 59.185.230.105 (port 18824). |
+| 2023‑08‑10T18:02:45Z | f355965c-9e1d-4a06-9075-ca02b4250675 | Failed password for invalid user “debian” from 59.185.230.105 (port 17372). |
+| 2023‑08‑10T18:02:49Z | f08ccd17-475c-4e74-bbad-efd01ad392bc | Failed password for invalid user “debian” from 59.185.230.105 (port 52683). |
+| 2023‑08‑10T18:02:53Z | b76df4a1-70da-4928-adb4-96ae0b2c040a | Wazuh rule 5712 triggered on failed password (port 6143). |
+| 2023‑08‑10T18:03:01Z | d7425d9b-bb75-4a82-b665-69b3feeafced | Failed password for invalid user “debian” from 59.185.230.105 (port 56838). |
+| 2023‑08‑10T18:03:06Z | 3e5cea6c-5a46-4a47-a009-d10ad51b3f20 | Failed password for invalid user “debian” from 59.185.230.105 (port 42114). |
+| 2026‑08‑10T18:02:13.053Z | ee23062c-54e4-407a-b676-fd459dea778f | Same as above (event re‑ingested with 2026 timestamp). |
+| 2026‑08‑10T18:02:15.279Z | c3086206-81cd-45f5-b1be-7f9c56843b43 | Same as above (re‑ingested). |
+| 2026‑08‑10T18:02:17.418Z | d51b1a29-a652-4aa6-81f2-996622f68005 | PAM authentication failure – multiple failed logins in short period (T1110). |
+| 2026‑08‑10T18:02:18.892Z | bd7f75b3-2297-43ce-afcf-0d19b7ac4474 | Same as above (re‑ingested). |
+| 2026‑08‑10T18:02:20.912Z | 55169762-2603-4d68-9b21-cc74a332d042 | Same as above (re‑ingested). |
+| 2026‑08‑10T18:02:21.018Z | 7cde01d2-157f-4016-8ad1-d8a1d82650a2 | PAM: User login failed (T1110.001). |
+| 2026‑08‑10T18:02:22.857Z | 1d48051d-f2df-43f1-99fa-7435909d12fd | Same as above (re‑ingested). |
+| 2026‑08‑10T18:02:24‑… | … | (Further re‑ingested events continue in the same pattern). |
 
 ---  
 
-## IOCs
-| Value | Type | Reputation | Confidence | Tags | First Seen | Last Seen | Source |
-|-------|------|------------|------------|------|------------|-----------|--------|
-| 203.0.113.50 | IP | suspicious | 0.0 | non_public, reserved | – | 2026‑07‑25T14:10:58+00:00 | AbuseIPDB |
+## Indicators of Compromise (IOCs)
 
-*Note:* The IOC confidence is reported as **0.0** in the source data.
+| Type | Value | Context |
+|------|-------|---------|
+| **Source IP** | `59.185.230.105` | Origin of all SSH login attempts. |
+| **Target Host** | `victim-machine` | Host where attempts were observed. |
+| **Username** | `debian` | Non‑existent account repeatedly targeted. |
+| **Service** | `ssh` | Protocol under attack. |
+
+*No file hashes, domains, or additional network indicators were provided.*
 
 ---  
 
-## ATT&CK Techniques (Observed)
-| ATT&CK ID | Technique Name | Confidence | Evidence Event ID | Known Groups (excerpt) | Recommended Mitigations |
-|----------|----------------|------------|-------------------|------------------------|--------------------------|
-| T1110 | Brute Force | 0.90 | 1c715bab-dd74-48ee-a9f9-e50248ef0b34 | Fox Kitten, HEXANE, Ember Bear, Turla, … | User Account Management, Account Use Policies, Multi‑factor Authentication, Password Policies |
-| T1110 | Brute Force | 0.90 | e9d57a2d-a8f6-4b84-94ff-11b9e9a27757 | Fox Kitten, HEXANE, Ember Bear, Turla, … | (same as above) |
-| T1110 | Brute Force | 0.90 | 0cc5fc71-b28f-4cda-a099-dd5bf3d68c34 | Fox Kitten, HEXANE, Ember Bear, Turla, … | (same as above) |
+## ATT&CK Techniques (Confirmed)
 
-All three entries map deterministically to **T1110 – Brute Force** and include the flag `ssh_brute_force_detected: true` with **3** failures per source IP.
+| ATT&CK ID | Technique Name | Evidence Event IDs |
+|-----------|----------------|--------------------|
+| **T1110.001** | Password Guessing | ee23062c‑..., c3086206‑..., bd7f75b3‑..., 55169762‑..., 1d48051d‑..., 88712f3a‑..., 5252a039‑..., 831121cf‑..., 68cc2bc7‑..., 05035e5d‑..., bd7f75b3‑..., etc. |
+| **T1021.004** | SSH | ee23062c‑..., c3086206‑..., bd7f75b3‑..., 55169762‑..., 1d48051d‑..., 831121cf‑..., 68cc2bc7‑..., etc. |
+| **T1110** | Brute Force (generic) | d51b1a29‑a652‑4aa6‑81f2‑996622f68005 |
 
 ---  
 
 ## Campaign Assessment
-The campaign, labeled **“Unclassified Activity,”** aims to **obtain valid credentials** for **SERVER‑01**.  
-- Multiple SSH authentication failures (3) from a single suspicious IP were followed by a successful login, matching the deterministic rule for **T1110 – Brute Force** (confidence ≈ 0.9).  
-- No additional malicious payloads or lateral‑movement indicators were observed in the supplied data.  
-- The activity aligns with a credential‑guessing effort that has succeeded, positioning the adversary to leverage the compromised account.
+The activity constitutes a **credential‑guessing brute‑force campaign** against the SSH service on *victim‑machine*. The attacker repeatedly attempts authentication for a non‑existent user, varying source ports, which is characteristic of automated tools. No successful login was recorded, and the volume of failures triggered Wazuh rule 5712 (authentication‑failure detection). The campaign’s objective is to gain unauthorized SSH access.
 
 ---  
 
-## Predicted Next Steps (Probabilistic Forecast)
-| Technique ID | Technique Name | Rationale |
-|--------------|----------------|-----------|
-| T1078 | Valid Accounts | After a successful brute‑force login, the attacker is likely to continue using the harvested credentials to access additional resources. |
-| T1098 | Account Manipulation | Attackers often create or modify accounts to maintain persistence and broaden access after gaining initial foothold. |
-
-*These techniques are forecasts only; they have not been observed.*
+## Predicted Next Steps
+*No data available.*  
 
 ---  
 
-## Recommendations
-**Mitigations specific to the observed brute‑force activity (T1110):**
+## Recommendations  
 
-1. **Notify security analyst immediately** (already queued).  
-2. **Temporarily block source IP 203.0.113.50** at the perimeter or host‑based firewall.  
-3. **Review the compromised `root` account** for any unauthorized actions or privilege escalation.  
-4. **Implement SSH key‑based authentication** and disable password authentication where possible.  
-5. **Review SSH logs** for additional suspicious activity (e.g., other source IPs, repeated attempts).  
-
-**General mitigations for T1110 (as recommended by the technique mapping):**
-
-- Enforce strong password policies and regular rotation.  
-- Deploy multi‑factor authentication for privileged accounts.  
-- Apply account lockout thresholds after a configurable number of failed attempts.  
-- Conduct periodic user account reviews and remove unnecessary privileged accounts.  
+| Recommendation | Relevant ATT&CK Technique |
+|----------------|---------------------------|
+| Enforce account lockout after a configurable number of failed SSH attempts. | T1110.001 |
+| Deploy SSH key‑based authentication and disable password authentication where possible. | T1021.004 |
+| Implement network‑level rate‑limiting or geo‑blocking for repeated connections from the same source IP. | T1110 |
+| Continuously monitor SSH logs for anomalous login patterns and integrate with a SIEM for real‑time alerts. | T1110.001 |
+| Conduct a post‑incident review of the “debian” account and remove any unused accounts. | T1110.001 |
+| Ensure the Wazuh rule set is up‑to‑date and that high‑severity alerts (e.g., rule level 10) trigger immediate response. | T1110 |
 
 ---  
 
-## Response Actions
+## Response Actions  
+
 | Action Type | Target | Status | Severity | Rationale |
 |-------------|--------|--------|----------|-----------|
-| notify_analyst | SOC | pending_approval | medium | Campaign “Unclassified Activity” targets SERVER‑01 using brute‑force (T1110). No high‑confidence IOCs; recommend monitoring and deeper investigation. |
+| *No response actions recorded in the provided evidence.* | – | – | – | – |
 
-*The action is a dry‑run and awaiting human approval.*
+---  
+
+*All statements in this report are derived exclusively from the supplied evidence.*
