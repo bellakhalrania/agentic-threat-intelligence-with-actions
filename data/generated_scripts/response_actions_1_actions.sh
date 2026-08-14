@@ -37,7 +37,7 @@ echo "",
 # =======================================
 # Action 1: notify_analyst
 # Target: SOC Team
-# ID: notify_analyst_e20fbb88
+# ID: notify_analyst_4589b946
 # Expected: Create analyst notification for SOC Team
 # =======================================
 action_1() {
@@ -48,8 +48,8 @@ action_1() {
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
-    # Related technique: T1110.001
-    # Confidence: 0.7
+    # Related technique: T1548.003
+    # Confidence: 1.0
     #
     # Please review the following:
     #   - SOC Team

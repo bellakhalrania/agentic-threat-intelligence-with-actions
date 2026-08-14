@@ -394749,5 +394749,377 @@
     "remote_push_url": "http://100.123.23.97:9001",
     "errors": [],
     "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "timestamp": "2026-08-13T09:33:06.737+0000",
+        "rule": {
+          "level": 3,
+          "description": "PAM: Login session closed.",
+          "id": "5502",
+          "firedtimes": 3,
+          "mail": false,
+          "groups": [
+            "pam",
+            "syslog"
+          ],
+          "pci_dss": [
+            "10.2.5"
+          ],
+          "gpg13": [
+            "7.8",
+            "7.9"
+          ],
+          "gdpr": [
+            "IV_32.2"
+          ],
+          "hipaa": [
+            "164.312.b"
+          ],
+          "nist_800_53": [
+            "AU.14",
+            "AC.7"
+          ],
+          "tsc": [
+            "CC6.8",
+            "CC7.2",
+            "CC7.3"
+          ]
+        },
+        "agent": {
+          "id": "005",
+          "name": "control-node1",
+          "ip": "100.123.23.97"
+        },
+        "manager": {
+          "name": "wazuh.manager"
+        },
+        "id": "1786613586.57799",
+        "full_log": "Aug 13 09:33:06 control-node1 sudo[7453]: pam_unix(sudo:session): session closed for user root",
+        "predecoder": {
+          "program_name": "sudo",
+          "timestamp": "Aug 13 09:33:06",
+          "hostname": "control-node1"
+        },
+        "decoder": {
+          "parent": "pam",
+          "name": "pam"
+        },
+        "data": {
+          "dstuser": "root"
+        },
+        "location": "journald"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "de0832f3-116c-434c-81b6-f8966d2876c8",
+        "source": "wazuh",
+        "event_type": "wazuh_rule_5502",
+        "timestamp": "2026-08-13T09:33:06.737+0000",
+        "host": "control-node1",
+        "user": "root",
+        "username": "root",
+        "process": "sudo",
+        "command_line": "Aug 13 09:33:06 control-node1 sudo[7453]: pam_unix(sudo:session): session closed for user root",
+        "src_ip": null,
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": 3,
+        "rule_description": "PAM: Login session closed.",
+        "rule_level": 3,
+        "rule_groups": [
+          "pam",
+          "syslog"
+        ],
+        "rule_mitre": [],
+        "proto": null,
+        "service": null,
+        "query": null,
+        "raw": {
+          "timestamp": "2026-08-13T09:33:06.737+0000",
+          "rule": {
+            "level": 3,
+            "description": "PAM: Login session closed.",
+            "id": "5502",
+            "firedtimes": 3,
+            "mail": false,
+            "groups": [
+              "pam",
+              "syslog"
+            ],
+            "pci_dss": [
+              "10.2.5"
+            ],
+            "gpg13": [
+              "7.8",
+              "7.9"
+            ],
+            "gdpr": [
+              "IV_32.2"
+            ],
+            "hipaa": [
+              "164.312.b"
+            ],
+            "nist_800_53": [
+              "AU.14",
+              "AC.7"
+            ],
+            "tsc": [
+              "CC6.8",
+              "CC7.2",
+              "CC7.3"
+            ]
+          },
+          "agent": {
+            "id": "005",
+            "name": "control-node1",
+            "ip": "100.123.23.97"
+          },
+          "manager": {
+            "name": "wazuh.manager"
+          },
+          "id": "1786613586.57799",
+          "full_log": "Aug 13 09:33:06 control-node1 sudo[7453]: pam_unix(sudo:session): session closed for user root",
+          "predecoder": {
+            "program_name": "sudo",
+            "timestamp": "Aug 13 09:33:06",
+            "hostname": "control-node1"
+          },
+          "decoder": {
+            "parent": "pam",
+            "name": "pam"
+          },
+          "data": {
+            "dstuser": "root"
+          },
+          "location": "journald"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.123.23.97",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 1.0,
+        "tags": [
+          "protected_management",
+          "trusted"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "local-policy",
+        "evidence": [],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.123.23.97",
+          "source_event_id": "de0832f3-116c-434c-81b6-f8966d2876c8",
+          "confidence": 1.0
+        }
+      },
+      {
+        "value": "wazuh.manager",
+        "ioc_type": "domain",
+        "reputation": "unknown",
+        "confidence": 0.0,
+        "tags": [],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "",
+        "evidence": [],
+        "raw": {
+          "type": "domain",
+          "value": "wazuh.manager",
+          "source_event_id": "de0832f3-116c-434c-81b6-f8966d2876c8",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1548.003",
+        "technique_name": "Sudo and Sudo Caching",
+        "evidence_event_id": "de0832f3-116c-434c-81b6-f8966d2876c8",
+        "mapping_source": "llm",
+        "confidence": 0.92,
+        "known_groups": [],
+        "known_software": [
+          "Cobalt Strike",
+          "Shai-Hulud",
+          "Proton",
+          "Dok"
+        ],
+        "recommended_mitigations": [
+          "Restrict File and Directory Permissions",
+          "Operating System Configuration",
+          "Privileged Account Management"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "e3b0c442-98fc-1c14-9af8-9d5e6f2a7b3c",
+      "name": "Unclassified Activity",
+      "objective": "Obtain elevated privileges on the host (privilege escalation to root)",
+      "timeline": [
+        {
+          "timestamp": "2026-08-13T09:33:06Z",
+          "event_id": "de0832f3-116c-434c-81b6-f8966d2876c8",
+          "description": "The sudo process on host control-node1 logged a session close for user root (Event de0832f3-116c-434c-81b6-f8966d2876c8), which aligns with the ATT&CK technique Sudo and Sudo Caching (T1548.003)."
+        }
+      ],
+      "related_techniques": [
+        "T1548.003"
+      ],
+      "evidence_summary": "The only recorded activity is a sudo session termination for root on control-node1 (Event de0832f3-116c-434c-81b6-f8966d2876c8), mapped to ATT&CK technique T1548.003 (Sudo and Sudo Caching) with a confidence of 0.92. No malicious network indicators were observed; the IP 100.123.23.97 is marked benign (IOC confidence 1.0) and the identifier \"wazuh.manager\" has unknown reputation (IOC confidence 0.0). Together, the event and technique suggest an attempt to leverage sudo for privilege escalation, while the IOCs do not provide additional malicious context.",
+      "confidence": 0.19
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1003",
+          "technique_name": "OS Credential Dumping",
+          "rationale": "After obtaining root privileges via sudo, attackers commonly dump system credentials (e.g., /etc/shadow, /etc/passwd) to harvest additional account information for further lateral movement or persistence."
+        },
+        {
+          "technique_id": "T1098",
+          "technique_name": "Account Manipulation",
+          "rationale": "With elevated rights, adversaries often create or modify privileged accounts to maintain access, allowing them to log in later without re\u2011exploiting sudo."
+        },
+        {
+          "technique_id": "T1083",
+          "technique_name": "File and Directory Discovery",
+          "rationale": "Root access enables comprehensive discovery of sensitive files and configuration data, which is a typical next step to identify valuable targets or further attack vectors."
+        }
+      ],
+      "rationale": "The observed use of the Sudo and Sudo Caching technique (T1548.003) indicates the attacker has already escalated to root. Attackers usually follow privilege escalation with actions that leverage the new privileges: extracting credential stores (T1003), establishing persistent privileged accounts (T1098), and enumerating the file system for valuable data (T1083). These techniques are all present in the allowed prediction list."
+    },
+    "threat_summary": {
+      "campaign": {
+        "campaign_id": "e3b0c442-98fc-1c14-9af8-9d5e6f2a7b3c",
+        "name": "Unclassified Activity",
+        "severity": "high",
+        "confidence": 0.19
+      },
+      "event_count": 1,
+      "failed_login_count": 0,
+      "affected_hosts": [
+        "control-node1"
+      ],
+      "affected_users": [
+        "root"
+      ],
+      "source_ips": [],
+      "processes": [
+        "sudo"
+      ],
+      "top_mitre_techniques": [
+        {
+          "id": "T1548.003",
+          "name": "Sudo and Sudo Caching",
+          "count": 1,
+          "confidence": 0.92
+        }
+      ],
+      "prediction": {
+        "likely_next_techniques": [
+          {
+            "id": "T1003",
+            "name": "OS Credential Dumping"
+          },
+          {
+            "id": "T1098",
+            "name": "Account Manipulation"
+          },
+          {
+            "id": "T1083",
+            "name": "File and Directory Discovery"
+          }
+        ],
+        "rationale": "The observed use of the Sudo and Sudo Caching technique (T1548.003) indicates the attacker has already escalated to root. Attackers usually follow privilege escalation with actions that leverage the new privileges: extracting credential stores (T1003), establishing persistent privileged accounts (T1098), and enumerating the file system for valuable data (T1083). These techniques are all present in the allowed prediction list."
+      },
+      "valid_action_targets": [
+        "SOC Team",
+        "SOC_Team",
+        "SOC_analyst",
+        "control-node1",
+        "root",
+        "sudo"
+      ],
+      "victim_isolation_targets": [
+        "control-node1"
+      ],
+      "attacker_source_ips": []
+    },
+    "report": "# Threat Intelligence Report  \n\n**Report Date:** 2026\u201108\u201113  \n\n---  \n\n## Executive Summary  \nA sudo session termination for the **root** user was logged on host **control\u2011node1** (Event\u202fde0832f3\u2011116c\u2011434c\u201181b6\u2011f8966d2876c8). The activity maps to ATT&CK technique **T1548.003 \u2013 Sudo and Sudo Caching** with high confidence (0.92), indicating a successful privilege\u2011escalation attempt to obtain full administrative rights on the host. No malicious network indicators were observed; the only IP seen (100.123.23.97) is classified as **benign**, and the domain \u201cwazuh.manager\u201d has an **unknown** reputation.  \n\nThe campaign is currently classified as **high severity** due to the elevated privileges achieved and the predicted follow\u2011on techniques (credential dumping, account manipulation, file discovery).  \n\n---  \n\n## Timeline  \n\n| Timestamp (UTC) | Host | Event ID | Description |\n|-----------------|------|----------|-------------|\n| 2026\u201108\u201113\u202f09:33:06 | control\u2011node1 | de0832f3\u2011116c\u2011434c\u201181b6\u2011f8966d2876c8 | `sudo[7453]: pam_unix(sudo:session): session closed for user root` \u2013 aligns with ATT&CK T1548.003 (Sudo and Sudo Caching). |\n\n---  \n\n## Indicators of Compromise (IOCs)  \n\n| IOC Type | Value | Confidence | Reputation | Tags |\n|----------|-------|------------|------------|------|\n| IP | 100.123.23.97 | 1.0 | benign | protected_management, trusted |\n| Domain | wazuh.manager | 0.0 | unknown | \u2013 |\n\n---  \n\n## ATT&CK Techniques (Observed)  \n\n| Technique ID | Technique Name | Confidence |\n|--------------|----------------|------------|\n| **T1548.003** | Sudo and Sudo Caching | 0.92 |\n\n---  \n\n## Campaign Assessment  \nThe isolated event demonstrates an **attempted privilege escalation** to root via sudo. The benign status of the observed IP and the lack of additional malicious artifacts suggest a limited footprint so far. However, the successful escalation raises the risk of subsequent high\u2011impact actions such as credential dumping, creation of privileged accounts, and extensive file system discovery (as outlined in the prediction).  \n\n---  \n\n## Predicted Next Steps (Probabilistic Forecast)  \n\n| Technique ID | Technique Name | Forecast Rationale |\n|--------------|----------------|--------------------|\n| T1003 | OS Credential Dumping | Attackers often harvest `/etc/shadow` or `/etc/passwd` after gaining root. |\n| T1098 | Account Manipulation | Creation or modification of privileged accounts to maintain persistence. |\n| T1083 | File and Directory Discovery | Enumerating sensitive files and configurations to identify further targets. |\n\n*These techniques are forecasts only and have not been observed in the current data set.*  \n\n---  \n\n## Recommendations  \n\nMitigations should focus on the confirmed technique **T1548.003** (Sudo and Sudo Caching) and the elevated\u2011privilege state:\n\n1. **Enforce least\u2011privilege sudo policies** \u2013 Review `/etc/sudoers` to restrict commands that can be executed with sudo and remove unnecessary sudo rights.  \n2. **Enable sudo session logging and alerting** \u2013 Ensure all sudo invocations are logged centrally and generate alerts for root\u2011level sessions.  \n3. **Validate integrity of privileged binaries** \u2013 Verify checksums of `sudo` and related binaries to detect tampering.  \n4. **Conduct a host\u2011level forensic review** \u2013 Search for additional sudo usage, newly created accounts, and modifications to system files.  \n5. **Apply host\u2011based intrusion detection rules** \u2013 Deploy rules that detect abnormal sudo activity (e.g., rapid successive sudo calls, use of cached credentials).  \n\n---  \n\n## Response Actions  \n\n| Action Type | Target | Status | Severity | Rationale |\n|-------------|--------|--------|----------|-----------|\n| isolate_host | control-node1 | pending_approval | high | Sudo and Sudo Caching (T1548.003) observed; isolation prevents lateral movement while the high\u2011severity campaign is investigated. |\n| notify_analyst | SOC Team | executed_remote | high | Root escalation detected; analyst notified to monitor for additional malicious activity and to coordinate response. |\n\n---  \n\n*Counts may exceed the listed samples when `summary_counts` are larger than the arrays.*  \n\n---  ",
+    "actions_taken": [
+      {
+        "action_id": "e3cf524d-4ce7-4a33-b4a1-c27806c8eb14",
+        "action": {
+          "action_type": "isolate_host",
+          "target": "control-node1",
+          "severity": "high",
+          "rationale": "Sudo and Sudo Caching (T1548.003) was observed, indicating successful privilege escalation to root. The campaign is marked high severity and predictions include credential dumping, account manipulation, and file discovery, all high-impact techniques. Isolating the host prevents further lateral movement and data exfiltration.",
+          "technique_id": "T1548.003",
+          "confidence": 0.92
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "b2084c3e-1e67-4c95-b57f-ecf8f603359e",
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC Team",
+          "severity": "high",
+          "rationale": "Root escalation detected on control-node1 via sudo. High\u2011severity campaign with predicted follow\u2011on techniques (credential dumping, account manipulation, file discovery). Recommended action: isolate the host and monitor for additional malicious activity.",
+          "technique_id": "T1548.003",
+          "confidence": 1.0
+        },
+        "status": "executed_remote",
+        "detail": "Remotely executed on Machine 2 (execution_id=9d36c0d7-fa6f-4f1e-b233-f5b751366065).",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "notify_analyst_4589b946",
+        "action_type": "notify_analyst",
+        "target": "SOC Team",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_4589b946.log",
+        "script": "# Notify analyst about: SOC Team\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: T1548.003\n# Confidence: 1.0\n#\n# Please review the following:\n#   - SOC Team\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC Team",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 1\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: notify_analyst\n# Target: SOC Team\n# ID: notify_analyst_4589b946\n# Expected: Create analyst notification for SOC Team\n# =======================================\naction_1() {\n    echo \"[ACTION 1] notify_analyst -> SOC Team\"\n    echo \"  Expected: Create analyst notification for SOC Team\"\n\n    # Notify analyst about: SOC Team\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: T1548.003\n    # Confidence: 1.0\n    #\n    # Please review the following:\n    #   - SOC Team\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] notify_analyst -> SOC Team\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] notify_analyst -> SOC Team\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 1 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_1_actions.sh",
+    "remote_execution_result": {
+      "success": true,
+      "execution_id": "9d36c0d7-fa6f-4f1e-b233-f5b751366065",
+      "filename": "9d36c0d7-fa6f-4f1e-b233-f5b751366065_response_actions_1_actions.sh",
+      "campaign_id": "e3b0c442-98fc-1c14-9af8-9d5e6f2a7b3c",
+      "exit_code": 0,
+      "stdout": "========================================\n  Response Actions Execution Script\n  Mode: EXECUTE\n========================================\n,\n\nStarting execution of 1 action(s)...\n\n[ACTION 1] notify_analyst -> SOC Team\n  Expected: Create analyst notification for SOC Team\n  [OK] notify_analyst completed\n\nExecution completed.\n",
+      "stderr": "",
+      "status": "completed",
+      "executed_at": "2026-08-13T09:41:17.007167+00:00",
+      "duration_ms": 15.32,
+      "error": null
+    },
+    "remote_execution_error": "",
+    "remote_push_attempted": true,
+    "remote_push_url": "http://100.123.23.97:9001",
+    "errors": [],
+    "metadata": {}
   }
 ]
