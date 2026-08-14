@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     iproute2 \
     net-tools \
     procps \
+    systemd \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy and install Python dependencies

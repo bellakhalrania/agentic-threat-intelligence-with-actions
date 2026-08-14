@@ -9,8 +9,6 @@
 #
 # For production, set REMOTE_AGENT_API_KEY in a .env file or environment.
 
-version: '3.8'
-
 services:
   remote-response-agent:
     build:
@@ -44,6 +42,46 @@ services:
       - SYS_ADMIN
     restart: unless-stopped
 
+  remote-event-forwarder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: remote-event-forwarder
+    network_mode: host
+    command: ["python", "-m", "remote_agent.forwarder"]
+    environment:
+      - AGENT_SOURCE_URL=${AGENT_SOURCE_URL}
+      - AGENT_SOURCE_API_KEY=${AGENT_SOURCE_API_KEY:-}
+      - AGENT_SOURCE_VERIFY_SSL=${AGENT_SOURCE_VERIFY_SSL:-true}
+      - AGENT_EVENTS_PATH=/app/remote_agent/spool/agent_events.jsonl
+      - AGENT_CURSOR_PATH=/app/remote_agent/spool/agent_cursor.json
+      - AGENT_FORWARD_BATCH_SIZE=${AGENT_FORWARD_BATCH_SIZE:-100}
+      - AGENT_FORWARD_POLL_INTERVAL=${AGENT_FORWARD_POLL_INTERVAL:-15}
+      - AGENT_FORWARD_TIMEOUT=${AGENT_FORWARD_TIMEOUT:-30}
+      - AGENT_FORWARD_MAX_RETRIES=${AGENT_FORWARD_MAX_RETRIES:-3}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - remote_agent_spool:/app/remote_agent/spool
+    restart: unless-stopped
+
+  remote-ssh-collector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: remote-ssh-collector
+    network_mode: host
+    command: ["python", "-m", "remote_agent.ssh_collector"]
+    environment:
+      - SSH_COLLECTOR_SPOOL=/app/remote_agent/spool/agent_events.jsonl
+      - SSH_COLLECTOR_POLL_INTERVAL=2
+      - SSH_COLLECTOR_HOST=${REMOTE_AGENT_NODE_HOSTNAME:-control-node1}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - remote_agent_spool:/app/remote_agent/spool
+      - /run/log/journal:/run/log/journal:ro
+    restart: unless-stopped
+
 volumes:
   remote_agent_scripts:
   remote_agent_logs:
+  remote_agent_spool:

@@ -2,108 +2,95 @@
 
 **Campaign:** Unclassified Activity
 **Campaign ID:** d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d
-**Generated:** 2026-08-11T08:44:49.070135+00:00
+**Generated:** 2026-08-13T16:10:52.757745+00:00
 
 ---
 
-**Threat Intelligence Report**  
-*Campaign ID:* `d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d`  
-*Report Date:* 2026‑08‑11  
+# Threat Intelligence Report  
+
+**Campaign ID:** `d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d`  
+**Report Date:** 2026‑08‑13  
 
 ---  
 
-## Executive Summary
-- On 2026‑08‑11 the victim host received **two failed SSH password attempts** for the `root` account from the **malicious IP 47.113.113.162**.  
-- Shortly thereafter a **successful SSH login** was observed for the user `ubuntu` from the **benign IP 102.28.108.32** using a valid public‑key.  
-- The activity maps to the following ATT&CK techniques: **T1110.001 (Password Guessing)**, **T1021.004 (SSH)**, **T1078 (Valid Accounts)** and **T1021 (Remote Services)**.  
-- No additional malicious file creation or process execution was observed beyond the normal system‑health events.  
+## Executive Summary  
+- Ten **sysmon_event_unknown** records were generated on the host **control‑node1** within a few seconds.  
+- All events originated from the same external IP address **100.117.52.58**.  
+- The IP is classified as **benign** (AbuseIPDB confidence 0.0) and carries the tags *non_public*, *reserved*.  
+- No ATT&CK techniques were mapped to these events; the confidence in the activity being malicious is low (0.2).  
+- A low‑severity notification was sent to the SOC team for continued monitoring.  
 
----  
+---
 
 ## Timeline  
 
 | Timestamp (UTC) | Event ID | Description |
 |-----------------|----------|-------------|
-| 2026‑08‑11T08:42:23 | `7f768cbb-b804-47b6-8cd3-42f45f2e9887` | Failed SSH password authentication for `root` from **47.113.113.162** (Password Guessing – T1110.001). |
-| 2026‑08‑11T08:42:25 | `276122e7-763b-4250-9004-f16724311470` | Second failed SSH password attempt for `root` from **47.113.113.162** (Password Guessing – T1110.001, SSH – T1021.004). |
-| 2026‑08‑11T08:42:47 | `3056a917-bb52-4d48-9f6b-6d17e3d81caf` | Successful SSH login for user `ubuntu` from **102.28.108.32** using a public‑key (Valid Accounts – T1078, Remote Services – T1021). |
-| 2026‑08‑11T08:42:47 | `b26a2f07-87ec-40b8-83b5-9a4c549c7d9d` | Session opened for `ubuntu` (continuation of Valid Accounts activity). |
-| 2026‑08‑11T05:48:55.819 | `24ae68da-80e4-4149-9a8e-11b9082bb010` | File `/etc/systemd/system/snapd.mounts.target.wants/snap-snapd-27591.mount` added (scheduled). |
-| 2026‑08‑11T05:48:55.852 | `01ab4477-cbd0-4850-974b-c2a22accdd32` | File `/etc/systemd/system/snap-snapd-27591.mount` added (scheduled). |
-| 2026‑08‑11T08:15:33.952 | `c585ecbf-a0e9-4b3e-944c-cf6f57c408ac` | Wazuh manager started (system health event). |
+| 2026‑08‑13T16:02:20.353467+00:00 | `2ca0e9c3-a692-48ea-a3f7-12e138a4c413` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:20.353628+00:00 | `3653e13e-55ec-439c-b890-543941b3ad7a` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:20.353845+00:00 | `ac4d5a1d-8f92-4d7c-ab19-12fb67a0be03` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:20.353990+00:00 | `57270d66-f3b6-442a-a963-59a11b6a8107` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.367473+00:00 | `84282774-2d64-47b6-aa73-438af7aee44a` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.368796+00:00 | `15dc32de-160e-4e30-ac30-bb7a4ea10aa9` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.369618+00:00 | `ae46ec76-973d-400b-8256-19057b2b2c5f` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.370513+00:00 | `cb52bde6-eb47-48c0-b965-a8185f551855` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.371273+00:00 | `ce31ef9e-a3e3-4237-a9e3-97cb0e4b2ba5` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.371980+00:00 | `9041532c-bdaf-490c-a9c1-70a0adea8030` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
 
----  
+*All timestamps are exact as recorded; the summary count of 10 events matches the listed records.*
+
+---
 
 ## Indicators of Compromise (IOCs)
 
-| IOC Type | Value | Reputation | Source | Tags |
-|----------|-------|------------|--------|------|
-| IP | `47.113.113.162` | malicious | AbuseIPDB | country:CN, data_center/web_hosting/transit, domain:alibabacloud.com, isp:Aliyun Computing Co., LTD |
-| IP | `102.28.108.32` | benign | AbuseIPDB | country:TN, domain:tunisietelecom.tn, fixed_line_isp, isp:SOCIETE NATIONALE DES TELECOMMUNICATIONS (Tunisie Telecom) |
-| IP | `100.90.153.71` | benign | AbuseIPDB | non_public, reserved |
-| Hash | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` | unknown | – | – |
-| Hash | `da39a3ee5e6b4b0d3255bfef95601890afd80709` | unknown | – | – |
-| Hash | `d41d8cd98f00b204e9800998ecf8427e` | unknown | – | – |
-| Hash | `1c18b233045f56e0300f00659417b869c5550a7fa96340300a869a5c79aaebb4` | unknown | – | – |
-| Hash | `f1bd644bec2bb0f4ae297bb9d9719699970e844d` | unknown | – | – |
-| Hash | `6ca583aa6b398d6a1de1ab2fca9ee542` | unknown | – | – |
-| Domain | `snapd.mounts.target.wants` | unknown | – | – |
-| Domain | `snap-snapd-27591.mount` | unknown | – | – |
-| Domain | `wazuh.manager` | unknown | – | – |
+| Type | Value | Reputation | Confidence | Source | Tags |
+|------|-------|------------|------------|--------|------|
+| IP | `100.117.52.58` | benign | 0.0 | AbuseIPDB | non_public, reserved |
 
----  
+---
 
-## ATT&CK Techniques (Observed)
+## ATT&CK Techniques  
 
-| Technique ID | Technique Name | Confidence |
-|--------------|----------------|------------|
-| T1110.001 | Password Guessing | 1.0 |
-| T1021.004 | SSH | 1.0 |
-| T1078 | Valid Accounts | 1.0 |
-| T1021 | Remote Services | 1.0 |
+No ATT&CK techniques were observed or mapped in the provided evidence.  
 
----  
+*Confirmed technique list: **none**.*
 
-## Campaign Assessment
-The adversary’s objective was to **obtain unauthorized remote access via SSH**. Initial activity consisted of **password‑guessing attempts** against the `root` account from a known malicious IP (47.113.113.162). After two failures, the attacker succeeded in establishing a **valid SSH session** using a public‑key for the `ubuntu` account from a benign‑looking IP (102.28.108.32). The transition from brute‑force probing to a legitimate‑looking key‑based login indicates a **two‑stage approach**: reconnaissance/brute‑force followed by exploitation of a valid credential (or key) to gain persistence. No further post‑compromise actions (e.g., credential dumping, tool transfer) were observed in the current data set.
+---
 
----  
+## Campaign Assessment  
 
-## Predicted Next Steps (Forecast)
+- **Activity Type:** Unclassified activity consisting of unknown Sysmon events.  
+- **Objective:** Unknown (no technique mapping, low confidence).  
+- **Confidence Level:** 0.2 (low).  
+- **Potential Impact:** Currently undetermined; activity may be benign or a precursor to further actions.  
 
-| Technique ID | Technique Name | Rationale |
-|--------------|----------------|-----------|
-| T1003 | OS Credential Dumping | After obtaining a valid SSH session, attackers often dump credentials to expand foothold. |
-| T1059.001 | PowerShell | Remote access is frequently leveraged to run PowerShell for command execution or downloading tools. |
-| T1105 | Ingress Tool Transfer | Attackers may transfer additional payloads to the compromised host. |
-| T1547 | Boot or Logon Autostart Execution | Persistence mechanisms such as systemd services are a common follow‑up. |
-| T1098 | Account Manipulation | Creation or modification of accounts to ensure continued access. |
+The repeated events from a single IP suggest automated or scripted interaction, but without additional context the risk remains low.
 
-*These techniques are probabilistic forecasts based on the observed sequence and are **not** confirmed in the current evidence.*
+---
 
----  
+## Predicted Next Steps  
 
-## Recommendations
-| Recommendation | Related ATT&CK Technique(s) |
-|----------------|-----------------------------|
-| Enforce strong, complex passwords for all local and remote accounts. | T1110.001 |
-| Implement account lockout or rate‑limiting after a small number of failed SSH attempts. | T1110.001 |
-| Deploy SSH key‑based authentication only and disable password authentication where possible. | T1021.004 |
-| Restrict SSH access to a limited set of trusted source IPs (e.g., via firewall or security groups). | T1021.004 |
-| Monitor and alert on repeated authentication failures for privileged accounts. | T1110.001 |
-| Regularly review authorized SSH keys and remove any that are unnecessary or unknown. | T1078 |
-| Apply host‑based intrusion detection rules to detect anomalous remote service usage. | T1021 |
-| Conduct periodic audits of user accounts for unexpected privilege escalations. | T1078 |
-| Ensure systemd service directories are monitored for unauthorized additions. | T1021 |
+The prediction block contains no forecasted techniques. Consequently, **no probabilistic technique forecasts are available** at this time.
 
----  
+---
+
+## Recommendations  
+
+1. **Continuous Monitoring** – Keep the host **control‑node1** under heightened observation for any new events or emergence of ATT&CK‑mapped behaviors.  
+2. **Log Enrichment** – Ensure Sysmon logging is fully configured (including command line, hashes, network connections) to capture richer data if activity evolves.  
+3. **Network Controls** – Consider temporary network‑level restrictions (e.g., rate‑limit or block) for source IP **100.117.52.58** pending further investigation.  
+4. **Host Review** – Perform a baseline integrity check on **control‑node1** (process list, file hashes, scheduled tasks) to detect any hidden changes.  
+5. **Threat Intelligence Correlation** – Periodically re‑query external feeds for the IP address and any related indicators.  
+6. **Alert Tuning** – Adjust detection rules to reduce false positives for unknown Sysmon events while preserving visibility.  
+
+---
 
 ## Response Actions  
 
 | Action Type | Target | Status | Severity | Rationale |
 |-------------|--------|--------|----------|-----------|
-| *No response actions recorded in the provided evidence.* | – | – | – | – |
+| `notify_analyst` | SOC Team | executed | low | Low‑severity activity observed from source IP 100.117.52.58 targeting control‑node1 with no detected ATT&CK techniques. Monitoring recommended. |
 
 ---  
 
-*All statements in this report are derived exclusively from the supplied evidence. No additional data or assumptions have been introduced.*
+*All information presented is derived directly from the supplied evidence. No additional data has been inferred or fabricated.*

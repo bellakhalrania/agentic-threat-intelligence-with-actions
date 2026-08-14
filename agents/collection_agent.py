@@ -175,18 +175,53 @@ def _normalize_wazuh(event: dict) -> dict:
     return n
 
 
+def _normalize_agent(event: dict) -> dict:
+    """Normalize events emitted by the custom agent on machine 2."""
+    n = _blank()
+    n["source"] = "agent"
+    n["timestamp"] = (
+        event.get("timestamp")
+        or event.get("observed_at")
+        or event.get("received_at")
+        or event.get("time")
+    )
+    n["host"] = event.get("host") or event.get("agent_host") or event.get("hostname")
+    n["user"] = event.get("user")
+    n["username"] = event.get("username")
+    n["process"] = event.get("process") or event.get("program")
+    n["command_line"] = event.get("command_line") or event.get("script") or event.get("command")
+    n["src_ip"] = event.get("src_ip") or event.get("source_ip") or event.get("agent_ip")
+    n["dest_ip"] = event.get("dest_ip") or event.get("destination_ip") or event.get("target_ip")
+    n["signature"] = event.get("signature") or event.get("rule_name") or event.get("name")
+    n["category"] = event.get("category") or event.get("event_category")
+    n["severity"] = event.get("severity") or event.get("risk")
+    n["event_type"] = event.get("event_type") or event.get("type") or "agent_event"
+    n["raw"] = event
+    return n
+
+
 def _normalize_linux(event: dict) -> dict:
     """Normalize Linux authentication events (e.g., SSH auth from auth.log)."""
     n = _blank()
     n["source"] = "linux"
-    n["event_type"] = event.get("event_type", "authentication")
+    event_type = event.get("event_type", "authentication")
+    # The lightweight SSH collector emits ``auth_failed`` / ``auth_success``.
+    # Normalize those aliases to the canonical values expected by the ATT&CK
+    # matcher and correlation rules.
+    n["event_type"] = {
+        "auth_failed": "authentication_failed",
+        "auth_success": "authentication_success",
+    }.get(event_type, event_type)
     n["timestamp"] = event.get("timestamp")
     n["host"] = event.get("host")
     n["username"] = event.get("username") or event.get("user")
-    n["service"] = event.get("service")
+    n["service"] = event.get("service") or (
+        "ssh" if event.get("source") in {"sshd", "ssh"} else None
+    )
     n["src_ip"] = event.get("src_ip") or event.get("source_ip")
     n["dest_ip"] = event.get("dest_ip") or event.get("destination_ip")
     n["proto"] = event.get("proto")
+    n["severity"] = event.get("severity") or event.get("risk")
     n["raw"] = event
     return n
 
@@ -214,8 +249,11 @@ def _detect_source(event: dict) -> str:
     """Determine log source heuristically from available fields."""
     # If an explicit source is already set, trust it.
     explicit = event.get("source")
-    if explicit in ("sysmon", "suricata", "zeek", "wazuh", "windows_event", "linux"):
+    if explicit in ("sysmon", "suricata", "zeek", "wazuh", "windows_event", "linux", "agent"):
         return explicit
+
+    if explicit in ("sshd", "ssh", "auth", "authlog"):
+        return "linux"
 
     # Linux: has service field (e.g., "ssh") and authentication-related event_type
     if event.get("service") == "ssh" or event.get("event_type") in ("authentication", "authentication_failed", "authentication_success"):
@@ -268,6 +306,7 @@ _NORMALIZER_DISPATCH = {
     "suricata": _normalize_suricata,
     "zeek": _normalize_zeek,
     "wazuh": _normalize_wazuh,
+    "agent": _normalize_agent,
     "linux": _normalize_linux,
     "windows_event": _normalize_windows_event,
 }

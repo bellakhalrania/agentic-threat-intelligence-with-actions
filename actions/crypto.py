@@ -233,6 +233,7 @@ def build_signed_payload(
     platform: str,
     secret_key: str,
     execution_packages: Optional[List[Dict]] = None,
+    timestamp: Optional[int] = None,
 ) -> Dict[str, Any]:
     """
     Build a complete signed payload with replay protection.
@@ -258,7 +259,7 @@ def build_signed_payload(
           - execution_packages (if provided)
     """
     nonce = generate_nonce()
-    ts = current_timestamp()
+    ts = timestamp if timestamp is not None else current_timestamp()
 
     payload = {
         "script": script,

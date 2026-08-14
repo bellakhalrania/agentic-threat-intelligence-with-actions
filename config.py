@@ -71,6 +71,16 @@ class Config:
     WAZUH_POLL_INTERVAL = int(os.getenv("WAZUH_POLL_INTERVAL", "30"))  # seconds
     WAZUH_VERIFY_SSL = os.getenv("WAZUH_VERIFY_SSL", "false").lower() == "true"
 
+    # ---------------- Custom Agent Connector ----------------
+    # Optional HTTP endpoint on machine 2 that exposes the agent event feed.
+    AGENT_SOURCE_URL = os.getenv("AGENT_SOURCE_URL", "")
+    AGENT_SOURCE_API_KEY = os.getenv("AGENT_SOURCE_API_KEY", "")
+    AGENT_SOURCE_VERIFY_SSL = os.getenv("AGENT_SOURCE_VERIFY_SSL", "true").lower() == "true"
+    # Optional local spool file written by machine 2 when offline.
+    AGENT_EVENTS_PATH = os.getenv("AGENT_EVENTS_PATH", "./data/state/agent_events.jsonl")
+    AGENT_CURSOR_PATH = os.getenv("AGENT_CURSOR_PATH", "./data/state/agent_cursor.json")
+    AGENT_FETCH_LIMIT = int(os.getenv("AGENT_FETCH_LIMIT", "100"))
+
 
 
 
@@ -144,6 +154,11 @@ class Config:
         if item.strip()
     ]
     REMOTE_AGENT_PORT = int(os.getenv("REMOTE_AGENT_PORT", "9001"))
+
+    # ---------------- Machine 3 Agent Ingest API ----------------
+    AGENT_EVENT_STORE_PATH = os.getenv("AGENT_EVENT_STORE_PATH", "./data/state/agent_events_ingested.jsonl")
+    AGENT_EVENT_SHARED_KEY = os.getenv("AGENT_EVENT_SHARED_KEY", "")
+    AGENT_EVENT_MAX_ITEMS = int(os.getenv("AGENT_EVENT_MAX_ITEMS", "200"))
 
     @classmethod
     def validate(cls):

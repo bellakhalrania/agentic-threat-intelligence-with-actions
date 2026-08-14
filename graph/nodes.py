@@ -152,9 +152,14 @@ def execution_translation_node(state: InvestigationState) -> dict:
 
             # Only actions already executed through policy or the human
             # approval workflow may be pushed to the remote execution agent.
+            # Notifications are delivered by the local notifier and have no
+            # endpoint-side containment effect, so they must not be pushed.
             remotely_executable_actions = [
                 action for action in actions_taken
-                if action.get("status") == "executed"
+                if (
+                    action.get("status") == "executed"
+                    and action.get("action", {}).get("action_type") != "notify_analyst"
+                )
             ]
 
             if not remotely_executable_actions:
