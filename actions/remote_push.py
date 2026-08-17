@@ -20,6 +20,7 @@ has been generated and saved locally.
 import os
 import json
 import logging
+from datetime import datetime
 from typing import Optional, Dict, Any, List
 
 import requests
@@ -32,6 +33,28 @@ logger = logging.getLogger(__name__)
 class RemotePushError(Exception):
     """Raised when pushing a script to the remote agent fails."""
     pass
+
+
+def _remote_agent_timestamp(execute_url: str, api_key: str) -> Optional[int]:
+    """Read the remote agent clock for a replay-safe request timestamp.
+
+    A remote host can reject an otherwise new request when its system clock
+    differs from the manager by more than its replay window.  The health
+    endpoint reports the agent's UTC time, so use it when available while
+    retaining a local-time fallback if the health response is unavailable.
+    """
+    health_url = _base_url_from_remote_url(execute_url) + "/health"
+    headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
+    try:
+        response = requests.get(health_url, headers=headers, timeout=10)
+        response.raise_for_status()
+        timestamp = response.json().get("timestamp")
+        if not isinstance(timestamp, str):
+            return None
+        return int(datetime.fromisoformat(timestamp.replace("Z", "+00:00")).timestamp())
+    except (requests.RequestException, ValueError, TypeError, json.JSONDecodeError) as exc:
+        logger.warning("Could not obtain remote agent time from %s: %s", health_url, exc)
+        return None
 
 
 def push_script_to_remote(
@@ -105,6 +128,10 @@ def push_script_to_remote(
     if not url.endswith("/execute"):
         url = url.rstrip("/") + "/execute"
 
+    # Use the remote clock when available, preventing a valid request from
+    # failing replay protection solely because the two machines are skewed.
+    remote_timestamp = _remote_agent_timestamp(url, key)
+
     # Build the signed payload with replay protection
     signed_payload = build_signed_payload(
         script=script,
@@ -114,6 +141,7 @@ def push_script_to_remote(
         platform=platform,
         secret_key=hmac_key,
         execution_packages=execution_packages,
+        timestamp=remote_timestamp,
     )
 
     # Build headers with Bearer token

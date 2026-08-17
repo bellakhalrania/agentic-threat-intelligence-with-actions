@@ -2,108 +2,66 @@
 
 **Campaign:** Unclassified Activity
 **Campaign ID:** e3b0c442-98fc-1c14-9af8-9d5e6f2a7c3d
-**Generated:** 2026-07-27T12:16:53.486597+00:00
+**Generated:** 2026-08-11T21:32:41.664217+00:00
 
 ---
 
 # Threat Intelligence Report  
 
 **Campaign ID:** `e3b0c442-98fc-1c14-9af8-9d5e6f2a7c3d`  
-**Report Date:** 2026‑07‑27  
+**Report Date:** 2026‑08‑11  
 
 ---  
 
 ## Executive Summary  
-- **Possible SSH Brute Force Attack (T1110)** was observed against **SERVER‑01**.  
-- **3 failed SSH authentication attempts** for the `root` account originated from **IP 203.0.113.50**, followed by a **successful login** from the same source.  
-- The source IP is flagged as **suspicious** (AbuseIPDB) and is a reserved address.  
-- No additional IOCs or malicious payloads were identified beyond the brute‑force activity.  
-
----  
+Telemetry from two Wazuh sensors indicates a routine OSSEC agent disconnect on *victim‑machine* and a normal start of the OSSEC manager on host **wazuh.manager**. No malicious activity, compromised accounts, or ATT&CK‑mapped techniques were observed. The only IOC present is the IP address **100.90.153.71**, which has a *benign* reputation, and the hostname **wazuh.manager**, whose reputation is *unknown*. The overall confidence in this activity being hostile is low (0.1).  
 
 ## Timeline  
 
-| Timestamp (UTC) | Event ID | Host | Service | Username | Source IP | Event Type |
-|-----------------|----------|------|---------|----------|-----------|------------|
-| 2026‑07‑20 09:00:00 | `d0bc5c5e-0439-41fd-934a-0ddb09cd7f8f` | SERVER‑01 | ssh | root | 203.0.113.50 | authentication_failed |
-| 2026‑07‑20 09:00:03 | `c77c353a-f772-4c46-8a53-bf838ec4c429` | SERVER‑01 | ssh | root | 203.0.113.50 | authentication_failed |
-| 2026‑07‑20 09:00:06 | `a9541333-0230-446a-a158-b73cd6e157d9` | SERVER‑01 | ssh | root | 203.0.113.50 | authentication_failed |
-| 2026‑07‑20 09:00:10 | `4d050187-23d6-42d0-a5ab-7f3ac3c36e8e` | SERVER‑01 | ssh | root | 203.0.113.50 | authentication_success |
+| Timestamp (UTC) | Host | Event ID | Description |
+|-----------------|------|----------|-------------|
+| 2026‑08‑11T10:27:35.140+0000 | victim‑machine | `a49627c0-cf6b-47b9-b87d-3c8a87b7bd9c` | Wazuh rule 504 – OSSEC **agent disconnected** (`Agent disconnected: 'victim-machine-any'`). |
+| 2026‑08‑11T16:33:28.902+0000 | wazuh.manager | `458a6ee7-bb87-43bf-afb5-7da5a6f35ac6` | Wazuh rule 502 – OSSEC **manager started** (`Manager started`). |
 
----  
+*All timestamps are as reported in the source events.*  
 
-## IOCs  
+## Indicators of Compromise (IOCs)  
 
-| Value | Type | Reputation | Confidence | Tags | First Seen | Last Seen | Source |
-|-------|------|------------|------------|------|------------|-----------|--------|
-| 203.0.113.50 | ip | suspicious | 0.0 | non_public, reserved | – | 2026‑07‑25T14:10:58+00:00 | AbuseIPDB |
+| IOC Type | Value | Reputation | Source | Tags |
+|----------|-------|------------|--------|------|
+| IP | `100.90.153.71` | benign | AbuseIPDB | non_public, reserved |
+| Domain | `wazuh.manager` | unknown | (none) | – |
 
-*Evidence excerpt:* AbuseIPDB reports the address as non‑public, reserved, with 10 total reports and an abuse confidence score of **0**.
+## ATT&CK Techniques  
 
----  
-
-## ATT&CK Techniques (Confirmed)  
-
-| ATT&CK ID | Technique Name | Confidence | Rule Name | Matched On | Evidence Event ID | Known Groups (excerpt) | Known Software (excerpt) | Recommended Mitigations (excerpt) | SSH Brute‑Force Detected | Failures |
-|----------|----------------|------------|-----------|------------|-------------------|------------------------|--------------------------|-----------------------------------|--------------------------|----------|
-| T1110 | Brute Force | 0.90 | ssh_authentication_failed | `service='ssh' and event_type='authentication_failed'` | d0bc5c5e-0439-41fd-934a-0ddb09cd7f8f | Fox Kitten, HEXANE, Ember Bear, … (see list) | Chaos, Caterpillar WebShell, Kinsing, … | User Account Management, Account Use Policies, Multi‑factor Authentication, Password Policies | True | 3 |
-| T1110 | Brute Force | 0.90 | ssh_authentication_failed | `service='ssh' and event_type='authentication_failed'` | c77c353a-f772-4c46-8a53-bf838ec4c429 | (same as above) | (same as above) | (same as above) | True | 3 |
-| T1110 | Brute Force | 0.90 | ssh_authentication_failed | `service='ssh' and event_type='authentication_failed'` | a9541333-0230-446a-a158-b73cd6e157d9 | (same as above) | (same as above) | (same as above) | True | 3 |
-
-*All three entries correspond to the three failed authentication events.*
-
----  
+No ATT&CK techniques were mapped in the provided evidence.  
 
 ## Campaign Assessment  
-The campaign, labeled **“Unclassified Activity,”** consists of a short‑lived SSH brute‑force attempt against a single Linux host. The pattern of three rapid failures followed by a successful login strongly indicates a credential‑guessing operation (ATT&CK T1110). No further lateral movement, data exfiltration, or persistence techniques have been observed to date.  
 
-**Key points**  
+The activity consists of standard OSSEC operational messages (agent disconnect and manager start). There are no signs of exploitation, lateral movement, credential abuse, or other adversary behavior. Given the low confidence score (0.1) and the benign nature of the sole IP IOC, the event is assessed as **low‑severity, likely benign**.  
 
-- Source IP **203.0.113.50** is suspicious but classified as a reserved address, limiting external attribution.  
-- The successful login used the `root` account, suggesting the attacker either guessed the password or leveraged a weak credential.  
-- Confidence in the overall campaign assessment is **0.6** (as provided).  
+## Predicted Next Steps  
 
----  
-
-## Predicted Next Steps (Probabilistic Forecast)  
-
-| Forecast Technique ID | Technique Name | Rationale |
-|-----------------------|----------------|-----------|
-| T1078 | Valid Accounts | After obtaining valid credentials via brute‑force, the adversary is likely to use them for further logins. |
-| T1098 | Account Manipulation | The attacker may create or modify accounts to maintain privileged access. |
-| T1552 | Unsecured Credentials | Harvesting additional credential material is a common follow‑on after a successful login. |
-
-*These techniques are forecasts only and have **not** been observed.*
-
----  
+The prediction component contains no forecasted techniques. Consequently, no probabilistic next‑step guidance can be provided at this time.  
 
 ## Recommendations  
 
-**Mitigations for Confirmed Technique (T1110 – Brute Force)**  
+| # | Recommendation |
+|---|----------------|
+| 1 | Continue monitoring OSSEC agent connectivity on *victim‑machine* and ensure the agent reconnects promptly. |
+| 2 | Verify that the OSSEC manager on **wazuh.manager** is operating with expected configuration and version. |
+| 3 | Review recent OSSEC logs for any additional anomalies (e.g., repeated disconnects, unexpected process launches). |
+| 4 | Maintain the current benign assessment of IP `100.90.153.71`; re‑evaluate if its reputation changes. |
+| 5 | Keep the SOC informed of any new events that could map to ATT&CK techniques. |
 
-1. **User Account Management** – Enforce least‑privilege principles; disable unnecessary root SSH access.  
-2. **Account Use Policies** – Implement lockout thresholds after a limited number of failed attempts.  
-3. **Multi‑factor Authentication (MFA)** – Require MFA for privileged accounts, especially SSH.  
-4. **Password Policies** – Enforce strong, complex passwords and regular rotation.  
-
-**Specific actions for the observed SSH brute‑force event**  
-
-- **Notify security analyst immediately** (already initiated).  
-- **Temporarily block the source IP address** `203.0.113.50`.  
-- **Review the compromised `root` account** for any unauthorized activity or changes.  
-- **Consider implementing SSH key‑based authentication** and disabling password authentication for privileged users.  
-- **Review SSH logs** for additional suspicious activity (e.g., other source IPs, repeated attempts).  
-
----  
+*All recommendations are based solely on the confirmed techniques (none) and observed data.*  
 
 ## Response Actions  
 
 | Action Type | Target | Status | Severity | Rationale |
 |-------------|--------|--------|----------|-----------|
-| notify_analyst | SOC Analyst Team | pending_approval | medium | Campaign reports repeated brute‑force attempts (T1110) with high confidence (0.9) but no actionable IOCs meeting block or isolate thresholds. Analyst awareness is required to monitor for credential‑spraying activity and consider further investigation. |
-
-*The action is currently a dry‑run pending human approval.*
+| notify_analyst | SOC Team | executed | low | Email notification sent to **benlakhalrania869@gmail.com** – low‑severity activity detected with no observable ATT&CK techniques, malicious IPs, or compromised accounts. Continue monitoring and gather more evidence before taking disruptive actions. |
 
 ---  
 
-*End of Report*
+**Note:** The `summary_counts` indicate 1 action taken, 2 events, 2 IOCs, and 0 techniques. These counts match the items listed above; if future summaries show larger counts than the arrays, the excess represents additional, unlisted items.  

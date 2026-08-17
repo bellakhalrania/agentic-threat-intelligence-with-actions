@@ -5,7 +5,7 @@
 # Threat Intelligence Platform), executes them, and returns results.
 #
 # Usage:
-#   docker build -f remote_agent/Dockerfile -t remote-response-agent .
+#   cd remote_agent && docker build -t remote-response-agent .
 #   docker run -d -p 9001:9001 --name remote-agent remote-response-agent
 
 FROM python:3.11-slim
@@ -21,14 +21,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     iproute2 \
     net-tools \
     procps \
+    systemd \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy and install Python dependencies
-COPY remote_agent/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the remote agent code
-COPY remote_agent/ /app/remote_agent/
+COPY . /app/remote_agent/
 
 # Create directories for scripts and logs
 RUN mkdir -p /app/remote_agent/received_scripts /app/remote_agent/logs

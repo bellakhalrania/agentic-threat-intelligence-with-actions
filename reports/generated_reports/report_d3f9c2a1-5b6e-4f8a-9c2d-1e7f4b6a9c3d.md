@@ -2,74 +2,95 @@
 
 **Campaign:** Unclassified Activity
 **Campaign ID:** d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d
-**Generated:** 2026-08-02T17:59:29.766716+00:00
+**Generated:** 2026-08-13T16:10:52.757745+00:00
 
 ---
 
-**Threat Intelligence Report**  
-*Investigation ID: d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d*  
-*Date: 2026‑08‑02*  
+# Threat Intelligence Report  
+
+**Campaign ID:** `d3f9c2a1-5b6e-4f8a-9c2d-1e7f4b6a9c3d`  
+**Report Date:** 2026‑08‑13  
 
 ---  
 
-## Executive Summary
-During a short window on 2026‑08‑02, the host **ip‑172‑31‑19‑70** exhibited a series of privileged‑access events. An attacker used valid credentials (technique **T1078 – Valid Accounts**) to obtain root via `sudo`, then repeatedly executed `iptables` commands to set the **INPUT**, **OUTPUT**, and **FORWARD** policies to **ACCEPT** and finally flushed all firewall rules. The activity is internal to the host; the only external IOC (`100.120.11.97`) is marked **benign**, and the domain `wazuh.manager` has an **unknown** reputation. No external malicious IPs were observed.
+## Executive Summary  
+- Ten **sysmon_event_unknown** records were generated on the host **control‑node1** within a few seconds.  
+- All events originated from the same external IP address **100.117.52.58**.  
+- The IP is classified as **benign** (AbuseIPDB confidence 0.0) and carries the tags *non_public*, *reserved*.  
+- No ATT&CK techniques were mapped to these events; the confidence in the activity being malicious is low (0.2).  
+- A low‑severity notification was sent to the SOC team for continued monitoring.  
 
-## Timeline
-| Time (UTC) | Event ID | Description |
-|------------|----------|-------------|
-| 2026‑08‑02T17:50:33.567 | 6b6453eb-12b1-4f92-9316-b6a021d0eb1d | `sudo` executed `docker logs --tail 120 remote-response-agent` (root command). |
-| 2026‑08‑02T17:50:33.581 | 0e1e5c85-79b1-406a-8a6e-ecadca60af72 | Authentication success – session opened for **root** by user **ubuntu** (Valid Accounts). |
-| 2026‑08‑02T17:50:33.636 | 03bb23a0-3fe8-422d-ae52-a47933bc0b26 | Session closed for **root** (sudo caching). |
-| 2026‑08‑02T17:51:23.650 | e4d18d5c-502d-4228-a62f-69472804a78e | `iptables -P INPUT ACCEPT` – firewall INPUT chain set to ACCEPT. |
-| 2026‑08‑02T17:51:23.752 | c4d279bb-e871-42cb-a1f9-12264e6dff22 | Session closed for **root** (sudo caching). |
-| 2026‑08‑02T17:51:45.578 | 6ada7986-82cb-4502-9803-582947e44d23 | `iptables -P OUTPUT ACCEPT` – firewall OUTPUT chain set to ACCEPT. |
-| 2026‑08‑02T17:51:45.672 | 45bdcff5-0b0d-4c1d-9001-7f185491e148 | Authentication success – another root session opened. |
-| 2026‑08‑02T17:51:53.624 | 3435c2f1-b9bb-420d-9fef-28c23f327e4f | `iptables -P FORWARD ACCEPT` – firewall FORWARD chain set to ACCEPT. |
-| 2026‑08‑02T17:51:53.811 | 0665b449-0ee6-4d3f-b002-046b2c515c40 | Session closed for **root** (sudo caching). |
-| 2026‑08‑02T17:52:03.577 | 5c3e3a41-7e4c-4303-96be-0d99e12b9ed5 | `iptables -F` – all firewall rules flushed. |
-| 2026‑08‑02T17:52:03.630 | 0955a1ac-28b7-46ae-8e97-3510b2f2047e | Final root session closed. |
+---
+
+## Timeline  
+
+| Timestamp (UTC) | Event ID | Description |
+|-----------------|----------|-------------|
+| 2026‑08‑13T16:02:20.353467+00:00 | `2ca0e9c3-a692-48ea-a3f7-12e138a4c413` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:20.353628+00:00 | `3653e13e-55ec-439c-b890-543941b3ad7a` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:20.353845+00:00 | `ac4d5a1d-8f92-4d7c-ab19-12fb67a0be03` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:20.353990+00:00 | `57270d66-f3b6-442a-a963-59a11b6a8107` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.367473+00:00 | `84282774-2d64-47b6-aa73-438af7aee44a` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.368796+00:00 | `15dc32de-160e-4e30-ac30-bb7a4ea10aa9` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.369618+00:00 | `ae46ec76-973d-400b-8256-19057b2b2c5f` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.370513+00:00 | `cb52bde6-eb47-48c0-b965-a8185f551855` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.371273+00:00 | `ce31ef9e-a3e3-4237-a9e3-97cb0e4b2ba5` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:02:22.371980+00:00 | `9041532c-bdaf-490c-a9c1-70a0adea8030` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+
+*All timestamps are exact as recorded; the summary count of 10 events matches the listed records.*
+
+---
 
 ## Indicators of Compromise (IOCs)
-| Type | Value | Reputation | Source | Tags |
-|------|-------|------------|--------|------|
-| IP | 100.120.11.97 | benign | AbuseIPDB | non_public, reserved |
-| Domain | wazuh.manager | unknown | – | – |
 
-## ATT&CK Techniques (Observed)
-| Technique ID | Technique Name | Confidence (average) | Evidence Event IDs |
-|--------------|----------------|----------------------|--------------------|
-| **T1548.003** | Sudo and Sudo Caching | 0.91* | 6b6453eb, e4d18d5c, 6ada7986, 3435c2f1, 5c3e3a41, 0955a1ac, 03bb23a0, c4d279bb, 0665b449 |
-| **T1078** | Valid Accounts | 1.0 | 0e1e5c85, 45bdcff5 |
+| Type | Value | Reputation | Confidence | Source | Tags |
+|------|-------|------------|------------|--------|------|
+| IP | `100.117.52.58` | benign | 0.0 | AbuseIPDB | non_public, reserved |
 
-\*Average confidence calculated from the nine mappings (values 1.0, 0.78, 1.0, 0.72, 1.0, 0.65, 1.0, 0.82) → **0.91**.
+---
 
-## Campaign Assessment
-The activity aligns with the **“Unclassified Activity”** campaign description: an adversary leveraged legitimate credentials (user *ubuntu*) to obtain root via `sudo` (T1078) and then used sudo to modify the host’s firewall configuration (T1548.003). The sequence of `iptables` policy changes and a final rule flush effectively disables host‑based network filtering, exposing the system to lateral movement and data exfiltration. No external malicious IPs or domains were involved; the behavior appears to be **internal** to the compromised host.
+## ATT&CK Techniques  
 
-## Predicted Next Steps (Probabilistic Forecast)
-| Technique ID | Technique Name | Rationale |
-|--------------|----------------|-----------|
-| **T1098** | Account Manipulation | Having gained persistent root access and disabled the firewall, the adversary is likely to create or modify accounts to maintain long‑term access and broaden privileges. |
+No ATT&CK techniques were observed or mapped in the provided evidence.  
 
-*Only technique IDs from the prediction block are listed here; they are not confirmed observations.*
+*Confirmed technique list: **none**.*
 
-## Recommendations
-| Recommendation | Related ATT&CK Technique(s) |
-|----------------|-----------------------------|
-| Enforce **least‑privilege** policies: restrict `sudo` rights to only required commands and users. | T1078, T1548.003 |
-| Deploy **sudo logging and alerting** (e.g., real‑time monitoring of `sudo` events) to detect abnormal usage. | T1078, T1548.003 |
-| Implement **iptables change monitoring** (e.g., auditd rules, configuration management) and generate alerts on policy modifications. | T1548.003 |
-| Conduct a **post‑incident account audit**: verify that no new privileged accounts were created and that existing accounts have not been altered. | T1078 |
-| Apply **host‑based firewall hardening**: set default DROP policies and use immutable firewall rules where possible. | T1548.003 |
-| Review **container logs** accessed via the initial `docker logs` command for signs of data exfiltration or further malicious activity. | – |
-| Ensure **regular backups** of firewall configurations and system state to enable rapid restoration after unauthorized changes. | – |
+---
 
-## Response Actions
+## Campaign Assessment  
+
+- **Activity Type:** Unclassified activity consisting of unknown Sysmon events.  
+- **Objective:** Unknown (no technique mapping, low confidence).  
+- **Confidence Level:** 0.2 (low).  
+- **Potential Impact:** Currently undetermined; activity may be benign or a precursor to further actions.  
+
+The repeated events from a single IP suggest automated or scripted interaction, but without additional context the risk remains low.
+
+---
+
+## Predicted Next Steps  
+
+The prediction block contains no forecasted techniques. Consequently, **no probabilistic technique forecasts are available** at this time.
+
+---
+
+## Recommendations  
+
+1. **Continuous Monitoring** – Keep the host **control‑node1** under heightened observation for any new events or emergence of ATT&CK‑mapped behaviors.  
+2. **Log Enrichment** – Ensure Sysmon logging is fully configured (including command line, hashes, network connections) to capture richer data if activity evolves.  
+3. **Network Controls** – Consider temporary network‑level restrictions (e.g., rate‑limit or block) for source IP **100.117.52.58** pending further investigation.  
+4. **Host Review** – Perform a baseline integrity check on **control‑node1** (process list, file hashes, scheduled tasks) to detect any hidden changes.  
+5. **Threat Intelligence Correlation** – Periodically re‑query external feeds for the IP address and any related indicators.  
+6. **Alert Tuning** – Adjust detection rules to reduce false positives for unknown Sysmon events while preserving visibility.  
+
+---
+
+## Response Actions  
+
 | Action Type | Target | Status | Severity | Rationale |
 |-------------|--------|--------|----------|-----------|
-| *No response actions recorded in the provided evidence.* | – | – | – | – |
+| `notify_analyst` | SOC Team | executed | low | Low‑severity activity observed from source IP 100.117.52.58 targeting control‑node1 with no detected ATT&CK techniques. Monitoring recommended. |
 
 ---  
 
-*All statements in this report are derived directly from the supplied evidence. No additional data or assumptions have been introduced.*
+*All information presented is derived directly from the supplied evidence. No additional data has been inferred or fabricated.*

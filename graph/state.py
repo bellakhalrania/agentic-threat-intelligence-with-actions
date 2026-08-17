@@ -27,6 +27,9 @@ class InvestigationState(TypedDict, total=False):
     # --- Prediction Agent output ---
     prediction: Dict[str, Any]                # {likely_next_techniques: [...], rationale: str}
 
+    # --- Deterministic response context ---
+    threat_summary: Dict[str, Any]            # bounded context; no raw event records
+
     # --- Reporting Agent output ---
     report: str                               # final markdown intelligence report
 
@@ -56,6 +59,7 @@ def new_investigation_state(raw_events: Optional[List[Dict[str, Any]]] = None) -
         techniques=[],
         campaign={},
         prediction={},
+        threat_summary={},
         report="",
         actions_taken=[],
         execution_packages=[],

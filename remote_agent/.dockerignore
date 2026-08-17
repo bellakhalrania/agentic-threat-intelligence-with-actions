@@ -1,0 +1,10 @@
+# Secrets are injected by Docker Compose at runtime; never bake them into the image.
+.env
+
+# Runtime and developer artefacts
+__pycache__/
+*.py[cod]
+received_scripts/
+logs/
+execution_log.jsonl
+.git/

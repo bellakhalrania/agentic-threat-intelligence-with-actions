@@ -24,6 +24,7 @@ AUDIT_LOG_PATH = "./data/action_audit_log.jsonl"
 # Built lazily on first query, invalidated when a new entry is written.
 _index_built = False
 _index: Dict[str, list] = {
+    "by_action_id": defaultdict(list),
     "by_status": defaultdict(list),
     "by_action_type": defaultdict(list),
     "by_target": defaultdict(list),
@@ -52,6 +53,7 @@ def _rebuild_index():
                 continue
 
             _index["by_status"][entry.get("status", "unknown")].append(line_num)
+            _index["by_action_id"][entry.get("action_id", "")].append(line_num)
             _index["by_action_type"][entry.get("action_type", "unknown")].append(line_num)
             _index["by_target"][entry.get("target", "")].append(line_num)
             _index["by_campaign"][entry.get("campaign_id", "")].append(line_num)
@@ -82,7 +84,7 @@ def _read_entry(line_num: int) -> Optional[dict]:
     return None
 
 
-def record(result: ActionResult, campaign_id: str = ""):
+def record(result: ActionResult, campaign_id: str = "", metadata: Optional[Dict] = None) -> dict:
     """Write a single audit log entry (append-only).
 
     The entry includes all action fields plus execution context like
@@ -90,6 +92,7 @@ def record(result: ActionResult, campaign_id: str = ""):
     """
     os.makedirs(os.path.dirname(AUDIT_LOG_PATH), exist_ok=True)
     entry = {
+        "action_id": result.action_id,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "campaign_id": campaign_id,
         "action_type": result.action.action_type,
@@ -102,24 +105,44 @@ def record(result: ActionResult, campaign_id: str = ""):
         "detail": result.detail,
         "dry_run": result.dry_run,
     }
+    if metadata:
+        entry["approval"] = metadata
     with open(AUDIT_LOG_PATH, "a", encoding="utf-8") as f:
         f.write(json.dumps(entry, default=str) + "\n")
 
     # Invalidate the index so the next query rebuilds it
     global _index_built
     _index_built = False
+    return entry
 
 
 def read_pending_approvals() -> List[dict]:
-    """Return all entries with status == 'pending_approval'."""
+    """Return pending actions whose latest audit entry is still pending."""
     _ensure_index()
     line_nums = _index["by_status"].get("pending_approval", [])
     results = []
     for ln in line_nums:
         entry = _read_entry(ln)
-        if entry is not None:
+        if entry is not None and entry.get("action_id"):
+            latest = get_latest_action(entry["action_id"])
+            if latest and latest.get("status") == "pending_approval":
+                results.append(latest)
+        elif entry is not None:
+            # Legacy records predate stable action IDs and remain viewable, but
+            # cannot be safely approved because they cannot be de-duplicated.
             results.append(entry)
     return results
+
+
+def get_latest_action(action_id: str) -> Optional[dict]:
+    """Return the newest audit entry for a stable action ID."""
+    if not action_id:
+        return None
+    _ensure_index()
+    line_nums = _index["by_action_id"].get(action_id, [])
+    if not line_nums:
+        return None
+    return _read_entry(line_nums[-1])
 
 
 def query(

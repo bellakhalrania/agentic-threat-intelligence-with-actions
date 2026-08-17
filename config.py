@@ -6,9 +6,26 @@ never live in source control.
 """
 
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+ROOT_DIR = Path(__file__).resolve().parent
+load_dotenv(dotenv_path=ROOT_DIR / ".env", override=False)
+load_dotenv(dotenv_path=ROOT_DIR / "remote_agent" / ".env", override=False)
+
+
+def _read_env_file(path: str) -> dict[str, str]:
+    values: dict[str, str] = {}
+    env_path = Path(path)
+    if not env_path.exists():
+        return values
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        key, value = stripped.split("=", 1)
+        values[key.strip()] = value.strip().strip('"').strip("'")
+    return values
 
 
 class Config:
@@ -53,6 +70,16 @@ class Config:
     WAZUH_CURSOR_MAX_IDS = int(os.getenv("WAZUH_CURSOR_MAX_IDS", "5000"))
     WAZUH_POLL_INTERVAL = int(os.getenv("WAZUH_POLL_INTERVAL", "30"))  # seconds
     WAZUH_VERIFY_SSL = os.getenv("WAZUH_VERIFY_SSL", "false").lower() == "true"
+
+    # ---------------- Custom Agent Connector ----------------
+    # Optional HTTP endpoint on machine 2 that exposes the agent event feed.
+    AGENT_SOURCE_URL = os.getenv("AGENT_SOURCE_URL", "")
+    AGENT_SOURCE_API_KEY = os.getenv("AGENT_SOURCE_API_KEY", "")
+    AGENT_SOURCE_VERIFY_SSL = os.getenv("AGENT_SOURCE_VERIFY_SSL", "true").lower() == "true"
+    # Optional local spool file written by machine 2 when offline.
+    AGENT_EVENTS_PATH = os.getenv("AGENT_EVENTS_PATH", "./data/state/agent_events.jsonl")
+    AGENT_CURSOR_PATH = os.getenv("AGENT_CURSOR_PATH", "./data/state/agent_cursor.json")
+    AGENT_FETCH_LIMIT = int(os.getenv("AGENT_FETCH_LIMIT", "100"))
 
 
 
@@ -103,12 +130,35 @@ class Config:
     REMOTE_AGENT_ENABLED = os.getenv("REMOTE_AGENT_ENABLED", "false").lower() == "true"
     # Timeout (seconds) for remote script execution.
     REMOTE_AGENT_TIMEOUT = int(os.getenv("REMOTE_AGENT_TIMEOUT", "3600"))
+    # Target platform used when an analyst approves one action for remote execution.
+    APPROVAL_REMOTE_PLATFORM = os.getenv("APPROVAL_REMOTE_PLATFORM", "linux")
     # If true, allow pushing pending_approval actions remotely (unsafe).
     # Keep false in safe-mode lab/testing to avoid accidental disruptive actions.
     REMOTE_ALLOW_PENDING_EXECUTION = os.getenv("REMOTE_ALLOW_PENDING_EXECUTION", "false").lower() == "true"
     # HMAC-SHA256 shared secret for payload signing.
     # Must be the same on Machine 1 and Machine 2.
     REMOTE_AGENT_HMAC_SECRET = os.getenv("REMOTE_AGENT_HMAC_SECRET", "")
+    # Management source IP that should never be blocked by response actions.
+    REMOTE_MANAGER_IP = os.getenv("REMOTE_MANAGER_IP", "")
+    MANAGEMENT_SOURCE_IP = os.getenv("MANAGEMENT_SOURCE_IP", "")
+    PROTECTED_MANAGEMENT_IPS = [
+        item.strip()
+        for item in os.getenv("PROTECTED_MANAGEMENT_IPS", "").split(",")
+        if item.strip()
+    ]
+    # Protected target hostnames (e.g. control nodes) that must never be treated
+    # as malicious IOCs, isolated, or otherwise acted against.
+    PROTECTED_TARGET_HOSTS = [
+        item.strip().lower()
+        for item in os.getenv("PROTECTED_TARGET_HOSTS", "").split(",")
+        if item.strip()
+    ]
+    REMOTE_AGENT_PORT = int(os.getenv("REMOTE_AGENT_PORT", "9001"))
+
+    # ---------------- Machine 3 Agent Ingest API ----------------
+    AGENT_EVENT_STORE_PATH = os.getenv("AGENT_EVENT_STORE_PATH", "./data/state/agent_events_ingested.jsonl")
+    AGENT_EVENT_SHARED_KEY = os.getenv("AGENT_EVENT_SHARED_KEY", "")
+    AGENT_EVENT_MAX_ITEMS = int(os.getenv("AGENT_EVENT_MAX_ITEMS", "200"))
 
     @classmethod
     def validate(cls):
@@ -123,3 +173,74 @@ class Config:
 
 
 config = Config()
+
+
+def get_protected_management_ips() -> set[str]:
+    """Return protected management/SSH IPs derived from config, env files, and the current SSH context."""
+    candidates: set[str] = set()
+
+    for key in ("REMOTE_MANAGER_IP", "REMOTE_AGENT_NODE_IP", "MANAGEMENT_SOURCE_IP"):
+        value = os.getenv(key, "")
+        if value:
+            candidates.add(value.strip())
+
+    for key in ("REMOTE_MANAGER_IP", "REMOTE_AGENT_NODE_IP", "MANAGEMENT_SOURCE_IP"):
+        value = getattr(config, key, "") if "config" in globals() else ""
+        if isinstance(value, str) and value:
+            candidates.add(value.strip())
+
+    for item in getattr(config, "PROTECTED_MANAGEMENT_IPS", []) if "config" in globals() else []:
+        if item:
+            candidates.add(item.strip())
+
+    remote_agent_env = _read_env_file(ROOT_DIR / "remote_agent" / ".env")
+    for key in ("REMOTE_MANAGER_IP", "REMOTE_AGENT_NODE_IP", "MANAGEMENT_SOURCE_IP"):
+        value = remote_agent_env.get(key, "")
+        if value:
+            candidates.add(value.strip())
+
+    protected_env = os.getenv("PROTECTED_MANAGEMENT_IPS", "")
+    if protected_env:
+        for item in protected_env.split(","):
+            item = item.strip()
+            if item:
+                candidates.add(item)
+
+    ssh_client = os.getenv("SSH_CLIENT", "")
+    if ssh_client:
+        first_token = ssh_client.split()[0].strip()
+        if first_token:
+            candidates.add(first_token)
+
+    ssh_connection = os.getenv("SSH_CONNECTION", "")
+    if ssh_connection:
+        first_token = ssh_connection.split()[0].strip()
+        if first_token:
+            candidates.add(first_token)
+
+    return {ip for ip in candidates if ip and not ip.startswith("$")}
+
+
+def is_protected_target(value: str) -> bool:
+    """Return True if the value matches a protected management IP or a protected target hostname.
+
+    Matches exact IPs from the protected management set, as well as configured
+    protected hostnames case-insensitively. Subdomains of a protected hostname
+    (e.g. "worker-1.control-node1") are also treated as protected so they cannot
+    be used to bypass the guardrail.
+    """
+    if not value:
+        return False
+    value = value.strip()
+    if not value:
+        return False
+
+    if value in get_protected_management_ips():
+        return True
+
+    hostname = value.lower()
+    protected_hosts = getattr(config, "PROTECTED_TARGET_HOSTS", [])
+    for protected in protected_hosts:
+        if hostname == protected or hostname.endswith("." + protected):
+            return True
+    return False

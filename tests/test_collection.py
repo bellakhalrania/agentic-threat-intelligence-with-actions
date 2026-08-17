@@ -394,6 +394,26 @@ class TestFallbackSource:
         result = agent.run([event])
         assert result[0]["source"] == "suricata"
 
+    def test_sshd_auth_failure_is_normalized_for_attack_mapping(self, agent):
+        """Custom SSH collector events must satisfy the T1110 matcher inputs."""
+        event = {
+            "event_id": "ssh-1",
+            "source": "sshd",
+            "event_type": "auth_failed",
+            "timestamp": "2026-08-13T16:21:54Z",
+            "host": "control-node1",
+            "src_ip": "100.117.52.58",
+            "username": "lanna",
+            "severity": "high",
+        }
+
+        result = agent.run([event])[0]
+
+        assert result["source"] == "linux"
+        assert result["service"] == "ssh"
+        assert result["event_type"] == "authentication_failed"
+        assert result["severity"] == "high"
+
 
 # ═══════════════════════════════════════════════════════════════════════
 # No inference / no modification guarantees

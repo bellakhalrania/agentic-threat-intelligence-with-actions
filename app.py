@@ -22,12 +22,14 @@ from typing import Optional, List, Dict, Any
 import json
 import logging
 import os
+import uuid
 from datetime import datetime, timezone
 
 # Import project modules
 from graph.workflow import threat_intel_workflow
 from graph.state import new_investigation_state
 from connectors.wazuh_connector import WazuhConnector
+from actions.approval_service import ApprovalError, decide_pending_action, list_pending_actions
 import config
 
 # Configure logging
@@ -130,6 +132,19 @@ class ActionOnlyResponse(BaseModel):
     error: Optional[str] = None
 
 
+class ApprovalDecisionRequest(BaseModel):
+    """A human review decision for one pending response action."""
+    decision: str = Field(..., pattern="^(approve|deny)$")
+    reviewer: str = Field(..., min_length=1, max_length=200)
+    note: str = Field("", max_length=2000)
+
+
+class ApprovalDecisionResponse(BaseModel):
+    success: bool
+    action: Optional[Dict[str, Any]] = None
+    error: Optional[str] = None
+
+
 class RemoteExecutionWebhookPayload(BaseModel):
     """Execution result posted from Machine 2 remote agent."""
     execution_id: str
@@ -146,11 +161,38 @@ class RemoteExecutionWebhookPayload(BaseModel):
     agent_ip: str = ""
 
 
+class AgentEventsIngestRequest(BaseModel):
+    """Batch of raw events sent from a custom agent."""
+
+    events: List[Dict[str, Any]] = Field(..., min_length=1)
+
+
+class AgentEventsIngestResponse(BaseModel):
+    success: bool
+    events_stored: int = 0
+    latest_event_id: Optional[str] = None
+    timestamp: str
+    error: Optional[str] = None
+
+
+class AgentLatestResponse(BaseModel):
+    success: bool
+    count: int
+    events: List[Dict[str, Any]]
+    timestamp: str
+
+
 WEBHOOK_RESULTS_PATH = os.getenv(
     "REMOTE_RESULT_STORAGE_PATH",
     "./data/remote_results/execution_results.jsonl",
 )
 WEBHOOK_SHARED_KEY = os.getenv("REMOTE_WEBHOOK_KEY", "")
+AGENT_EVENTS_PATH = os.getenv(
+    "AGENT_EVENT_STORE_PATH",
+    "./data/state/agent_events_ingested.jsonl",
+)
+AGENT_SHARED_KEY = os.getenv("AGENT_EVENT_SHARED_KEY", "")
+AGENT_LATEST_LIMIT = int(os.getenv("AGENT_EVENT_MAX_ITEMS", "200"))
 
 
 def _append_remote_execution_result(entry: Dict[str, Any]) -> None:
@@ -158,6 +200,41 @@ def _append_remote_execution_result(entry: Dict[str, Any]) -> None:
     os.makedirs(os.path.dirname(WEBHOOK_RESULTS_PATH), exist_ok=True)
     with open(WEBHOOK_RESULTS_PATH, "a", encoding="utf-8") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+
+def _append_agent_event(entry: Dict[str, Any]) -> None:
+    """Persist an ingested agent event as JSONL."""
+    os.makedirs(os.path.dirname(AGENT_EVENTS_PATH), exist_ok=True)
+    with open(AGENT_EVENTS_PATH, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+
+def _read_agent_events(limit: int = AGENT_LATEST_LIMIT) -> List[Dict[str, Any]]:
+    """Read the most recent ingested agent events from disk."""
+    if not os.path.exists(AGENT_EVENTS_PATH):
+        return []
+
+    events: List[Dict[str, Any]] = []
+    try:
+        with open(AGENT_EVENTS_PATH, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    event = json.loads(line)
+                except json.JSONDecodeError:
+                    logger.warning("Skipping invalid stored agent event line")
+                    continue
+                if isinstance(event, dict):
+                    events.append(event)
+    except OSError as e:
+        logger.error(f"Failed to read agent event store: {e}")
+        return []
+
+    if limit > 0:
+        return events[-limit:]
+    return events
 
 
 # Background task for async investigation
@@ -222,6 +299,62 @@ async def health():
             "chromadb": "up" if chroma_ok else "down"
         }
     }
+
+
+@app.get("/agent/health")
+async def agent_health():
+    """Health check for the custom agent ingest path."""
+    stored_events = _read_agent_events(limit=1)
+    return {
+        "status": "healthy",
+        "timestamp": datetime.utcnow().isoformat(),
+        "version": "1.0.0",
+        "events_stored": len(_read_agent_events(limit=0)),
+        "latest_event": stored_events[-1] if stored_events else None,
+    }
+
+
+@app.post("/agent/events", response_model=AgentEventsIngestResponse)
+async def ingest_agent_events(
+    request: AgentEventsIngestRequest,
+    x_agent_key: Optional[str] = Header(None, alias="X-Agent-Key"),
+):
+    """Receive raw events from a custom agent running on machine 2."""
+    if AGENT_SHARED_KEY:
+        if not x_agent_key or x_agent_key != AGENT_SHARED_KEY:
+            raise HTTPException(status_code=403, detail="Invalid agent authentication key")
+
+    latest_event_id: Optional[str] = None
+    try:
+        for event in request.events:
+            record = dict(event)
+            record.setdefault("source", "agent")
+            record.setdefault("event_id", str(uuid.uuid4()))
+            record["received_at"] = datetime.now(timezone.utc).isoformat()
+            latest_event_id = str(record.get("event_id"))
+            _append_agent_event(record)
+        return AgentEventsIngestResponse(
+            success=True,
+            events_stored=len(request.events),
+            latest_event_id=latest_event_id,
+            timestamp=datetime.now(timezone.utc).isoformat(),
+        )
+    except OSError as e:
+        logger.error(f"Failed to persist agent events: {e}")
+        raise HTTPException(status_code=500, detail="Failed to persist agent events")
+
+
+@app.get("/agent/latest", response_model=AgentLatestResponse)
+async def latest_agent_events(limit: int = 20):
+    """Return the latest stored agent events for debugging and replay."""
+    effective_limit = max(1, min(limit, AGENT_LATEST_LIMIT))
+    events = _read_agent_events(limit=effective_limit)
+    return AgentLatestResponse(
+        success=True,
+        count=len(events),
+        events=events,
+        timestamp=datetime.utcnow().isoformat(),
+    )
 
 
 @app.post("/investigate", response_model=InvestigationResponse)
@@ -347,6 +480,11 @@ async def list_connectors():
                 "name": "wazuh",
                 "description": "Wazuh security alerts",
                 "modes": ["file", "api"]
+            },
+            {
+                "name": "agent",
+                "description": "Custom machine-2 agent events",
+                "modes": ["http", "file"]
             }
         ]
     }
@@ -362,6 +500,14 @@ async def get_config():
             "alerts_path": config.WAZUH_ALERTS_PATH,
             "poll_interval": config.WAZUH_POLL_INTERVAL,
             "verify_ssl": config.WAZUH_VERIFY_SSL
+        },
+        "agent": {
+            "source_url": config.AGENT_SOURCE_URL,
+            "events_path": config.AGENT_EVENTS_PATH,
+            "cursor_path": config.AGENT_CURSOR_PATH,
+            "fetch_limit": config.AGENT_FETCH_LIMIT,
+            "event_store_path": config.AGENT_EVENT_STORE_PATH,
+            "auth_configured": bool(config.AGENT_EVENT_SHARED_KEY),
         },
         "threat_intel": {
             "abuseipdb_configured": bool(config.ABUSEIPDB_API_KEY),
@@ -530,6 +676,35 @@ async def response_actions(request: ActionOnlyRequest):
             success=False,
             error=str(e)
         )
+
+
+@app.get("/response/pending-actions")
+async def get_pending_response_actions():
+    """List pending actions that still require a human reviewer decision."""
+    return {"actions": list_pending_actions()}
+
+
+@app.post(
+    "/response/pending-actions/{action_id}/decision",
+    response_model=ApprovalDecisionResponse,
+)
+async def decide_response_action(action_id: str, request: ApprovalDecisionRequest):
+    """Approve-and-execute or deny a single pending action.
+
+    The caller supplies a reviewer identity for the audit trail. Deployments
+    should place this endpoint behind their existing authenticated analyst UI
+    or API gateway so that the identity is trustworthy.
+    """
+    try:
+        action = decide_pending_action(
+            action_id=action_id,
+            decision=request.decision,
+            reviewer=request.reviewer,
+            note=request.note,
+        )
+        return ApprovalDecisionResponse(success=True, action=action)
+    except ApprovalError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
 @app.post("/attack/search", response_model=SearchResponse)

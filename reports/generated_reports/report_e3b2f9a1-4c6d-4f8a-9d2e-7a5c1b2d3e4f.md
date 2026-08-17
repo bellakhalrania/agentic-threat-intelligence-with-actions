@@ -2,96 +2,90 @@
 
 **Campaign:** Unclassified Activity
 **Campaign ID:** e3b2f9a1-4c6d-4f8a-9d2e-7a5c1b2d3e4f
-**Generated:** 2026-08-02T17:31:49.200853+00:00
+**Generated:** 2026-08-13T16:15:20.343181+00:00
 
 ---
 
-# Threat Intelligence Report  
-
-**Campaign ID:** `e3b2f9a1-4c6d-4f8a-9d2e-7a5c1b2d3e4f`  
-**Report Date:** 2026‑08‑02  
-
----  
-
-## Executive Summary  
-During a short window on 2026‑08‑02, three consecutive failed SSH authentication attempts for user **labuser** were recorded from source IP **172.31.24.217**. The failures were identified as **Password Guessing (T1110.001)** over **SSH (T1021.004)**. Shortly thereafter, a successful SSH login for the same account was observed, indicating the use of a **Valid Account (T1078)**. No malicious IOCs were detected; the only listed IP IOC (`100.120.11.97`) is marked *benign*. The activity reflects an attempt to obtain unauthorized access via credential compromise. Host isolation has been initiated and the SOC has been notified.  
+**Threat Intelligence Report**  
+*Campaign ID:* `e3b2f9a1-4c6d-4f8a-9d2e-7a5c1b2d3e4f`  
+*Report Date:* 2026‑08‑13  
 
 ---  
 
-## Timeline  
+## Executive Summary
+- Ten **sysmon_event_unknown** records were generated on host **control‑node1** within a few seconds.  
+- All events originated from the same external IP address **100.117.52.58**.  
+- The IP is listed in AbuseIPDB with a **benign** reputation and **0 % confidence**.  
+- No ATT&CK techniques were mapped to the observed events; the campaign’s objective is **unknown**.  
+- Confidence in the overall campaign classification is low (**0.2**).  
+- A low‑severity notification was sent to the SOC team; continued monitoring is recommended.
 
+---
+
+## Timeline
 | Timestamp (UTC) | Event ID | Description |
 |-----------------|----------|-------------|
-| 2026‑08‑02T17:30:30Z | 59212741-78fe-4958-a9f3-d5ff1135cc59 | Failed authentication for *labuser* from 172.31.24.217 (password guessing). |
-| 2026‑08‑02T17:30:32Z | 97cee7a2-3b94-48aa-94cf-a2e5480d1000 | Second failed password for *labuser* from 172.31.24.217, port 42432 (SSH). |
-| 2026‑08‑02T17:30:36Z | 86bbb2fe-9f19-4f8b-9fc9-71c4e9e7548d | Third failed password for *labuser* from 172.31.24.217 (SSH). |
-| 2026‑08‑02T17:30:49Z | 498a6d0c-d15d-435d-8c30-24d86fcc25cf | Successful SSH login for *labuser* (uid=1001). |
-| 2026‑08‑02T17:30:49Z | c8723938-903c-4c74-bc51-19b0d6078396 | Systemd reports session opened for *labuser* (confirmation of valid account usage). |
-| 2026‑08‑02T17:30:53Z | 8dda56f0-eb76-4706-88c7-85a27b6aa696 | SSH session closed for *labuser* (end of observed activity). |
+| 2026‑08‑13T16:07:12.306446+00:00 | `3343bb3e-d5fb-4405-8397-ed8cf37edc71` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:12.306704+00:00 | `c73e4b5a-9581-4af1-8dd6-ec12359e6ade` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:12.306900+00:00 | `de634d06-a3c9-4b00-a998-e644de071084` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:12.309967+00:00 | `bfa7160f-cde8-4e6f-ac3e-99aaa7e41b00` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:14.367373+00:00 | `6b647d82-b8a7-4271-a828-c1f2be8223ac` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:14.368431+00:00 | `4e2657c1-1805-4db5-8942-2916502f276e` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:14.369976+00:00 | `820a33bf-7b90-4493-81e0-d822303e8675` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:14.371086+00:00 | `c1fd0e95-f220-4742-a55e-7b0c83613f83` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:14.372023+00:00 | `4d6abd8c-24c4-4956-a271-00b7dd69db80` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
+| 2026‑08‑13T16:07:14.372752+00:00 | `745c93e8-2efe-4c3b-8592-95036983c7ce` | sysmon_event_unknown on **control‑node1** from source IP **100.117.52.58** |
 
----  
+*Note:* The summary count for events (10) matches the listed events.
 
-## Indicators of Compromise (IOCs)  
+---
 
-| IOC Type | Value | Reputation | Source | Tags |
-|----------|-------|------------|--------|------|
-| IP | 100.120.11.97 | benign | AbuseIPDB | non_public, reserved |
-| Domain | wazuh.manager | unknown |  |  |
+## Indicators of Compromise (IOCs)
 
-*No malicious IOCs were associated with the observed activity.*  
+| Type | Value | Reputation | Source | Confidence | Tags |
+|------|-------|------------|--------|------------|------|
+| IP | `100.117.52.58` | benign | AbuseIPDB | 0.0 | non_public, reserved |
 
----  
+---
 
-## ATT&CK Techniques (Observed)  
+## ATT&CK Techniques Observed
+No ATT&CK techniques were mapped to the observed events.  
 
-| Technique ID | Technique Name | Confidence | Evidence Event IDs |
-|--------------|----------------|------------|--------------------|
-| T1110.001 | Password Guessing | 1.0 | 59212741-78fe-4958-a9f3-d5ff1135cc59, 97cee7a2-3b94-48aa-94cf-a2e5480d1000, 86bbb2fe-9f19-4f8b-9fc9-71c4e9e7548d |
-| T1021.004 | SSH | 1.0 | 97cee7a2-3b94-48aa-94cf-a2e5480d1000, 86bbb2fe-9f19-4f8b-9fc9-71c4e9e7548d |
-| T1078 | Valid Accounts | 1.0 | 498a6d0c-d15d-435d-8c30-24d86fcc25cf, c8723938-903c-4c74-bc51-19b0d6078396 |
+*Technique count:* **0** (matches summary count).
 
----  
+---
 
-## Campaign Assessment  
+## Campaign Assessment
+- **Name:** Unclassified Activity  
+- **Objective:** Unknown  
+- **Confidence:** 0.2 (low)  
+- **Related Techniques:** None identified.  
+- The activity consists solely of unknown Sysmon events from a single external IP.  
+- Given the benign reputation of the IP and lack of mapped techniques, the activity is currently assessed as low‑severity and may represent benign scanning or misconfiguration.
 
-* **Objective:** Obtain valid user credentials to gain unauthorized SSH access.  
-* **Confidence:** 0.7 (as provided in the campaign object).  
-* **Evidence Summary:** Three consecutive `authentication_failed` events from 172.31.24.217 demonstrate password‑guessing over SSH (T1110.001, T1021.004). This was followed by two `authentication_success` events for user *labuser*, confirming the use of a valid account (T1078). No malicious IOCs were identified.  
+---
 
----  
+## Predicted Next Steps
+The prediction component reports **no likely next techniques** and provides the rationale: *“No techniques observed yet.”*  
+Therefore, no specific technique forecasts can be listed at this time.
 
-## Predicted Next Steps (Forecast)  
+---
 
-| Technique ID | Technique Name | Rationale |
-|--------------|----------------|-----------|
-| T1003 | OS Credential Dumping | After obtaining a valid account via SSH, attackers often dump credentials from the compromised host to harvest additional passwords, hashes, or tokens for further lateral movement or privilege escalation. |
-| T1098 | Account Manipulation | With a valid account already in use, the adversary may modify existing accounts or create new privileged accounts to maintain persistence and expand access. |
+## Recommendations
+1. **Continue Monitoring** – Keep an eye on Sysmon logs for any new event types or escalation.  
+2. **Validate Source IP** – Perform a passive DNS and WHOIS lookup on `100.117.52.58` to confirm its ownership and any recent reputation changes.  
+3. **Network Controls** – If additional suspicious activity is observed from this IP, consider temporary network‑level blocking.  
+4. **Log Review** – Expand log collection on **control‑node1** (e.g., Windows Security, PowerShell, and authentication logs) to capture any subsequent activity that could map to ATT&CK techniques.  
+5. **Endpoint Hardening** – Ensure the host has up‑to‑date anti‑malware, host‑based intrusion detection, and that unnecessary services are disabled.  
 
-*These techniques are probabilistic forecasts and have not been observed in the current data set.*  
+*All recommendations are generic and do not reference specific ATT&CK technique IDs, in accordance with the confirmed technique list (none).*
 
----  
+---
 
-## Recommendations  
-
-Mitigations aligned with the confirmed techniques (T1110.001, T1021.004, T1078):
-
-1. **Enforce account lockout** after a configurable number of failed SSH login attempts to limit password‑guessing (T1110.001).  
-2. **Implement SSH key‑based authentication** and disable password authentication where possible (T1021.004).  
-3. **Restrict SSH access** to trusted source IP ranges using firewall rules or security groups.  
-4. **Monitor and alert** on repeated failed SSH logins and successful logins from newly observed source IPs.  
-5. **Review the “labuser” account** for any unauthorized activity or privilege changes (T1078).  
-6. **Rotate credentials** for the compromised account and any other accounts with similar privileges.  
-7. **Apply host‑based intrusion detection** to detect anomalous post‑login behavior (e.g., credential dumping, account manipulation).  
-
----  
-
-## Response Actions  
+## Response Actions
 
 | Action Type | Target | Status | Severity | Rationale |
 |-------------|--------|--------|----------|-----------|
-| isolate_host | 100.120.11.97 | pending_approval | high | Multiple high‑confidence ATT&CK techniques observed (Password Guessing T1110.001, SSH T1021.004, Valid Accounts T1078) indicate an active credential‑theft attempt; isolation will stop further brute‑force attempts and prevent lateral movement. |
-| notify_analyst | SOC Team | executed_remote | medium | Campaign e3b2f9a1‑4c6d‑4f8a‑9d2e‑7a5c1b2d3e4f detected with objective to obtain SSH credentials. High‑confidence techniques T1110.001, T1021.004, and T1078 observed. Host 100.120.11.97 has been isolated pending further investigation. |
+| `notify_analyst` | SOC Team | executed | low | Email notification sent to benlakhalrania869@gmail.com; low‑severity activity observed from source IP 100.117.52.58 targeting control‑node1 with no detected ATT&CK techniques. Monitoring recommended. |
 
----  
-
-*End of Report*  
+*Summary counts:* actions taken = 1 (matches the table), events = 10, IOCs = 1, techniques = 0.

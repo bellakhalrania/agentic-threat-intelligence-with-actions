@@ -96,6 +96,31 @@ def sample_iocs():
     ]
 
 
+@pytest.fixture
+def sample_threat_summary():
+    return {
+        "campaign": {
+            "campaign_id": "test-camp-001",
+            "name": "Test Campaign",
+            "severity": "high",
+            "confidence": 0.9,
+        },
+        "event_count": 1,
+        "failed_login_count": 0,
+        "affected_hosts": ["WORKSTATION-01"],
+        "affected_users": [],
+        "source_ips": ["198.51.100.99"],
+        "processes": [],
+        "top_mitre_techniques": [
+            {"id": "T1059.001", "name": "PowerShell", "count": 1, "confidence": 1.0},
+        ],
+        "prediction": {"likely_next_techniques": [], "rationale": ""},
+        "valid_action_targets": ["198.51.100.99", "WORKSTATION-01", "SOC Team"],
+        "victim_isolation_targets": ["WORKSTATION-01"],
+        "attacker_source_ips": ["198.51.100.99"],
+    }
+
+
 # ═══════════════════════════════════════════════════════════════════════
 # Connector Tests
 # ═══════════════════════════════════════════════════════════════════════
@@ -467,20 +492,19 @@ class TestResponseAgent:
         audit_log.AUDIT_LOG_PATH = original_path
         audit_log._index_built = False
 
-    def test_empty_proposals(self, agent, sample_campaign, sample_techniques, sample_iocs):
+    def test_empty_proposals(self, agent, sample_threat_summary, sample_iocs):
         """When LLM returns no proposals, agent should return empty list."""
         with patch("agents.response_agent.invoke_llm", return_value="[]"):
-            results = agent.run(sample_campaign, sample_techniques, sample_iocs)
+            results = agent.run(sample_threat_summary, sample_iocs)
             assert results == []
 
-    def test_malformed_llm_output_returns_empty(self, agent, sample_campaign,
-                                                 sample_techniques, sample_iocs):
+    def test_malformed_llm_output_returns_empty(self, agent, sample_threat_summary, sample_iocs):
         """When LLM returns non-JSON, agent should return empty list."""
         with patch("agents.response_agent.invoke_llm", return_value="Not JSON at all"):
-            results = agent.run(sample_campaign, sample_techniques, sample_iocs)
+            results = agent.run(sample_threat_summary, sample_iocs)
             assert results == []
 
-    def test_single_notify_action(self, agent, sample_campaign, sample_techniques, sample_iocs):
+    def test_single_notify_action(self, agent, sample_threat_summary, sample_iocs):
         """A single notify_analyst action should be processed."""
         llm_output = json.dumps([
             {
@@ -493,13 +517,14 @@ class TestResponseAgent:
             }
         ])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output):
-            results = agent.run(sample_campaign, sample_techniques, sample_iocs)
+            results = agent.run(sample_threat_summary, sample_iocs)
             assert len(results) == 1
             assert results[0].action.action_type == "notify_analyst"
             assert results[0].status in ("executed", "pending_approval")
 
-    def test_multiple_actions(self, agent, sample_campaign, sample_techniques, sample_iocs):
+    def test_multiple_actions(self, agent, sample_threat_summary, sample_iocs):
         """Multiple actions should all be processed."""
+        sample_iocs[0].update({"reputation": "malicious", "confidence": 0.9})
         llm_output = json.dumps([
             {
                 "action_type": "block_ip",
@@ -519,12 +544,12 @@ class TestResponseAgent:
             },
         ])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output):
-            results = agent.run(sample_campaign, sample_techniques, sample_iocs)
+            results = agent.run(sample_threat_summary, sample_iocs)
             assert len(results) == 2
             assert results[0].action.action_type == "block_ip"
             assert results[1].action.action_type == "notify_analyst"
 
-    def test_actions_are_audit_logged(self, agent, sample_campaign, sample_techniques, sample_iocs):
+    def test_actions_are_audit_logged(self, agent, sample_threat_summary, sample_iocs):
         """Every action should be written to the audit log."""
         llm_output = json.dumps([
             {
@@ -537,12 +562,12 @@ class TestResponseAgent:
             }
         ])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output):
-            agent.run(sample_campaign, sample_techniques, sample_iocs)
+            agent.run(sample_threat_summary, sample_iocs)
             entries = audit_log.get_recent()
             assert len(entries) == 1
             assert entries[0]["campaign_id"] == "test-camp-001"
 
-    def test_malformed_action_skipped(self, agent, sample_campaign, sample_techniques, sample_iocs):
+    def test_malformed_action_skipped(self, agent, sample_threat_summary, sample_iocs):
         """A malformed action in the array should be skipped, not crash."""
         llm_output = json.dumps([
             {"invalid": "no action_type"},  # missing required fields
@@ -556,12 +581,11 @@ class TestResponseAgent:
             },
         ])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output):
-            results = agent.run(sample_campaign, sample_techniques, sample_iocs)
+            results = agent.run(sample_threat_summary, sample_iocs)
             assert len(results) == 1
             assert results[0].action.action_type == "notify_analyst"
 
-    def test_unknown_action_type_returns_failed(self, agent, sample_campaign,
-                                                 sample_techniques, sample_iocs):
+    def test_unknown_action_type_returns_failed(self, agent, sample_threat_summary, sample_iocs):
         """An action type not in ACTION_DISPATCH should fail gracefully."""
         llm_output = json.dumps([
             {
@@ -574,12 +598,14 @@ class TestResponseAgent:
             }
         ])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output):
-            results = agent.run(sample_campaign, sample_techniques, sample_iocs)
+            results = agent.run(sample_threat_summary, sample_iocs)
             # Malformed action_type will fail ProposedAction validation and be skipped
             assert len(results) == 0
 
-    def test_protected_target_denied(self, agent, sample_campaign, sample_techniques, sample_iocs):
-        """Actions against protected targets should be denied."""
+    def test_protected_target_rejected_before_policy(self, agent, sample_threat_summary, sample_iocs):
+        """Response Agent rejects protected containment targets before policy evaluation."""
+        sample_threat_summary["valid_action_targets"].append("DC-FILESRV01")
+        sample_threat_summary["victim_isolation_targets"] = ["DC-FILESRV01"]
         llm_output = json.dumps([
             {
                 "action_type": "isolate_host",
@@ -592,23 +618,67 @@ class TestResponseAgent:
         ])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output), \
              patch.object(config, "AUTO_RESPONSE_ENABLED", True):
-            results = agent.run(sample_campaign, sample_techniques, sample_iocs)
+            results = agent.run(sample_threat_summary, sample_iocs)
             assert len(results) == 1
-            assert results[0].status == "denied"
-            assert "protected" in results[0].detail.lower()
+            assert results[0].action.action_type == "notify_analyst"
 
-    def test_llm_invoked_with_correct_prompt(self, agent, sample_campaign,
-                                              sample_techniques, sample_iocs):
-        """The LLM should be called with the campaign, techniques, and IOCs."""
+    def test_ambiguous_sudo_event_only_notifies_analyst(self, agent):
+        """T1548.003 and predictions cannot turn a sudo session-close into containment."""
+        threat_summary = {
+            "campaign": {"campaign_id": "sudo-1", "severity": "high"},
+            "event_count": 1,
+            "top_mitre_techniques": [
+                {"id": "T1548.003", "name": "Sudo and Sudo Caching", "count": 1, "confidence": 1.0}
+            ],
+            "prediction": {"likely_next_techniques": ["T1003", "T1098", "T1083"]},
+            "valid_action_targets": ["control-node1", "100.123.23.97", "SOC_analyst"],
+            "victim_isolation_targets": ["control-node1"],
+            "attacker_source_ips": ["100.123.23.97"],
+        }
+        iocs = [{
+            "value": "100.123.23.97", "ioc_type": "ipv4", "reputation": "benign",
+            "confidence": 1.0, "tags": ["protected_management", "trusted"],
+        }]
+        llm_output = json.dumps([
+            {"action_type": "isolate_host", "target": "control-node1", "severity": "high", "rationale": "Root escalation detected", "technique_id": "T1548.003", "confidence": 1.0},
+            {"action_type": "block_ip", "target": "100.123.23.97", "severity": "medium", "rationale": "Block source", "technique_id": "T1003", "confidence": 1.0},
+            {"action_type": "disable_account", "target": "root", "severity": "high", "rationale": "Disable root", "technique_id": "T1098", "confidence": 1.0},
+        ])
+        with patch("agents.response_agent.invoke_llm", return_value=llm_output):
+            results = agent.run(threat_summary, iocs)
+
+        assert [result.action.action_type for result in results] == ["notify_analyst"]
+        assert "does not independently confirm malicious privilege escalation" in results[0].action.rationale
+
+    def test_predicted_techniques_and_severity_do_not_authorize_isolation(self, agent, sample_threat_summary, sample_iocs):
+        """Containment needs explicit structured confirmation, not predictions or severity."""
+        sample_threat_summary["prediction"] = {"likely_next_techniques": ["T1003"]}
+        llm_output = json.dumps([{
+            "action_type": "isolate_host", "target": "WORKSTATION-01", "severity": "high",
+            "rationale": "High severity prediction", "technique_id": "T1003", "confidence": 1.0,
+        }])
+        with patch("agents.response_agent.invoke_llm", return_value=llm_output):
+            results = agent.run(sample_threat_summary, sample_iocs)
+        assert [result.action.action_type for result in results] == ["notify_analyst"]
+
+    def test_auto_block_skips_protected_management_ip(self, agent):
+        """Even malicious-looking enrichment cannot auto-block a protected management IP."""
+        with patch("agents.response_agent.is_protected_target", return_value=True):
+            assert agent._auto_propose_high_confidence_actions([{
+                "value": "100.123.23.97", "ioc_type": "ipv4", "reputation": "malicious", "confidence": 0.99,
+            }]) == []
+
+    def test_llm_invoked_with_threat_summary_only(self, agent, sample_threat_summary, sample_iocs):
+        """The LLM prompt is the compact summary, not IOC or event payloads."""
         with patch("agents.response_agent.invoke_llm") as mock_llm:
             mock_llm.return_value = "[]"
-            agent.run(sample_campaign, sample_techniques, sample_iocs)
-            # Check that the user prompt contains the campaign data
+            agent.run(sample_threat_summary, sample_iocs)
             call_args = mock_llm.call_args[1]
-            assert "Campaign:" in call_args["user_prompt"]
+            assert call_args["user_prompt"] == json.dumps(
+                sample_threat_summary, sort_keys=True, separators=(",", ":")
+            )
             assert "test-camp-001" in call_args["user_prompt"]
             assert "T1059.001" in call_args["user_prompt"]
-            assert "198.51.100.99" in call_args["user_prompt"]
 
 
 # ═══════════════════════════════════════════════════════════════════════

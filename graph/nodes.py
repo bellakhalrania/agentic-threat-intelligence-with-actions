@@ -16,6 +16,7 @@ from agents.reporting_agent import ReportingAgent
 from agents.response_agent import ResponseAgent
 from agents.execution_translation_agent import ExecutionTranslationAgent
 from intelligence.threat_intel.registry import ProviderRegistry
+from intelligence.threat_summary import build_threat_summary
 
 # Initialize provider registry with available threat intelligence sources
 provider_registry = ProviderRegistry()
@@ -83,13 +84,20 @@ def reporting_node(state: InvestigationState) -> dict:
 
 
 def response_node(state: InvestigationState) -> dict:
-    results = response_agent.run(
+    threat_summary = build_threat_summary(
         campaign=state.get("campaign", {}),
         techniques=state.get("techniques", []),
-        iocs=state.get("iocs", []),
+        prediction=state.get("prediction", {}),
         events=state.get("events", []),
     )
-    return {"actions_taken": [r.model_dump() for r in results]}
+    results = response_agent.run(
+        threat_summary=threat_summary,
+        iocs=state.get("iocs", []),
+    )
+    return {
+        "threat_summary": threat_summary,
+        "actions_taken": [r.model_dump() for r in results],
+    }
 
 
 def execution_translation_node(state: InvestigationState) -> dict:
@@ -142,13 +150,16 @@ def execution_translation_node(state: InvestigationState) -> dict:
             api_key = config.REMOTE_AGENT_API_KEY
             timeout = config.REMOTE_AGENT_TIMEOUT
 
-            # Safe default: only policy-approved actions are pushed remotely.
-            # Optional override exists for labs via REMOTE_ALLOW_PENDING_EXECUTION.
-            allow_pending = config.REMOTE_ALLOW_PENDING_EXECUTION
+            # Only actions already executed through policy or the human
+            # approval workflow may be pushed to the remote execution agent.
+            # Notifications are delivered by the local notifier and have no
+            # endpoint-side containment effect, so they must not be pushed.
             remotely_executable_actions = [
                 action for action in actions_taken
-                if action.get("status") == "executed"
-                or (allow_pending and action.get("status") == "pending_approval")
+                if (
+                    action.get("status") == "executed"
+                    and action.get("action", {}).get("action_type") != "notify_analyst"
+                )
             ]
 
             if not remotely_executable_actions:
