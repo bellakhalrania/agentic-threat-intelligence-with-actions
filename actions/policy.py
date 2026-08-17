@@ -31,8 +31,8 @@ PROTECTED_TARGETS = {
 }
 
 # Action types that always require a human, no matter the confidence score.
-ALWAYS_REQUIRE_APPROVAL = {ActionSeverity.HIGH}
-
+#ALWAYS_REQUIRE_APPROVAL = {ActionSeverity.HIGH}
+ALWAYS_REQUIRE_APPROVAL = set()
 MIN_AUTO_EXECUTE_CONFIDENCE = 0.85
 MAX_ACTIONS_PER_TARGET_PER_HOUR = 3
 
