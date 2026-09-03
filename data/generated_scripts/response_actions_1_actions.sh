@@ -37,7 +37,7 @@ echo "",
 # =======================================
 # Action 1: notify_analyst
 # Target: SOC_analyst
-# ID: notify_analyst_83798eb2
+# ID: notify_analyst_b532e692
 # Expected: Create analyst notification for SOC_analyst
 # =======================================
 action_1() {
@@ -49,7 +49,7 @@ action_1() {
     # This is informational only; no disruptive action is taken.
     #
     # Related technique: T1110
-    # Confidence: 0.85
+    # Confidence: 0.9
     #
     # Please review the following:
     #   - SOC_analyst

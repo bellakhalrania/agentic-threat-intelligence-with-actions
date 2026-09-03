@@ -37,7 +37,7 @@ echo "",
 # =======================================
 # Action 1: block_ip
 # Target: 100.81.172.118
-# ID: block_ip_675e2d1c
+# ID: block_ip_0b0d672e
 # Expected: Block only inbound and outbound traffic to/from IP 100.81.172.118 without altering global firewall policy
 # =======================================
 action_1() {
@@ -98,113 +98,82 @@ verify_1() {
 
 
 # =======================================
-# Action 2: isolate_host
-# Target: victim-endpoint-01
-# ID: isolate_host_6f3d670f
-# Expected: Isolate host victim-endpoint-01 while preserving manager access on port 9001 and SSH (port 22), plus webhook callback to manager:8000
+# Action 2: disable_account
+# Target: anna
+# ID: disable_account_e5b2f537
+# Expected: Lock password and expire account anna
 # =======================================
 action_2() {
-    echo "[ACTION 2] isolate_host -> victim-endpoint-01"
-    echo "  Expected: Isolate host victim-endpoint-01 while preserving manager access on port 9001 and SSH (port 22), plus webhook callback to manager:8000"
+    echo "[ACTION 2] disable_account -> anna"
+    echo "  Expected: Lock password and expire account anna"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Isolate host victim-endpoint-01 while preserving remote management channel
-    # NOTE: Keep port 9001 reachable so the remote agent does not self-lock.
-    MGMT_IP="${REMOTE_MANAGER_IP:-100.76.226.30}"
-    REMOTE_PORT="${REMOTE_AGENT_PORT:-9001}"
-    if command -v iptables &> /dev/null; then
-        # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_6f3d670f.txt 2>/dev/null || true
-        iptables -P INPUT DROP
-        iptables -P OUTPUT DROP
-        iptables -P FORWARD DROP
-        # Allow loopback
-        iptables -A INPUT -i lo -j ACCEPT
-        iptables -A OUTPUT -o lo -j ACCEPT
-        # Keep established connections alive
-        iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-        iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-        # Keep control-plane reachable from manager
-        iptables -A INPUT -p tcp --dport "$REMOTE_PORT" -s "$MGMT_IP" -j ACCEPT
-        # Keep SSH management reachable from manager
-        iptables -A INPUT -p tcp --dport 22 -s "$MGMT_IP" -j ACCEPT
-        # Allow callback webhook traffic to manager
-        iptables -A OUTPUT -p tcp -d "$MGMT_IP" --dport 8000 -j ACCEPT
-    elif command -v nft &> /dev/null; then
-        nft add table inet isolate 2>/dev/null || true
-        nft add chain inet isolate input '{ type filter hook input priority 0; policy drop; }' 2>/dev/null || true
-        nft add chain inet isolate output '{ type filter hook output priority 0; policy drop; }' 2>/dev/null || true
-        nft add rule inet isolate input iif lo accept
-        nft add rule inet isolate output oif lo accept
-        nft add rule inet isolate input ct state established,related accept
-        nft add rule inet isolate output ct state established,related accept
-        nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept
-        # Keep SSH management reachable from manager
-        nft add rule inet isolate input ip saddr $MGMT_IP tcp dport 22 accept
-        nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept
+    # Disable account anna
+    if id 'anna' &>/dev/null; then
+        # Lock the password (prevents login)
+        passwd -l 'anna'
+        # Force expire password
+        chage -E 0 'anna'
+        # Kill active sessions
+        pkill -u 'anna' 2>/dev/null || true
+        echo 'Account anna disabled'
     else
-        echo 'ERROR: No firewall tool found' >&2
+        echo 'ERROR: Account anna does not exist' >&2
         exit 1
     fi
-    echo 'Host victim-endpoint-01 isolated with management channel preserved'
-    echo "  [OK] isolate_host completed"
+    echo "  [OK] disable_account completed"
 }
 
 rollback_2() {
-    echo "[ROLLBACK 2] isolate_host -> victim-endpoint-01"
-    if [ -f /tmp/iptables_backup_6f3d670f.txt ]; then
-        iptables-restore < /tmp/iptables_backup_6f3d670f.txt
-        rm /tmp/iptables_backup_6f3d670f.txt
-    fi
-    # Fallback: set policies to ACCEPT
-    iptables -P INPUT ACCEPT 2>/dev/null || true
-    iptables -P OUTPUT ACCEPT 2>/dev/null || true
-    iptables -P FORWARD ACCEPT 2>/dev/null || true
-    echo "  [OK] Rollback of isolate_host completed"
+    echo "[ROLLBACK 2] disable_account -> anna"
+    passwd -u 'anna'
+    chage -E -1 'anna'
+    echo 'Account anna re-enabled'
+    echo "  [OK] Rollback of disable_account completed"
 }
 
 verify_2() {
-    echo "[VERIFY 2] isolate_host -> victim-endpoint-01"
-    iptables -L -n 2>/dev/null | head -5
-    ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'
+    echo "[VERIFY 2] disable_account -> anna"
+    passwd -S 'anna' | grep -q ' L ' && echo 'DISABLED'
+    chage -l 'anna' | grep 'Account expires'
 }
 
 
 # =======================================
 # Action 3: notify_analyst
-# Target: SOC Team
-# ID: notify_analyst_aebb1faf
-# Expected: Create analyst notification for SOC Team
+# Target: SOC_analyst
+# ID: notify_analyst_55fdb570
+# Expected: Create analyst notification for SOC_analyst
 # =======================================
 action_3() {
-    echo "[ACTION 3] notify_analyst -> SOC Team"
-    echo "  Expected: Create analyst notification for SOC Team"
+    echo "[ACTION 3] notify_analyst -> SOC_analyst"
+    echo "  Expected: Create analyst notification for SOC_analyst"
 
-    # Notify analyst about: SOC Team
+    # Notify analyst about: SOC_analyst
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
     # Related technique: N/A
-    # Confidence: 0.9
+    # Confidence: 1.0
     #
     # Please review the following:
-    #   - SOC Team
+    #   - SOC_analyst
     #
     # Manual investigation is required.
     echo "  [OK] notify_analyst completed"
 }
 
 rollback_3() {
-    echo "[ROLLBACK 3] notify_analyst -> SOC Team"
+    echo "[ROLLBACK 3] notify_analyst -> SOC_analyst"
     # No rollback needed for notification actions.
     echo "  [OK] Rollback of notify_analyst completed"
 }
 
 verify_3() {
-    echo "[VERIFY 3] notify_analyst -> SOC Team"
+    echo "[VERIFY 3] notify_analyst -> SOC_analyst"
     # Notification logged; verify via platform audit trail.
 }
 

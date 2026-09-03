@@ -13,7 +13,7 @@ import json
 from typing import Any, List, Dict, Set
 from llm.groq_client import invoke_llm
 from llm.output_parsers import extract_json
-from actions.action_models import ProposedAction, ActionResult
+from actions.action_models import ActionType, ProposedAction, ActionResult
 from actions.connectors import ACTION_DISPATCH
 from actions.risk_scoring import calculate_risk_score
 from actions import policy, audit_log
@@ -156,7 +156,15 @@ class ResponseAgent:
             decision = policy.evaluate(action)
             print(f"  Policy Decision: {decision}")
             
-            result = self._handle_decision(action, decision)
+            if action.action_type == ActionType.NOTIFY_ANALYST and decision == "auto_execute":
+                result = ActionResult(
+                    action=action,
+                    status="executed",
+                    detail="Included in the final response-actions summary email.",
+                    dry_run=config.DRY_RUN,
+                )
+            else:
+                result = self._handle_decision(action, decision)
             
             print(f"  Final Status: {result.status}")
             print(f"  Detail: {result.detail}")
@@ -165,6 +173,15 @@ class ResponseAgent:
             audit_log.record(result, campaign_id=campaign.get("campaign_id", ""))
             results.append(result)
             print()
+
+        if results and not config.DRY_RUN:
+            from actions.notifier_email import send_action_results_email
+
+            email_result = send_action_results_email(
+                [result.model_dump() for result in results],
+                risk_assessment=risk,
+            )
+            print(f"Post-execution email: {email_result['detail']}")
         
         print(f"--- Summary ---")
         print(f"Total actions proposed: {len(all_proposals)}")

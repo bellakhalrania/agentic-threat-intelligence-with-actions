@@ -38,3 +38,29 @@ def test_reporting_prompt_uses_compact_event_summary():
     assert "205.210.31.25" in prompt
     assert "authentication_success" in prompt
     assert len(prompt) < 5000
+
+
+def test_response_actions_section_uses_state_actions():
+    agent = ReportingAgent()
+    state = {
+        "actions_taken": [
+            {
+                "action": {
+                    "action_type": "block_ip",
+                    "target": "198.51.100.10",
+                    "severity": "high",
+                    "rationale": "Repeated authentication failures.",
+                },
+                "status": "pending_approval",
+                "detail": "Awaiting human approval.",
+                "dry_run": False,
+            }
+        ]
+    }
+
+    report = agent._replace_response_actions_section(
+        "## Recommendations\n\n## Response Actions\n\n| No data available |", state
+    )
+
+    assert "| block_ip | 198.51.100.10 | pending_approval | high |" in report
+    assert "| No data available |" not in report

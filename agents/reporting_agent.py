@@ -43,6 +43,10 @@ class ReportingAgent:
             logger.exception("Reporting LLM failed; generating deterministic fallback report: %s", exc)
             report_markdown = self._fallback_report(state, error=str(exc))
 
+        # Keep operational action status authoritative even when the LLM omits
+        # or misreads the response_actions_taken evidence block.
+        report_markdown = self._replace_response_actions_section(report_markdown, state)
+
         # Validate report against evidence before saving (for logging only)
         validation_result = validate_report(report_markdown, state)
 
@@ -263,6 +267,35 @@ class ReportingAgent:
             ])
 
         return "\n".join(lines)
+
+    def _replace_response_actions_section(self, report: str, state: InvestigationState) -> str:
+        """Replace the LLM's response-action section with evidence-backed data."""
+        actions = self._summarize_actions(state.get("actions_taken", []))
+        lines = [
+            "## Response Actions",
+            "",
+            "| Action Type | Target | Status | Severity | Rationale |",
+            "|---|---|---|---|---|",
+        ]
+        if actions:
+            for action in actions:
+                lines.append(
+                    f"| {action.get('action_type') or ''} | {action.get('target') or ''} | "
+                    f"{action.get('status') or ''} | {action.get('severity') or ''} | "
+                    f"{action.get('rationale') or ''} |"
+                )
+        else:
+            lines.append("| No data available | - | - | - | No response actions were recorded. |")
+
+        section = "\n".join(lines)
+        marker = "## Response Actions"
+        start = report.find(marker)
+        if start == -1:
+            return report.rstrip() + "\n\n" + section + "\n"
+
+        next_section = report.find("\n## ", start + len(marker))
+        end = next_section if next_section != -1 else len(report)
+        return report[:start].rstrip() + "\n\n" + section + report[end:]
 
     @classmethod
     def _shorten(cls, value: Any, max_chars: int | None = None) -> Any:

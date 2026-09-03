@@ -22,19 +22,28 @@ MODEL_TOKEN_LIMITS = {
     "mixtral-8x7b-32768": 32000,
 }
 
-# Reserve tokens for system prompt and response
-RESERVED_TOKENS = 1000
+# Reserve tokens for the model response. This must be large enough for the
+# complete report, not just the shorter JSON responses from other agents.
+RESERVED_TOKENS = config.GROQ_MAX_OUTPUT_TOKENS
 # Leave headroom for tokenizer differences and request overhead.
 TOKEN_SAFETY_MARGIN = 500
 # Approximate characters per token for compact JSON prompts.
 CHARS_PER_TOKEN = 3.0
 
-llm = ChatGroq(
-    api_key=config.GROQ_API_KEY,
-    model=config.GROQ_MODEL,
-    temperature=config.GROQ_TEMPERATURE,
-    max_tokens=RESERVED_TOKENS,
-)
+def _create_llm(api_key: str) -> ChatGroq:
+    return ChatGroq(
+        api_key=api_key,
+        model=config.GROQ_MODEL,
+        temperature=config.GROQ_TEMPERATURE,
+        max_tokens=RESERVED_TOKENS,
+    )
+
+
+# Keep the original ``llm`` name for compatibility with callers and tests.
+llm = _create_llm(config.GROQ_API_KEYS[0] if config.GROQ_API_KEYS else config.GROQ_API_KEY)
+llm_clients = [llm] + [
+    _create_llm(api_key) for api_key in config.GROQ_API_KEYS[1:]
+]
 
 
 def estimate_token_count(text: str) -> int:
@@ -132,14 +141,31 @@ def invoke_llm(system_prompt: str, user_prompt: str, max_retries: int = 3) -> st
         f"total_estimated=~{system_tokens + estimate_token_count(truncated_user_prompt)}"
     )
     
-    for attempt in range(max_retries + 1):
-        try:
-            response = llm.invoke(messages)
-            return response.content
-        except RateLimitError as e:
-            if attempt == max_retries:
-                raise
-            # Extract retry delay from error message if available, otherwise use exponential backoff
-            retry_delay = 2 ** attempt  # 1s, 2s, 4s
-            logger.warning(f"Rate limit hit. Retrying in {retry_delay}s... (attempt {attempt + 1}/{max_retries})")
-            time.sleep(retry_delay)
+    last_rate_limit_error = None
+    clients = [llm] + [client for client in llm_clients if client is not llm]
+    for client_index, client in enumerate(clients):
+        for attempt in range(max_retries + 1):
+            try:
+                response = client.invoke(messages)
+                return response.content
+            except RateLimitError as error:
+                last_rate_limit_error = error
+                if attempt == max_retries:
+                    if client_index < len(clients) - 1:
+                        logger.warning(
+                            "Groq rate limit reached; switching to configured fallback API key."
+                        )
+                        break
+                    raise
+                # Extract retry delay from error message if available, otherwise use exponential backoff
+                retry_delay = 2 ** attempt  # 1s, 2s, 4s
+                logger.warning(
+                    "Groq rate limit hit. Retrying in %ss... (attempt %s/%s)",
+                    retry_delay,
+                    attempt + 1,
+                    max_retries,
+                )
+                time.sleep(retry_delay)
+
+    if last_rate_limit_error is not None:
+        raise last_rate_limit_error

@@ -31,8 +31,17 @@ def _read_env_file(path: str) -> dict[str, str]:
 class Config:
     # ---------------- Groq LLM (optional after refactor) ----------------
     GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+    GROQ_API_KEYS = tuple(
+        dict.fromkeys(
+            key.strip()
+            for key in os.getenv("GROQ_API_KEYS", GROQ_API_KEY).split(",")
+            if key.strip()
+        )
+    )
+    GROQ_API_KEY = GROQ_API_KEYS[0] if GROQ_API_KEYS else ""
     GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
     GROQ_TEMPERATURE = float(os.getenv("GROQ_TEMPERATURE", "0.1"))
+    GROQ_MAX_OUTPUT_TOKENS = int(os.getenv("GROQ_MAX_OUTPUT_TOKENS", "3000"))
 
     # ---------------- Threat Intelligence Providers ----------------
     ABUSEIPDB_API_KEY = os.getenv("ABUSEIPDB_API_KEY", "")
@@ -195,8 +204,8 @@ class Config:
     @classmethod
     def validate(cls):
         missing = []
-        if not cls.GROQ_API_KEY:
-            missing.append("GROQ_API_KEY")
+        if not cls.GROQ_API_KEYS:
+            missing.append("GROQ_API_KEY or GROQ_API_KEYS")
         if missing:
             raise EnvironmentError(
                 f"Missing required environment variables: {', '.join(missing)}. "

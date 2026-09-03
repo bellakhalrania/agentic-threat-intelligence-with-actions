@@ -1,7 +1,9 @@
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+import httpx
 import llm.groq_client as groq_client
+from groq import RateLimitError
 
 
 def test_gpt_oss_model_has_on_demand_token_limit():
@@ -31,3 +33,23 @@ def test_invoke_llm_truncates_prompt_with_safety_margin():
     )
     assert groq_client.estimate_token_count(sent_user_prompt) <= max_user_tokens
     assert len(sent_user_prompt) < len(user_prompt)
+
+
+def test_invoke_llm_switches_to_fallback_key_after_rate_limit():
+    first_llm = Mock()
+    second_llm = Mock()
+    first_llm.invoke.side_effect = RateLimitError(
+        "rate limited",
+        response=httpx.Response(429, request=httpx.Request("POST", "https://api.groq.com")),
+        body=None,
+    )
+    second_llm.invoke.return_value = SimpleNamespace(content="fallback response")
+
+    with patch.object(groq_client, "llm_clients", [first_llm, second_llm]), patch.object(
+        groq_client, "llm", first_llm
+    ), patch.object(groq_client.time, "sleep"):
+        result = groq_client.invoke_llm("system", "user", max_retries=0)
+
+    assert result == "fallback response"
+    first_llm.invoke.assert_called_once()
+    second_llm.invoke.assert_called_once()
