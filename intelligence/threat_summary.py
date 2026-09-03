@@ -32,6 +32,7 @@ def build_threat_summary(
     source_ips = _unique_values(events, ("src_ip",))
     processes = _unique_values(events, ("process",))
     failed_logins = sum(_is_failed_login(event) for event in events)
+    successful_after_failures = _successful_authentication_after_failures(events)
     top_techniques = _top_techniques(techniques)
     campaign_confidence = _number(campaign.get("confidence"))
 
@@ -42,9 +43,6 @@ def build_threat_summary(
         *affected_users,
         *source_ips,
         *processes,
-        "SOC_analyst",
-        "SOC Team",
-        "SOC_Team",
     })
 
     return {
@@ -56,6 +54,7 @@ def build_threat_summary(
         },
         "event_count": len(events),
         "failed_login_count": failed_logins,
+        "successful_authentication_after_failures": successful_after_failures,
         "affected_hosts": affected_hosts,
         "affected_users": affected_users,
         "source_ips": source_ips,
@@ -133,6 +132,27 @@ def _is_failed_login(event: Dict[str, Any]) -> bool:
     if event_type in {"authentication_failed", "login_failed", "failed_login"}:
         return True
     return "authentication" in event_type and "fail" in event_type
+
+
+def _is_successful_login(event: Dict[str, Any]) -> bool:
+    event_type = str(event.get("event_type") or "").lower()
+    if event_type in {"authentication_success", "login_success", "successful_login"}:
+        return True
+    return "authentication" in event_type and "success" in event_type
+
+
+def _successful_authentication_after_failures(events: List[Dict[str, Any]]) -> bool:
+    """Require a success to follow a failure for the same source and account."""
+    failed_pairs: set[tuple[str, str]] = set()
+    for event in events:
+        source = _short_text(event.get("src_ip"))
+        account = _short_text(event.get("user") or event.get("username"))
+        pair = (source, account)
+        if _is_failed_login(event):
+            failed_pairs.add(pair)
+        elif _is_successful_login(event) and pair in failed_pairs:
+            return True
+    return False
 
 
 def _number(value: Any) -> float | None:

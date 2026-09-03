@@ -6,35 +6,21 @@ is exactly the kind of decision that should never depend on a model's
 non-deterministic judgment alone.
 
 Rules, in order:
-1. Global kill switch (config.AUTO_RESPONSE_ENABLED) can disable all
+1. Analyst notifications are always attempted immediately.
+2. Global kill switch (config.AUTO_RESPONSE_ENABLED) can disable disruptive
    auto-execution instantly, platform-wide.
-2. Per-target allowlist/denylist - some hosts/accounts (e.g. domain
+3. Per-target allowlist/denylist - some hosts/accounts (e.g. domain
    controllers, the CEO's account) should NEVER be auto-actioned.
-3. Confidence threshold - low-confidence ATT&CK mappings don't get to
-   trigger disruptive actions.
-4. Severity threshold - HIGH severity actions (e.g. isolate_host) always
-   require human approval, regardless of confidence.
-5. Rate limiting - cap actions per host per hour to prevent a feedback loop
+4. Deterministic risk threshold - only observed evidence contributes.
+5. Explicit auto-executable action types and isolation target allowlists.
+6. Rate limiting - cap actions per host per hour to prevent a feedback loop
    (e.g. a misfiring detection isolating the same host repeatedly).
 """
 
 import time
 from collections import defaultdict
-from config import config
-from actions.action_models import ProposedAction, ActionSeverity, ActionType
-
-# Targets that must NEVER be auto-actioned, regardless of confidence.
-# Populate this with domain controllers, exec accounts, critical infra, etc.
-PROTECTED_TARGETS = {
-    "DC-FILESRV01",
-    "domain admin",
-}
-
-# Action types that always require a human, no matter the confidence score.
-#ALWAYS_REQUIRE_APPROVAL = {ActionSeverity.HIGH}
-ALWAYS_REQUIRE_APPROVAL = set()
-MIN_AUTO_EXECUTE_CONFIDENCE = 0.85
-MAX_ACTIONS_PER_TARGET_PER_HOUR = 3
+from actions.action_models import ProposedAction, ActionType
+from config import config, is_protected_target
 
 _action_history = defaultdict(list)  # target -> [timestamps]
 
@@ -43,35 +29,35 @@ def _rate_limit_exceeded(target: str) -> bool:
     now = time.time()
     window_start = now - 3600
     _action_history[target] = [t for t in _action_history[target] if t > window_start]
-    return len(_action_history[target]) >= MAX_ACTIONS_PER_TARGET_PER_HOUR
+    return len(_action_history[target]) >= config.MAX_AUTO_ACTIONS_PER_TARGET_PER_HOUR
 
 
 def evaluate(action: ProposedAction) -> str:
     """Returns one of: 'auto_execute', 'pending_approval', 'denied'."""
 
-    if action.target in PROTECTED_TARGETS:
+    # Notification bypasses the disruptive-action kill switch and risk gate,
+    # but connector failures are still recorded as failures.
+    if action.action_type == ActionType.NOTIFY_ANALYST:
+        return "auto_execute"
+
+    if is_protected_target(action.target):
         return "denied"
-
-    # Safe-mode policy: keep disruptive containment gated, allow analyst notification.
-    if config.SAFE_MODE_ENFORCED:
-        if action.action_type == ActionType.NOTIFY_ANALYST and config.SAFE_MODE_NOTIFY_ANALYST_AUTO:
-            _action_history[action.target].append(time.time())
-            return "auto_execute"
-
-        if action.action_type == ActionType.ISOLATE_HOST:
-            # Explicit approval channel for isolation: operator must allowlist target.
-            if action.target in config.APPROVED_ISOLATION_TARGETS:
-                _action_history[action.target].append(time.time())
-                return "auto_execute"
-            return "pending_approval"
 
     if not config.AUTO_RESPONSE_ENABLED:
         return "pending_approval"  # kill switch off -> everything needs a human
 
-    if action.severity in ALWAYS_REQUIRE_APPROVAL:
+    if action.action_type.value not in config.AUTO_EXECUTE_ACTIONS:
         return "pending_approval"
 
-    if action.confidence < MIN_AUTO_EXECUTE_CONFIDENCE:
+    # The requirement is strictly greater than the configured threshold.
+    if action.risk_score <= config.AUTO_RISK_THRESHOLD:
+        return "pending_approval"
+
+    if (
+        config.SAFE_MODE_ENFORCED
+        and action.action_type == ActionType.ISOLATE_HOST
+        and action.target not in config.APPROVED_ISOLATION_TARGETS
+    ):
         return "pending_approval"
 
     if _rate_limit_exceeded(action.target):

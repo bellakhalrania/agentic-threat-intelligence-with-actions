@@ -425844,5 +425844,2895 @@
     "remote_push_url": "",
     "errors": [],
     "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "event_id": "a5af6114-2655-4742-899c-7c8568c0d9a0",
+        "timestamp": "2026-09-03T11:52:59.860805+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T11:53:06.177464+00:00"
+      },
+      {
+        "event_id": "4bbd5518-5ca5-4113-a7dc-b3e94a478330",
+        "timestamp": "2026-09-03T11:52:59.861140+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T11:53:06.178174+00:00"
+      },
+      {
+        "event_id": "68094fdf-c561-4dc4-9129-7c3aa5d3dc8f",
+        "timestamp": "2026-09-03T11:53:01.860861+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 37452 ssh2",
+        "received_at": "2026-09-03T11:53:06.178626+00:00"
+      },
+      {
+        "event_id": "dee3588f-c2f7-4b0a-b638-a3d998fa1385",
+        "timestamp": "2026-09-03T11:53:01.861204+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 37434 ssh2",
+        "received_at": "2026-09-03T11:53:06.179042+00:00"
+      },
+      {
+        "event_id": "ca77dc48-eb90-44b7-b265-2fc412ca0520",
+        "timestamp": "2026-09-03T11:53:03.860727+00:00",
+        "source": "sshd",
+        "event_type": "auth_success",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "medium",
+        "message": "Accepted password for anna from 100.81.172.118 port 37434 ssh2",
+        "received_at": "2026-09-03T11:53:06.179379+00:00"
+      },
+      {
+        "event_id": "fdcd6944-76f8-4abb-b6e7-2769b48d6dee",
+        "timestamp": "2026-09-03T11:53:05.610782+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 37452 ssh2",
+        "received_at": "2026-09-03T11:53:06.179697+00:00"
+      },
+      {
+        "event_id": "7a6ef95d-1660-487f-8b9d-d61285309103",
+        "timestamp": "2026-09-03T11:53:07.360789+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "PAM 1 more authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T11:53:16.518602+00:00"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "a5af6114-2655-4742-899c-7c8568c0d9a0",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:52:59.860805+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "a5af6114-2655-4742-899c-7c8568c0d9a0",
+          "timestamp": "2026-09-03T11:52:59.860805+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T11:53:06.177464+00:00"
+        }
+      },
+      {
+        "event_id": "4bbd5518-5ca5-4113-a7dc-b3e94a478330",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:52:59.861140+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "4bbd5518-5ca5-4113-a7dc-b3e94a478330",
+          "timestamp": "2026-09-03T11:52:59.861140+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T11:53:06.178174+00:00"
+        }
+      },
+      {
+        "event_id": "68094fdf-c561-4dc4-9129-7c3aa5d3dc8f",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:53:01.860861+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "68094fdf-c561-4dc4-9129-7c3aa5d3dc8f",
+          "timestamp": "2026-09-03T11:53:01.860861+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 37452 ssh2",
+          "received_at": "2026-09-03T11:53:06.178626+00:00"
+        }
+      },
+      {
+        "event_id": "dee3588f-c2f7-4b0a-b638-a3d998fa1385",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:53:01.861204+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "dee3588f-c2f7-4b0a-b638-a3d998fa1385",
+          "timestamp": "2026-09-03T11:53:01.861204+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 37434 ssh2",
+          "received_at": "2026-09-03T11:53:06.179042+00:00"
+        }
+      },
+      {
+        "event_id": "ca77dc48-eb90-44b7-b265-2fc412ca0520",
+        "source": "linux",
+        "event_type": "authentication_success",
+        "timestamp": "2026-09-03T11:53:03.860727+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "medium",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "ca77dc48-eb90-44b7-b265-2fc412ca0520",
+          "timestamp": "2026-09-03T11:53:03.860727+00:00",
+          "source": "sshd",
+          "event_type": "auth_success",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "medium",
+          "message": "Accepted password for anna from 100.81.172.118 port 37434 ssh2",
+          "received_at": "2026-09-03T11:53:06.179379+00:00"
+        }
+      },
+      {
+        "event_id": "fdcd6944-76f8-4abb-b6e7-2769b48d6dee",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:53:05.610782+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "fdcd6944-76f8-4abb-b6e7-2769b48d6dee",
+          "timestamp": "2026-09-03T11:53:05.610782+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 37452 ssh2",
+          "received_at": "2026-09-03T11:53:06.179697+00:00"
+        }
+      },
+      {
+        "event_id": "7a6ef95d-1660-487f-8b9d-d61285309103",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:53:07.360789+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "7a6ef95d-1660-487f-8b9d-d61285309103",
+          "timestamp": "2026-09-03T11:53:07.360789+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "PAM 1 more authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T11:53:16.518602+00:00"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.81.172.118",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "100.81.172.118",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null
+            },
+            "queried_at": "2026-09-03 11:53:31.610894"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.81.172.118",
+          "source_event_id": "a5af6114-2655-4742-899c-7c8568c0d9a0",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.8999999999999999,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "a5af6114-2655-4742-899c-7c8568c0d9a0",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ],
+        "ssh_brute_force_detected": true,
+        "ssh_brute_force_failures": 4
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.8999999999999999,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "4bbd5518-5ca5-4113-a7dc-b3e94a478330",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ],
+        "ssh_brute_force_detected": true,
+        "ssh_brute_force_failures": 4
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.8999999999999999,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "68094fdf-c561-4dc4-9129-7c3aa5d3dc8f",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ],
+        "ssh_brute_force_detected": true,
+        "ssh_brute_force_failures": 4
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.8999999999999999,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "dee3588f-c2f7-4b0a-b638-a3d998fa1385",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ],
+        "ssh_brute_force_detected": true,
+        "ssh_brute_force_failures": 4
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.8999999999999999,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "fdcd6944-76f8-4abb-b6e7-2769b48d6dee",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ],
+        "ssh_brute_force_detected": true,
+        "ssh_brute_force_failures": 4
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.8999999999999999,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "7a6ef95d-1660-487f-8b9d-d61285309103",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ],
+        "ssh_brute_force_detected": true,
+        "ssh_brute_force_failures": 4
+      }
+    ],
+    "campaign": {
+      "campaign_id": "7b4d0a00-8aae-4f33-b295-0532b2e6b89a",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "2026-09-03T11:52:59.860805+00:00",
+          "event_id": "a5af6114-2655-4742-899c-7c8568c0d9a0",
+          "description": "Event type: authentication_failed"
+        },
+        {
+          "timestamp": "2026-09-03T11:52:59.861140+00:00",
+          "event_id": "4bbd5518-5ca5-4113-a7dc-b3e94a478330",
+          "description": "Event type: authentication_failed"
+        },
+        {
+          "timestamp": "2026-09-03T11:53:01.860861+00:00",
+          "event_id": "68094fdf-c561-4dc4-9129-7c3aa5d3dc8f",
+          "description": "Event type: authentication_failed"
+        },
+        {
+          "timestamp": "2026-09-03T11:53:01.861204+00:00",
+          "event_id": "dee3588f-c2f7-4b0a-b638-a3d998fa1385",
+          "description": "Event type: authentication_failed"
+        },
+        {
+          "timestamp": "2026-09-03T11:53:03.860727+00:00",
+          "event_id": "ca77dc48-eb90-44b7-b265-2fc412ca0520",
+          "description": "Event type: authentication_success"
+        },
+        {
+          "timestamp": "2026-09-03T11:53:05.610782+00:00",
+          "event_id": "fdcd6944-76f8-4abb-b6e7-2769b48d6dee",
+          "description": "Event type: authentication_failed"
+        },
+        {
+          "timestamp": "2026-09-03T11:53:07.360789+00:00",
+          "event_id": "7a6ef95d-1660-487f-8b9d-d61285309103",
+          "description": "Event type: authentication_failed"
+        }
+      ],
+      "related_techniques": [
+        "T1110",
+        "T1110",
+        "T1110",
+        "T1110",
+        "T1110",
+        "T1110"
+      ],
+      "evidence_summary": "Based on 7 events, 1 IOCs, and 6 techniques. Insufficient evidence to determine campaign objective or attribution.",
+      "confidence": 0.7
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1078",
+          "technique_name": "Valid Accounts",
+          "rationale": "After successful brute\u2011force attempts, attackers often leverage the newly compromised credentials to log in directly, establishing persistent access without further guessing."
+        },
+        {
+          "technique_id": "T1098",
+          "technique_name": "Account Manipulation",
+          "rationale": "With valid credentials obtained via brute force, threat actors frequently create new accounts, add the compromised account to privileged groups, or modify account properties to maintain and elevate access."
+        },
+        {
+          "technique_id": "T1003",
+          "technique_name": "OS Credential Dumping",
+          "rationale": "Once inside using brute\u2011forced credentials, attackers commonly dump additional credentials from the host to expand their foothold and facilitate lateral movement."
+        }
+      ],
+      "rationale": "The campaign has demonstrated repeated brute\u2011force activity (T1110). In ATT&CK, successful brute\u2011force attacks typically lead to the use of the harvested credentials (Valid Accounts), manipulation of those accounts for persistence and privilege escalation (Account Manipulation), and further credential harvesting from the compromised system (OS Credential Dumping). All three techniques are present in the allowed prediction list."
+    },
+    "threat_summary": {
+      "campaign": {
+        "campaign_id": "7b4d0a00-8aae-4f33-b295-0532b2e6b89a",
+        "name": "Unclassified Activity",
+        "severity": "high",
+        "confidence": 0.7
+      },
+      "event_count": 7,
+      "failed_login_count": 6,
+      "successful_authentication_after_failures": true,
+      "affected_hosts": [
+        "victim-endpoint"
+      ],
+      "affected_users": [
+        "anna"
+      ],
+      "source_ips": [
+        "100.81.172.118"
+      ],
+      "processes": [],
+      "top_mitre_techniques": [
+        {
+          "id": "T1110",
+          "name": "Brute Force",
+          "count": 6,
+          "confidence": 0.9
+        }
+      ],
+      "prediction": {
+        "likely_next_techniques": [
+          {
+            "id": "T1078",
+            "name": "Valid Accounts"
+          },
+          {
+            "id": "T1098",
+            "name": "Account Manipulation"
+          },
+          {
+            "id": "T1003",
+            "name": "OS Credential Dumping"
+          }
+        ],
+        "rationale": "The campaign has demonstrated repeated brute\u2011force activity (T1110). In ATT&CK, successful brute\u2011force attacks typically lead to the use of the harvested credentials (Valid Accounts), manipulation of those accounts for persistence and privilege escalation (Account Manipulation), and further credential harvesting from the compromised system (OS Credential Dumping). All three techniques are present in the allowed prediction list."
+      },
+      "valid_action_targets": [
+        "100.81.172.118",
+        "anna",
+        "victim-endpoint"
+      ],
+      "victim_isolation_targets": [
+        "victim-endpoint"
+      ],
+      "attacker_source_ips": [
+        "100.81.172.118"
+      ]
+    },
+    "report": "**Threat Intelligence Report**  \n*Prepared: 2026\u201109\u201103*  \n\n---  \n\n## Executive Summary\nA series of SSH authentication attempts targeting the account **anna** on host **victim\u2011endpoint** were observed. Six failed attempts were followed by a successful login, all originating from source IP **100.81.172.118**. The activity maps to ATT&CK technique **T1110 \u2013 Brute Force** with high confidence (0.90). The campaign is currently classified as **\u201cUnclassified Activity\u201d** with an unknown objective. Immediate containment actions have been proposed and are pending analyst approval.\n\n---\n\n## Timeline  \n\n| Time (UTC) | Event ID | Description |\n|------------|----------|-------------|\n| 2026\u201109\u201103\u202f11:52:59.860805 | a5af6114-2655-4742-899c-7c8568c0d9a0 | SSH authentication **failed** for user *anna* (src IP 100.81.172.118) |\n| 2026\u201109\u201103\u202f11:52:59.861140 | 4bbd5518-5ca5-4113-a7dc-b3e94a478330 | SSH authentication **failed** for user *anna* (src IP 100.81.172.118) |\n| 2026\u201109\u201103\u202f11:53:01.860861 | 68094fdf-c561-4dc4-9129-7c3aa5d3dc8f | SSH authentication **failed** for user *anna* (src IP 100.81.172.118) |\n| 2026\u201109\u201103\u202f11:53:01.861204 | dee3588f-c2f7-4b0a-b638-a3d998",
+    "actions_taken": [
+      {
+        "action_id": "027942dd-811c-4299-8aa2-88e265aea0f1",
+        "action": {
+          "action_type": "block_ip",
+          "target": "100.81.172.118",
+          "severity": "high",
+          "rationale": "Source IP performed repeated brute\u2011force attempts (T1110) and achieved a successful login; blocking stops further malicious access.",
+          "technique_id": "T1110",
+          "confidence": 0.9,
+          "risk_score": 82,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:18",
+            "failed_login_repetition:15",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:4"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "4911dbb6-928b-4654-b793-be9aa1d48009",
+        "action": {
+          "action_type": "isolate_host",
+          "target": "victim-endpoint",
+          "severity": "high",
+          "rationale": "Host exhibited high\u2011confidence brute\u2011force activity and likely credential compromise; isolation prevents lateral movement and data exfiltration.",
+          "technique_id": "T1110",
+          "confidence": 0.9,
+          "risk_score": 82,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:18",
+            "failed_login_repetition:15",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:4"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "9dde6db3-ea82-4128-8035-b928f49840df",
+        "action": {
+          "action_type": "disable_account",
+          "target": "anna",
+          "severity": "high",
+          "rationale": "User account was used in a successful authentication after multiple failed attempts, indicating possible compromise; disabling mitigates further abuse.",
+          "technique_id": "T1078",
+          "confidence": 0.7,
+          "risk_score": 82,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:18",
+            "failed_login_repetition:15",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:4"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "955ef576-2d99-4a1a-a740-cd31003b8775",
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC_analyst",
+          "severity": "high",
+          "rationale": "Brute\u2011force campaign (high severity) detected: source IP blocked, host isolated, and user account disabled. Continue monitoring for additional ATT&CK techniques such as Account Manipulation (T1098) and OS Credential Dumping (T1003).",
+          "technique_id": "T1110",
+          "confidence": 0.9,
+          "risk_score": 82,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:18",
+            "failed_login_repetition:15",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:4"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "executed",
+        "detail": "Email notification sent to benlakhalrania869@gmail.com",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "notify_analyst_9557e84c",
+        "action_type": "notify_analyst",
+        "target": "SOC_analyst",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_9557e84c.log",
+        "script": "# Notify analyst about: SOC_analyst\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: T1110\n# Confidence: 0.9\n#\n# Please review the following:\n#   - SOC_analyst\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC_analyst",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 1\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: notify_analyst\n# Target: SOC_analyst\n# ID: notify_analyst_9557e84c\n# Expected: Create analyst notification for SOC_analyst\n# =======================================\naction_1() {\n    echo \"[ACTION 1] notify_analyst -> SOC_analyst\"\n    echo \"  Expected: Create analyst notification for SOC_analyst\"\n\n    # Notify analyst about: SOC_analyst\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: T1110\n    # Confidence: 0.9\n    #\n    # Please review the following:\n    #   - SOC_analyst\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] notify_analyst -> SOC_analyst\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] notify_analyst -> SOC_analyst\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 1 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_1_actions.sh",
+    "remote_execution_result": null,
+    "remote_execution_error": "",
+    "remote_push_attempted": false,
+    "remote_push_url": "",
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "event_id": "af7504ea-1032-438d-bcb5-e1f64634b07a",
+        "timestamp": "2026-09-03T11:59:04.110726+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T11:59:06.965846+00:00"
+      },
+      {
+        "event_id": "665478d3-c3d6-41c8-863c-3b18dc507d79",
+        "timestamp": "2026-09-03T11:59:04.111271+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T11:59:06.966038+00:00"
+      },
+      {
+        "event_id": "5bfe0165-cf8c-4ce6-9bda-94fa7ae35b8a",
+        "timestamp": "2026-09-03T11:59:04.111498+00:00",
+        "source": "sshd",
+        "event_type": "auth_success",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "medium",
+        "message": "Accepted password for anna from 100.81.172.118 port 52896 ssh2",
+        "received_at": "2026-09-03T11:59:06.966150+00:00"
+      },
+      {
+        "event_id": "46854d9d-3b24-4d82-999c-9bfd01bcb3dc",
+        "timestamp": "2026-09-03T11:59:05.860719+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 52918 ssh2",
+        "received_at": "2026-09-03T11:59:06.966267+00:00"
+      },
+      {
+        "event_id": "102ec91e-9554-4e43-a5df-f8eade5b9171",
+        "timestamp": "2026-09-03T11:59:05.861087+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 52888 ssh2",
+        "received_at": "2026-09-03T11:59:06.966397+00:00"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "af7504ea-1032-438d-bcb5-e1f64634b07a",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:59:04.110726+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "af7504ea-1032-438d-bcb5-e1f64634b07a",
+          "timestamp": "2026-09-03T11:59:04.110726+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T11:59:06.965846+00:00"
+        }
+      },
+      {
+        "event_id": "665478d3-c3d6-41c8-863c-3b18dc507d79",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:59:04.111271+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "665478d3-c3d6-41c8-863c-3b18dc507d79",
+          "timestamp": "2026-09-03T11:59:04.111271+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T11:59:06.966038+00:00"
+        }
+      },
+      {
+        "event_id": "5bfe0165-cf8c-4ce6-9bda-94fa7ae35b8a",
+        "source": "linux",
+        "event_type": "authentication_success",
+        "timestamp": "2026-09-03T11:59:04.111498+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "medium",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "5bfe0165-cf8c-4ce6-9bda-94fa7ae35b8a",
+          "timestamp": "2026-09-03T11:59:04.111498+00:00",
+          "source": "sshd",
+          "event_type": "auth_success",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "medium",
+          "message": "Accepted password for anna from 100.81.172.118 port 52896 ssh2",
+          "received_at": "2026-09-03T11:59:06.966150+00:00"
+        }
+      },
+      {
+        "event_id": "46854d9d-3b24-4d82-999c-9bfd01bcb3dc",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:59:05.860719+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "46854d9d-3b24-4d82-999c-9bfd01bcb3dc",
+          "timestamp": "2026-09-03T11:59:05.860719+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 52918 ssh2",
+          "received_at": "2026-09-03T11:59:06.966267+00:00"
+        }
+      },
+      {
+        "event_id": "102ec91e-9554-4e43-a5df-f8eade5b9171",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T11:59:05.861087+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "102ec91e-9554-4e43-a5df-f8eade5b9171",
+          "timestamp": "2026-09-03T11:59:05.861087+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 52888 ssh2",
+          "received_at": "2026-09-03T11:59:06.966397+00:00"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.81.172.118",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "100.81.172.118",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null
+            },
+            "queried_at": "2026-09-03 11:59:24.178906"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.81.172.118",
+          "source_event_id": "af7504ea-1032-438d-bcb5-e1f64634b07a",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "af7504ea-1032-438d-bcb5-e1f64634b07a",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "665478d3-c3d6-41c8-863c-3b18dc507d79",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "46854d9d-3b24-4d82-999c-9bfd01bcb3dc",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "102ec91e-9554-4e43-a5df-f8eade5b9171",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "d3f9c2a1-5b6e-4f8a-9c2d-7e1f3b6a9c4e",
+      "name": "Unclassified Activity",
+      "objective": "Obtain valid credentials for the victim-endpoint by brute\u2011forcing authentication",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "af7504ea-1032-438d-bcb5-e1f64634b07a",
+          "description": "Failed authentication attempt from source IP 100.81.172.118 to victim-endpoint (evidence of brute\u2011force activity)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "665478d3-c3d6-41c8-863c-3b18dc507d79",
+          "description": "Another failed authentication attempt from the same IP 100.81.172.118 to victim-endpoint."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "46854d9d-3b24-4d82-999c-9bfd01bcb3dc",
+          "description": "Additional failed authentication attempt from source IP 100.81.172.118."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "102ec91e-9554-4e43-a5df-f8eade5b9171",
+          "description": "Further failed authentication attempt from source IP 100.81.172.118."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "5bfe0165-cf8c-4ce6-9bda-94fa7ae35b8a",
+          "description": "Successful authentication from source IP 100.81.172.118, indicating the brute\u2011force campaign achieved credential access."
+        }
+      ],
+      "related_techniques": [
+        "T1110"
+      ],
+      "evidence_summary": "Multiple authentication_failed events (IDs af7504ea-1032-438d-bcb5-e1f64634b07a, 665478d3-c3d6-41c8-863c-3b18dc507d79, 46854d9d-3b24-4d82-999c-9bfd01bcb3dc, 102ec91e-9554-4e43-a5df-f8eade5b9171) from the same source IP 100.81.172.118, followed by an authentication_success event (ID 5bfe0165-cf8c-4ce6-9bda-94fa7ae35b8a), are mapped to ATT&CK technique T1110 (Brute Force) with confidence 0.7, indicating a credential\u2011guessing campaign. The IP address is listed as benign with confidence 0.0, but the observed activity provides the primary evidence of the attack.",
+      "confidence": 0.62
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1078",
+          "technique_name": "Valid Accounts",
+          "rationale": "The campaign has successfully obtained credentials via brute\u2011force (T1110). Attackers typically leverage these newly\u2011gained credentials to log in to additional systems and continue their operation."
+        },
+        {
+          "technique_id": "T1098",
+          "technique_name": "Account Manipulation",
+          "rationale": "After gaining valid credentials, adversaries often create new accounts or modify existing ones to maintain persistence and elevate privileges, making T1098 a common follow\u2011on to T1110."
+        }
+      ],
+      "rationale": "The observed activity consists of repeated brute\u2011force attempts that culminated in a successful login, indicating the attacker now possesses valid credentials. In ATT&CK, the typical progression after T1110 is to exploit those credentials (T1078) and/or manipulate accounts to broaden access and persistence (T1098). Both techniques are present in the allowed prediction list."
+    },
+    "threat_summary": {
+      "campaign": {
+        "campaign_id": "d3f9c2a1-5b6e-4f8a-9c2d-7e1f3b6a9c4e",
+        "name": "Unclassified Activity",
+        "severity": "high",
+        "confidence": 0.62
+      },
+      "event_count": 5,
+      "failed_login_count": 4,
+      "successful_authentication_after_failures": true,
+      "affected_hosts": [
+        "victim-endpoint"
+      ],
+      "affected_users": [
+        "anna"
+      ],
+      "source_ips": [
+        "100.81.172.118"
+      ],
+      "processes": [],
+      "top_mitre_techniques": [
+        {
+          "id": "T1110",
+          "name": "Brute Force",
+          "count": 4,
+          "confidence": 0.7
+        }
+      ],
+      "prediction": {
+        "likely_next_techniques": [
+          {
+            "id": "T1078",
+            "name": "Valid Accounts"
+          },
+          {
+            "id": "T1098",
+            "name": "Account Manipulation"
+          }
+        ],
+        "rationale": "The observed activity consists of repeated brute\u2011force attempts that culminated in a successful login, indicating the attacker now possesses valid credentials. In ATT&CK, the typical progression after T1110 is to exploit those credentials (T1078) and/or manipulate accounts to broaden access and persistence (T1098). Both techniques are present in the allowed prediction list."
+      },
+      "valid_action_targets": [
+        "100.81.172.118",
+        "anna",
+        "victim-endpoint"
+      ],
+      "victim_isolation_targets": [
+        "victim-endpoint"
+      ],
+      "attacker_source_ips": [
+        "100.81.172.118"
+      ]
+    },
+    "report": "# Threat Intelligence Report  \n\n**Campaign ID:** `d3f9c2a1-5b6e-4f8a-9c2d-7e1f3b6a9c4e`  \n**Report Date:** 2026\u201109\u201103  \n\n---  \n\n## Executive Summary  \nMultiple SSH authentication failures followed by a successful login were observed on **victim\u2011endpoint** from the same external source IP **100.81.172.118**. The activity maps to ATT&CK technique **T1110 \u2013 Brute Force** with a confidence of 0.7, indicating a credential\u2011guessing campaign that succeeded in obtaining valid credentials for the user **anna**. No malicious reputation was associated with the IP (AbuseIPDB\u202f\u2192\u202fbenign, confidence\u202f0.0), but the observed behavior is indicative of an active brute\u2011force attack.\n\n---  \n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Event Type | Source IP | Username | Service |\n|-----------------|----------|------------|-----------|----------|---------|\n| 2026\u201109\u201103T11:59:04.110726+00:00 | `af7504ea-1032-438d-bcb5-e1f64634b07a` | authentication_failed | 100.81.172.118 | anna | ssh |\n| 2026\u201109\u201103T11:59:04.111271+00:00 | `665478d3-c3d6-41c8-863c-3b18dc507d79` | authentication_failed | 100.81.172.118 | anna | ssh |\n| 2026\u201109\u201103T11:59:04.111498+00:00 | `5bfe0165-cf8c-4ce6-9bda-94fa7ae35b8a` | authentication_success | 100.81.172.118 | anna | ssh |\n| 2026\u201109\u201103T11:59:05.860719+",
+    "actions_taken": [
+      {
+        "action_id": "3c887cff-d9b2-4f50-9810-fc8627b2932f",
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC_analyst",
+          "severity": "high",
+          "rationale": "Response review required for campaign Unclassified Activity.",
+          "technique_id": "",
+          "confidence": 0.62,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "executed",
+        "detail": "Email notification sent to benlakhalrania869@gmail.com",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "notify_analyst_223e955b",
+        "action_type": "notify_analyst",
+        "target": "SOC_analyst",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_223e955b.log",
+        "script": "# Notify analyst about: SOC_analyst\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: N/A\n# Confidence: 0.62\n#\n# Please review the following:\n#   - SOC_analyst\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC_analyst",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 1\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: notify_analyst\n# Target: SOC_analyst\n# ID: notify_analyst_223e955b\n# Expected: Create analyst notification for SOC_analyst\n# =======================================\naction_1() {\n    echo \"[ACTION 1] notify_analyst -> SOC_analyst\"\n    echo \"  Expected: Create analyst notification for SOC_analyst\"\n\n    # Notify analyst about: SOC_analyst\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: N/A\n    # Confidence: 0.62\n    #\n    # Please review the following:\n    #   - SOC_analyst\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] notify_analyst -> SOC_analyst\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] notify_analyst -> SOC_analyst\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 1 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_1_actions.sh",
+    "remote_execution_result": null,
+    "remote_execution_error": "",
+    "remote_push_attempted": false,
+    "remote_push_url": "",
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "event_id": "81a029e5-25ac-4dc5-9340-2a35f69e5960",
+        "timestamp": "2026-09-03T12:02:08.301473+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T12:02:17.197647+00:00"
+      },
+      {
+        "event_id": "9f382045-9444-4820-a967-1d38a2768dbc",
+        "timestamp": "2026-09-03T12:02:08.301787+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T12:02:17.198168+00:00"
+      },
+      {
+        "event_id": "eb7b1cf6-f5ec-41bf-a2ff-71413ec28ba8",
+        "timestamp": "2026-09-03T12:02:08.301989+00:00",
+        "source": "sshd",
+        "event_type": "auth_success",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "medium",
+        "message": "Accepted password for anna from 100.81.172.118 port 58206 ssh2",
+        "received_at": "2026-09-03T12:02:17.198486+00:00"
+      },
+      {
+        "event_id": "1ab46901-849d-4e69-90e0-101a75cdaf87",
+        "timestamp": "2026-09-03T12:02:10.860785+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 58180 ssh2",
+        "received_at": "2026-09-03T12:02:17.198861+00:00"
+      },
+      {
+        "event_id": "986d3b7f-140b-49bd-a67f-e185e3969c43",
+        "timestamp": "2026-09-03T12:02:10.861121+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 58196 ssh2",
+        "received_at": "2026-09-03T12:02:17.199191+00:00"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "81a029e5-25ac-4dc5-9340-2a35f69e5960",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T12:02:08.301473+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "81a029e5-25ac-4dc5-9340-2a35f69e5960",
+          "timestamp": "2026-09-03T12:02:08.301473+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T12:02:17.197647+00:00"
+        }
+      },
+      {
+        "event_id": "9f382045-9444-4820-a967-1d38a2768dbc",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T12:02:08.301787+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "9f382045-9444-4820-a967-1d38a2768dbc",
+          "timestamp": "2026-09-03T12:02:08.301787+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T12:02:17.198168+00:00"
+        }
+      },
+      {
+        "event_id": "eb7b1cf6-f5ec-41bf-a2ff-71413ec28ba8",
+        "source": "linux",
+        "event_type": "authentication_success",
+        "timestamp": "2026-09-03T12:02:08.301989+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "medium",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "eb7b1cf6-f5ec-41bf-a2ff-71413ec28ba8",
+          "timestamp": "2026-09-03T12:02:08.301989+00:00",
+          "source": "sshd",
+          "event_type": "auth_success",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "medium",
+          "message": "Accepted password for anna from 100.81.172.118 port 58206 ssh2",
+          "received_at": "2026-09-03T12:02:17.198486+00:00"
+        }
+      },
+      {
+        "event_id": "1ab46901-849d-4e69-90e0-101a75cdaf87",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T12:02:10.860785+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "1ab46901-849d-4e69-90e0-101a75cdaf87",
+          "timestamp": "2026-09-03T12:02:10.860785+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 58180 ssh2",
+          "received_at": "2026-09-03T12:02:17.198861+00:00"
+        }
+      },
+      {
+        "event_id": "986d3b7f-140b-49bd-a67f-e185e3969c43",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T12:02:10.861121+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "986d3b7f-140b-49bd-a67f-e185e3969c43",
+          "timestamp": "2026-09-03T12:02:10.861121+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 58196 ssh2",
+          "received_at": "2026-09-03T12:02:17.199191+00:00"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.81.172.118",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "100.81.172.118",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null
+            },
+            "queried_at": "2026-09-03 12:02:33.212262"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.81.172.118",
+          "source_event_id": "81a029e5-25ac-4dc5-9340-2a35f69e5960",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "81a029e5-25ac-4dc5-9340-2a35f69e5960",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "9f382045-9444-4820-a967-1d38a2768dbc",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "1ab46901-849d-4e69-90e0-101a75cdaf87",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "986d3b7f-140b-49bd-a67f-e185e3969c43",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "d3f9c2a1-5b4e-4f9a-8c2e-7a1b6e9f3d4c",
+      "name": "Unclassified Activity",
+      "objective": "Attempt to gain unauthorized access to the victim endpoint by repeatedly trying credentials (brute\u2011force) and eventually achieving a successful login.",
+      "timeline": [
+        {
+          "timestamp": "Unknown",
+          "event_id": "81a029e5-25ac-4dc5-9340-2a35f69e5960",
+          "description": "Failed authentication attempt from source IP 100.81.172.118 to victim\u2011endpoint (evidence for T1110 \u2013 Brute Force)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "9f382045-9444-4820-a967-1d38a2768dbc",
+          "description": "Failed authentication attempt from source IP 100.81.172.118 to victim\u2011endpoint (evidence for T1110 \u2013 Brute Force)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "1ab46901-849d-4e69-90e0-101a75cdaf87",
+          "description": "Failed authentication attempt from source IP 100.81.172.118 to victim\u2011endpoint (evidence for T1110 \u2013 Brute Force)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "986d3b7f-140b-49bd-a67f-e185e3969c43",
+          "description": "Failed authentication attempt from source IP 100.81.172.118 to victim\u2011endpoint (evidence for T1110 \u2013 Brute Force)."
+        },
+        {
+          "timestamp": "Unknown",
+          "event_id": "eb7b1cf6-f5ec-41bf-a2ff-71413ec28ba8",
+          "description": "Successful authentication from source IP 100.81.172.118 to victim\u2011endpoint, indicating the brute\u2011force campaign achieved at least one valid credential."
+        }
+      ],
+      "related_techniques": [
+        "T1110"
+      ],
+      "evidence_summary": "Multiple authentication_failed events (81a029e5-25ac-4dc5-9340-2a35f69e5960, 9f382045-9444-4820-a967-1d38a2768dbc, 1ab46901-849d-4e69-90e0-101a75cdaf87, 986d3b7f-140b-49bd-a67f-e185e3969c43) from the same source IP 100.81.172.118 map to ATT&CK technique T1110 (Brute Force) with a confidence of 0.7, and a subsequent authentication_success event (eb7b1cf6-f5ec-41bf-a2ff-71413ec28ba8) shows the attacker obtained valid credentials. The IP address is listed in an IOC with benign reputation but zero confidence, providing no additional threat context.",
+      "confidence": 0.62
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1078",
+          "technique_name": "Valid Accounts",
+          "rationale": "The campaign has just achieved a successful login via brute\u2011force (T1110). Attackers typically leverage the newly\u2011compromised credentials to establish persistent access and move laterally using valid accounts."
+        },
+        {
+          "technique_id": "T1098",
+          "technique_name": "Account Manipulation",
+          "rationale": "After obtaining valid credentials, adversaries often modify account properties (e.g., add to privileged groups) to increase their privileges and maintain control."
+        },
+        {
+          "technique_id": "T1003",
+          "technique_name": "OS Credential Dumping",
+          "rationale": "With a foothold on the system, the next logical step is to harvest additional credentials from the host to expand the attack surface."
+        }
+      ],
+      "rationale": "The observed brute\u2011force activity culminated in a successful authentication, indicating the attacker now possesses valid credentials. The most common subsequent actions are to use those credentials directly (Valid Accounts), elevate privileges through account manipulation, and harvest further credentials from the compromised host (OS Credential Dumping)."
+    },
+    "threat_summary": {
+      "campaign": {
+        "campaign_id": "d3f9c2a1-5b4e-4f9a-8c2e-7a1b6e9f3d4c",
+        "name": "Unclassified Activity",
+        "severity": "high",
+        "confidence": 0.62
+      },
+      "event_count": 5,
+      "failed_login_count": 4,
+      "successful_authentication_after_failures": true,
+      "affected_hosts": [
+        "victim-endpoint"
+      ],
+      "affected_users": [
+        "anna"
+      ],
+      "source_ips": [
+        "100.81.172.118"
+      ],
+      "processes": [],
+      "top_mitre_techniques": [
+        {
+          "id": "T1110",
+          "name": "Brute Force",
+          "count": 4,
+          "confidence": 0.7
+        }
+      ],
+      "prediction": {
+        "likely_next_techniques": [
+          {
+            "id": "T1078",
+            "name": "Valid Accounts"
+          },
+          {
+            "id": "T1098",
+            "name": "Account Manipulation"
+          },
+          {
+            "id": "T1003",
+            "name": "OS Credential Dumping"
+          }
+        ],
+        "rationale": "The observed brute\u2011force activity culminated in a successful authentication, indicating the attacker now possesses valid credentials. The most common subsequent actions are to use those credentials directly (Valid Accounts), elevate privileges through account manipulation, and harvest further credentials from the compromised host (OS Credential Dumping)."
+      },
+      "valid_action_targets": [
+        "100.81.172.118",
+        "anna",
+        "victim-endpoint"
+      ],
+      "victim_isolation_targets": [
+        "victim-endpoint"
+      ],
+      "attacker_source_ips": [
+        "100.81.172.118"
+      ]
+    },
+    "report": "# Threat Intelligence Report  \n\n**Campaign ID:** `d3f9c2a1-5b4e-4f9a-8c2e-7a1b6e9f3d4c`  \n**Report Date:** 2026\u201109\u201103  \n\n---\n\n## Executive Summary\nA brute\u2011force credential\u2011guessing campaign targeted the SSH service on the host **victim\u2011endpoint**.  \n- Source IP **100.81.172.118** attempted four failed logins for user **anna** and subsequently achieved a successful authentication.  \n- The activity maps to ATT&CK technique **T1110 \u2013 Brute Force** with a confidence of 0.7.  \n- The successful login indicates that the adversary now possesses valid credentials on the victim system, raising the risk of further lateral movement or credential harvesting.  \n- Immediate containment actions are pending approval; an analyst has already been notified.\n\n---\n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Description |\n|-----------------|----------|-------------|\n| 2026\u201109\u201103T12:02:08.301473+00:00 | `81a029e5-25ac-4dc5-9340-2a35f69e5960` | SSH authentication **failed** for user *anna* from IP 100.81.172.118. |\n| 2026\u201109\u201103T12:02:08.301787+00:00 | `9f382045-",
+    "actions_taken": [
+      {
+        "action_id": "f546d3f2-efb5-447b-b63b-4b30f6759a77",
+        "action": {
+          "action_type": "block_ip",
+          "target": "100.81.172.118",
+          "severity": "high",
+          "rationale": "Source IP performed brute\u2011force (T1110) and achieved a successful login, indicating it now has valid credentials. Blocking the IP stops further malicious traffic.",
+          "technique_id": "T1110",
+          "confidence": 0.7,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "c17bad2e-41ee-4b37-ada9-0019ad6f9973",
+        "action": {
+          "action_type": "isolate_host",
+          "target": "victim-endpoint",
+          "severity": "high",
+          "rationale": "The endpoint has been compromised via brute\u2011force and a valid account was obtained. Isolation prevents lateral movement and credential\u2011dumping (T1078, T1003).",
+          "technique_id": "T1110",
+          "confidence": 0.7,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "08f402e7-2ca2-466a-84fc-6171f90706e0",
+        "action": {
+          "action_type": "disable_account",
+          "target": "anna",
+          "severity": "high",
+          "rationale": "User anna's account was used for a successful authentication after multiple failed attempts, indicating it is now compromised. Disabling the account blocks further abuse.",
+          "technique_id": "T1078",
+          "confidence": 0.62,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "d326e92e-1472-4f9b-9fbb-cb74c929ba14",
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC_analyst",
+          "severity": "high",
+          "rationale": "Brute\u2011force activity (T1110) succeeded, yielding valid credentials (T1078). Predicted next steps include account manipulation and OS credential dumping. Immediate analyst review and remediation are required.",
+          "technique_id": "T1110",
+          "confidence": 0.7,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "executed",
+        "detail": "Email notification sent to benlakhalrania869@gmail.com",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "notify_analyst_64fe5723",
+        "action_type": "notify_analyst",
+        "target": "SOC_analyst",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_64fe5723.log",
+        "script": "# Notify analyst about: SOC_analyst\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: T1110\n# Confidence: 0.7\n#\n# Please review the following:\n#   - SOC_analyst\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC_analyst",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 1\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: notify_analyst\n# Target: SOC_analyst\n# ID: notify_analyst_64fe5723\n# Expected: Create analyst notification for SOC_analyst\n# =======================================\naction_1() {\n    echo \"[ACTION 1] notify_analyst -> SOC_analyst\"\n    echo \"  Expected: Create analyst notification for SOC_analyst\"\n\n    # Notify analyst about: SOC_analyst\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: T1110\n    # Confidence: 0.7\n    #\n    # Please review the following:\n    #   - SOC_analyst\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] notify_analyst -> SOC_analyst\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] notify_analyst -> SOC_analyst\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 1 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_1_actions.sh",
+    "remote_execution_result": null,
+    "remote_execution_error": "",
+    "remote_push_attempted": false,
+    "remote_push_url": "",
+    "errors": [],
+    "metadata": {}
+  },
+  {
+    "raw_events": [
+      {
+        "event_id": "fb160dc2-bd8d-4017-9c5c-565e0e74ded0",
+        "timestamp": "2026-09-03T12:05:16.416404+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T12:05:17.345583+00:00"
+      },
+      {
+        "event_id": "317ba4a8-209a-4c8e-ac31-1415f11be016",
+        "timestamp": "2026-09-03T12:05:16.416673+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+        "received_at": "2026-09-03T12:05:17.345942+00:00"
+      },
+      {
+        "event_id": "79fdce7b-ae2a-4644-bbc2-489f8ec9b427",
+        "timestamp": "2026-09-03T12:05:16.416913+00:00",
+        "source": "sshd",
+        "event_type": "auth_success",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "medium",
+        "message": "Accepted password for anna from 100.81.172.118 port 55814 ssh2",
+        "received_at": "2026-09-03T12:05:17.346190+00:00"
+      },
+      {
+        "event_id": "fb9cf3c4-4178-4e1e-91f2-4537898b8837",
+        "timestamp": "2026-09-03T12:05:18.610738+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 55770 ssh2",
+        "received_at": "2026-09-03T12:05:27.480018+00:00"
+      },
+      {
+        "event_id": "6cb0c8f1-70b9-41d4-b8c2-e844702b9718",
+        "timestamp": "2026-09-03T12:05:18.611068+00:00",
+        "source": "sshd",
+        "event_type": "auth_failed",
+        "host": "victim-endpoint",
+        "src_ip": "100.81.172.118",
+        "username": "anna",
+        "severity": "high",
+        "message": "Failed password for anna from 100.81.172.118 port 55808 ssh2",
+        "received_at": "2026-09-03T12:05:27.480368+00:00"
+      }
+    ],
+    "events": [
+      {
+        "event_id": "fb160dc2-bd8d-4017-9c5c-565e0e74ded0",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T12:05:16.416404+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "fb160dc2-bd8d-4017-9c5c-565e0e74ded0",
+          "timestamp": "2026-09-03T12:05:16.416404+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T12:05:17.345583+00:00"
+        }
+      },
+      {
+        "event_id": "317ba4a8-209a-4c8e-ac31-1415f11be016",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T12:05:16.416673+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "317ba4a8-209a-4c8e-ac31-1415f11be016",
+          "timestamp": "2026-09-03T12:05:16.416673+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=100.81.172.118  user=anna",
+          "received_at": "2026-09-03T12:05:17.345942+00:00"
+        }
+      },
+      {
+        "event_id": "79fdce7b-ae2a-4644-bbc2-489f8ec9b427",
+        "source": "linux",
+        "event_type": "authentication_success",
+        "timestamp": "2026-09-03T12:05:16.416913+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "medium",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "79fdce7b-ae2a-4644-bbc2-489f8ec9b427",
+          "timestamp": "2026-09-03T12:05:16.416913+00:00",
+          "source": "sshd",
+          "event_type": "auth_success",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "medium",
+          "message": "Accepted password for anna from 100.81.172.118 port 55814 ssh2",
+          "received_at": "2026-09-03T12:05:17.346190+00:00"
+        }
+      },
+      {
+        "event_id": "fb9cf3c4-4178-4e1e-91f2-4537898b8837",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T12:05:18.610738+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "fb9cf3c4-4178-4e1e-91f2-4537898b8837",
+          "timestamp": "2026-09-03T12:05:18.610738+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 55770 ssh2",
+          "received_at": "2026-09-03T12:05:27.480018+00:00"
+        }
+      },
+      {
+        "event_id": "6cb0c8f1-70b9-41d4-b8c2-e844702b9718",
+        "source": "linux",
+        "event_type": "authentication_failed",
+        "timestamp": "2026-09-03T12:05:18.611068+00:00",
+        "host": "victim-endpoint",
+        "user": null,
+        "username": "anna",
+        "process": null,
+        "command_line": null,
+        "src_ip": "100.81.172.118",
+        "dest_ip": null,
+        "signature": null,
+        "category": null,
+        "severity": "high",
+        "rule_description": null,
+        "rule_level": null,
+        "rule_groups": null,
+        "rule_mitre": null,
+        "proto": null,
+        "service": "ssh",
+        "query": null,
+        "raw": {
+          "event_id": "6cb0c8f1-70b9-41d4-b8c2-e844702b9718",
+          "timestamp": "2026-09-03T12:05:18.611068+00:00",
+          "source": "sshd",
+          "event_type": "auth_failed",
+          "host": "victim-endpoint",
+          "src_ip": "100.81.172.118",
+          "username": "anna",
+          "severity": "high",
+          "message": "Failed password for anna from 100.81.172.118 port 55808 ssh2",
+          "received_at": "2026-09-03T12:05:27.480368+00:00"
+        }
+      }
+    ],
+    "iocs": [
+      {
+        "value": "100.81.172.118",
+        "ioc_type": "ip",
+        "reputation": "benign",
+        "confidence": 0.0,
+        "tags": [
+          "non_public",
+          "reserved"
+        ],
+        "first_seen": null,
+        "last_seen": null,
+        "source": "AbuseIPDB",
+        "evidence": [
+          {
+            "provider": "AbuseIPDB",
+            "raw_response": {
+              "ipAddress": "100.81.172.118",
+              "isPublic": false,
+              "ipVersion": 4,
+              "isWhitelisted": false,
+              "abuseConfidenceScore": 0,
+              "countryCode": null,
+              "usageType": "Reserved",
+              "isp": null,
+              "domain": null,
+              "hostnames": [],
+              "isTor": false,
+              "countryName": null,
+              "totalReports": 0,
+              "numDistinctUsers": 0,
+              "lastReportedAt": null
+            },
+            "queried_at": "2026-09-03 12:05:42.398079"
+          }
+        ],
+        "raw": {
+          "type": "ipv4",
+          "value": "100.81.172.118",
+          "source_event_id": "fb160dc2-bd8d-4017-9c5c-565e0e74ded0",
+          "confidence": 1.0
+        }
+      }
+    ],
+    "techniques": [
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "fb160dc2-bd8d-4017-9c5c-565e0e74ded0",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "317ba4a8-209a-4c8e-ac31-1415f11be016",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "fb9cf3c4-4178-4e1e-91f2-4537898b8837",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      },
+      {
+        "attack_id": "T1110",
+        "technique_name": "Brute Force",
+        "confidence": 0.7,
+        "rule_name": "ssh_authentication_failed",
+        "matched_on": "service='ssh' and event_type='authentication_failed'",
+        "evidence_event_id": "6cb0c8f1-70b9-41d4-b8c2-e844702b9718",
+        "mapping_source": "deterministic_rule",
+        "known_groups": [
+          "Fox Kitten",
+          "HEXANE",
+          "Ember Bear",
+          "Turla",
+          "DarkVishnya",
+          "FIN5",
+          "APT41",
+          "APT38",
+          "OilRig",
+          "Agrius",
+          "APT39",
+          "Dragonfly",
+          "VOID MANTICORE",
+          "Storm-0501",
+          "APT28"
+        ],
+        "known_software": [
+          "Chaos",
+          "Caterpillar WebShell",
+          "Kinsing",
+          "PoshC2",
+          "QakBot",
+          "Pysa",
+          "CrackMapExec"
+        ],
+        "recommended_mitigations": [
+          "User Account Management",
+          "Account Use Policies",
+          "Multi-factor Authentication",
+          "Password Policies"
+        ]
+      }
+    ],
+    "campaign": {
+      "campaign_id": "fe8d0791-910c-4bfd-886a-729794586795",
+      "name": "Unclassified Activity",
+      "objective": "Unknown",
+      "timeline": [
+        {
+          "timestamp": "2026-09-03T12:05:16.416404+00:00",
+          "event_id": "fb160dc2-bd8d-4017-9c5c-565e0e74ded0",
+          "description": "Event type: authentication_failed"
+        },
+        {
+          "timestamp": "2026-09-03T12:05:16.416673+00:00",
+          "event_id": "317ba4a8-209a-4c8e-ac31-1415f11be016",
+          "description": "Event type: authentication_failed"
+        },
+        {
+          "timestamp": "2026-09-03T12:05:16.416913+00:00",
+          "event_id": "79fdce7b-ae2a-4644-bbc2-489f8ec9b427",
+          "description": "Event type: authentication_success"
+        },
+        {
+          "timestamp": "2026-09-03T12:05:18.610738+00:00",
+          "event_id": "fb9cf3c4-4178-4e1e-91f2-4537898b8837",
+          "description": "Event type: authentication_failed"
+        },
+        {
+          "timestamp": "2026-09-03T12:05:18.611068+00:00",
+          "event_id": "6cb0c8f1-70b9-41d4-b8c2-e844702b9718",
+          "description": "Event type: authentication_failed"
+        }
+      ],
+      "related_techniques": [
+        "T1110",
+        "T1110",
+        "T1110",
+        "T1110"
+      ],
+      "evidence_summary": "Based on 5 events, 1 IOCs, and 4 techniques. Insufficient evidence to determine campaign objective or attribution.",
+      "confidence": 0.62
+    },
+    "prediction": {
+      "likely_next_techniques": [
+        {
+          "technique_id": "T1078",
+          "technique_name": "Valid Accounts",
+          "rationale": "The attacker has successfully brute\u2011forced credentials (multiple authentication_success events). The next logical step is to reuse those valid credentials to log into additional systems or maintain persistence."
+        },
+        {
+          "technique_id": "T1003",
+          "technique_name": "OS Credential Dumping",
+          "rationale": "After gaining initial access via brute force, adversaries often dump additional credentials from the compromised host to expand their foothold and facilitate further lateral movement."
+        },
+        {
+          "technique_id": "T1059.001",
+          "technique_name": "PowerShell",
+          "rationale": "With valid credentials in hand, attackers frequently execute PowerShell commands to run scripts, download payloads, or perform reconnaissance on the target environment."
+        },
+        {
+          "technique_id": "T1083",
+          "technique_name": "File and Directory Discovery",
+          "rationale": "Once logged in, the adversary is likely to enumerate files and directories to locate valuable data or additional credential stores."
+        }
+      ],
+      "rationale": "The observed pattern shows repeated brute\u2011force attempts culminating in a successful authentication. This indicates the attacker now possesses usable credentials. Typical post\u2011brute\u2011force behavior includes leveraging those credentials for legitimate\u2011looking logins (Valid Accounts), extracting more credentials (OS Credential Dumping), executing scripts for further control (PowerShell), and performing local discovery to identify high\u2011value assets (File and Directory Discovery). All suggested techniques are present in the allowed prediction list."
+    },
+    "threat_summary": {
+      "campaign": {
+        "campaign_id": "fe8d0791-910c-4bfd-886a-729794586795",
+        "name": "Unclassified Activity",
+        "severity": "high",
+        "confidence": 0.62
+      },
+      "event_count": 5,
+      "failed_login_count": 4,
+      "successful_authentication_after_failures": true,
+      "affected_hosts": [
+        "victim-endpoint"
+      ],
+      "affected_users": [
+        "anna"
+      ],
+      "source_ips": [
+        "100.81.172.118"
+      ],
+      "processes": [],
+      "top_mitre_techniques": [
+        {
+          "id": "T1110",
+          "name": "Brute Force",
+          "count": 4,
+          "confidence": 0.7
+        }
+      ],
+      "prediction": {
+        "likely_next_techniques": [
+          {
+            "id": "T1078",
+            "name": "Valid Accounts"
+          },
+          {
+            "id": "T1003",
+            "name": "OS Credential Dumping"
+          },
+          {
+            "id": "T1059.001",
+            "name": "PowerShell"
+          },
+          {
+            "id": "T1083",
+            "name": "File and Directory Discovery"
+          }
+        ],
+        "rationale": "The observed pattern shows repeated brute\u2011force attempts culminating in a successful authentication. This indicates the attacker now possesses usable credentials. Typical post\u2011brute\u2011force behavior includes leveraging those credentials for legitimate\u2011looking logins (Valid Accounts), extracting more credentials (OS Credential Dumping), executing scripts for further control (PowerShell), and performing local discovery to identify high\u2011value assets (File and Directory Discovery). All suggested techn"
+      },
+      "valid_action_targets": [
+        "100.81.172.118",
+        "anna",
+        "victim-endpoint"
+      ],
+      "victim_isolation_targets": [
+        "victim-endpoint"
+      ],
+      "attacker_source_ips": [
+        "100.81.172.118"
+      ]
+    },
+    "report": "# Threat Intelligence Report  \n\n**Campaign ID:** `fe8d0791-910c-4bfd-886a-729794586795`  \n**Report Date:** 2026\u201109\u201103  \n\n---  \n\n## Executive Summary  \nMultiple SSH authentication\u2011failed events were recorded for user **anna** from source IP **100.81.172.118**, followed by a successful login from the same IP. The activity maps to ATT&CK technique **T1110 \u2013 Brute Force** (confidence\u202f0.7). No additional techniques, objectives, or attribution were identified.  \n\nThe SOC has initiated containment actions (IP block, host isolation, account disable) that are pending analyst approval, and an analyst notification has already been sent.  \n\n---  \n\n## Timeline  \n\n| Timestamp (UTC) | Event ID | Event Type | Service | Username | Source IP |\n|-----------------|----------|------------|---------|----------|-----------|\n| 2026\u201109\u201103T12:05:16.416404+00:00 | fb160dc2-bd8d-4017-9c5c-565e0e74ded0 | authentication_failed | ssh | anna | 100.81.172.118 |\n| 2026\u201109\u201103T12:05:16.416673+00:00 | 317ba4a8-209a-4c8e-ac31-1415f11be016 | authentication_failed | ssh | anna | 100.81.172.118 |\n| 2026\u201109\u201103T12:05:16.416913+00:00 | 79fdce7b-ae2a-4644-bbc2-489f8ec9b427 | authentication_success | ssh | anna | 100.81.172.118 |\n| 2026\u201109\u201103T12:05:18.610738+00:00 | fb9cf3c4-4178-4e1e-91f2-4537898b",
+    "actions_taken": [
+      {
+        "action_id": "bb18338d-2964-4156-ba3e-463dd0e22c7c",
+        "action": {
+          "action_type": "block_ip",
+          "target": "100.81.172.118",
+          "severity": "high",
+          "rationale": "Brute\u2011force activity (T1110) succeeded and the attacker now has valid credentials. Blocking the source IP prevents further credential\u2011based attacks.",
+          "technique_id": "T1110",
+          "confidence": 0.71,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "db4d8640-9152-49ff-b568-b40c95148778",
+        "action": {
+          "action_type": "isolate_host",
+          "target": "victim-endpoint",
+          "severity": "high",
+          "rationale": "High\u2011severity campaign with successful credential use and predicted post\u2011login techniques (Valid Accounts, OS Credential Dumping, PowerShell). Isolating the host stops lateral movement and data exfiltration.",
+          "technique_id": "T1078",
+          "confidence": 0.78,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "e3e670a9-7db6-41aa-ba95-ed7ca3f23154",
+        "action": {
+          "action_type": "disable_account",
+          "target": "anna",
+          "severity": "high",
+          "rationale": "Multiple failed logins followed by a successful authentication indicate the account may be compromised. Disabling the account prevents further abuse.",
+          "technique_id": "T1078",
+          "confidence": 0.66,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "pending_approval",
+        "detail": "Awaiting human approval (run actions/review_pending.py).",
+        "dry_run": false
+      },
+      {
+        "action_id": "dfd3eb81-0680-4752-8805-8cfaafa99ae8",
+        "action": {
+          "action_type": "notify_analyst",
+          "target": "SOC_analyst",
+          "severity": "high",
+          "rationale": "Brute\u2011force attack (T1110) succeeded, leading to a valid account compromise (T1078). Predicted next steps include credential dumping, PowerShell execution, and discovery. Immediate containment actions (IP block, host isolation, account disable) have been recommended.",
+          "technique_id": "T1110",
+          "confidence": 0.85,
+          "risk_score": 74,
+          "risk_factors": [
+            "severity:25",
+            "observed_technique_confidence:14",
+            "failed_login_repetition:12",
+            "successful_authentication_after_failures:20",
+            "malicious_ioc:0",
+            "campaign_confidence:3"
+          ],
+          "risk_version": "1.0"
+        },
+        "status": "executed",
+        "detail": "Email notification sent to benlakhalrania869@gmail.com",
+        "dry_run": false
+      }
+    ],
+    "execution_packages": [
+      {
+        "action_id": "notify_analyst_83798eb2",
+        "action_type": "notify_analyst",
+        "target": "SOC_analyst",
+        "platform": "cross_platform",
+        "language": "text",
+        "filename": "notify_analyst_83798eb2.log",
+        "script": "# Notify analyst about: SOC_analyst\n# Creates an alert entry in the platform audit log.\n# This is informational only; no disruptive action is taken.\n#\n# Related technique: T1110\n# Confidence: 0.85\n#\n# Please review the following:\n#   - SOC_analyst\n#\n# Manual investigation is required.\n",
+        "requires_admin": false,
+        "expected_effect": "Create analyst notification for SOC_analyst",
+        "rollback": "# No rollback needed for notification actions.",
+        "verification": [
+          "# Notification logged; verify via platform audit trail."
+        ]
+      }
+    ],
+    "combined_script": "#!/bin/bash\n#\n# Combined Response Actions Script\n# Generated by Agentic Threat Intelligence - Execution Translation Agent\n# Date: $(date -u '+%Y-%m-%dT%H:%M:%SZ')\n# Total Actions: 1\n#\n# Usage:\n#   chmod +x this_script.sh\n#   sudo ./this_script.sh          # Execute all actions\n#   sudo ./this_script.sh --dry-run # Simulate without executing\n#   sudo ./this_script.sh --rollback # Rollback all actions\n#   sudo ./this_script.sh --action <N> # Execute only action N\n#\n\nset -euo pipefail\n\nDRY_RUN=false\nROLLBACK=false\nSINGLE_ACTION=\"\"\n\nwhile [[ $# -gt 0 ]]; do\n    case \"$1\" in\n        --dry-run) DRY_RUN=true; shift ;;\n        --rollback) ROLLBACK=true; shift ;;\n        --action) SINGLE_ACTION=\"$2\"; shift 2 ;;\n        *) echo \"Unknown option: $1\"; exit 1 ;;\n    esac\ndone\n\necho \"========================================\"\necho \"  Response Actions Execution Script\"\necho \"  Mode: $($DRY_RUN && echo 'DRY RUN' || ($ROLLBACK && echo 'ROLLBACK' || echo 'EXECUTE'))\"\necho \"========================================\"\necho \"\",\n\n# =======================================\n# Action 1: notify_analyst\n# Target: SOC_analyst\n# ID: notify_analyst_83798eb2\n# Expected: Create analyst notification for SOC_analyst\n# =======================================\naction_1() {\n    echo \"[ACTION 1] notify_analyst -> SOC_analyst\"\n    echo \"  Expected: Create analyst notification for SOC_analyst\"\n\n    # Notify analyst about: SOC_analyst\n    # Creates an alert entry in the platform audit log.\n    # This is informational only; no disruptive action is taken.\n    #\n    # Related technique: T1110\n    # Confidence: 0.85\n    #\n    # Please review the following:\n    #   - SOC_analyst\n    #\n    # Manual investigation is required.\n    echo \"  [OK] notify_analyst completed\"\n}\n\nrollback_1() {\n    echo \"[ROLLBACK 1] notify_analyst -> SOC_analyst\"\n    # No rollback needed for notification actions.\n    echo \"  [OK] Rollback of notify_analyst completed\"\n}\n\nverify_1() {\n    echo \"[VERIFY 1] notify_analyst -> SOC_analyst\"\n    # Notification logged; verify via platform audit trail.\n}\n\n# =======================================\n# Main Execution\n# =======================================\necho \"\"\necho \"Starting execution of 1 action(s)...\"\necho \"\"\n\nif $ROLLBACK; then\n    rollback_1\nelif [[ -n \"$SINGLE_ACTION\" ]]; then\n    case \"$SINGLE_ACTION\" in\n        1) action_1 ;;\n        *) echo \"Unknown action: $SINGLE_ACTION\"; exit 1 ;;\n    esac\nelse\n    action_1\nfi\n\necho \"\"\necho \"Execution completed.\"\n",
+    "combined_filename": "response_actions_1_actions.sh",
+    "remote_execution_result": null,
+    "remote_execution_error": "",
+    "remote_push_attempted": false,
+    "remote_push_url": "",
+    "errors": [],
+    "metadata": {}
   }
 ]

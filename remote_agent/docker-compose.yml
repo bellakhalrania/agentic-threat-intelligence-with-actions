@@ -32,7 +32,7 @@ services:
       - REMOTE_RESULT_WEBHOOK_BACKOFF=${REMOTE_RESULT_WEBHOOK_BACKOFF:-1.0}
       - REMOTE_RESULT_WEBHOOK_VERIFY_SSL=${REMOTE_RESULT_WEBHOOK_VERIFY_SSL:-true}
       - REMOTE_AGENT_NODE_IP=${REMOTE_AGENT_NODE_IP:-}
-      - REMOTE_MANAGER_IP=${REMOTE_MANAGER_IP:-100.76.226.30}
+      - REMOTE_MANAGER_IP=${REMOTE_MANAGER_IP:?REMOTE_MANAGER_IP is required}
     volumes:
       - remote_agent_scripts:/app/remote_agent/received_scripts
       - remote_agent_logs:/app/remote_agent/logs

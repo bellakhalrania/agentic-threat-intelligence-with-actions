@@ -562,7 +562,7 @@ class ExecutionTranslationAgent:
                 f"#!/bin/bash\n"
                 f"# Isolate host {target} while preserving remote management channel\n"
                 f"# NOTE: Keep port 9001 reachable so the remote agent does not self-lock.\n"
-                f"MGMT_IP=\"${{REMOTE_MANAGER_IP:-100.76.226.30}}\"\n"
+                f"MGMT_IP=\"${{REMOTE_MANAGER_IP:?REMOTE_MANAGER_IP is required}}\"\n"
                 f"REMOTE_PORT=\"${{REMOTE_AGENT_PORT:-9001}}\"\n"
                 f"if command -v iptables &> /dev/null; then\n"
                 f"    # Save current rules for rollback\n"

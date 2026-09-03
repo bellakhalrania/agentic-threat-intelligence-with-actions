@@ -38,7 +38,9 @@ def reset_policy_state():
     """Reset the in-memory rate limiter and audit log index before each test."""
     policy._action_history.clear()
     audit_log._index_built = False
-    yield
+    with patch.object(config, "DRY_RUN", True), \
+         patch.object(config, "ANALYST_NOTIFICATION_TARGET", "SOC_analyst"):
+        yield
 
 
 @pytest.fixture(autouse=True)
@@ -199,7 +201,8 @@ class TestPolicyEvaluation:
             rationale="Test",
             confidence=1.0,
         )
-        with patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+        with patch.object(config, "AUTO_RESPONSE_ENABLED", True), \
+             patch.object(config, "PROTECTED_TARGET_HOSTS", ["dc-filesrv01"]):
             assert policy.evaluate(action) == "denied"
 
     def test_denied_for_domain_admin(self):
@@ -211,19 +214,22 @@ class TestPolicyEvaluation:
             rationale="Test",
             confidence=1.0,
         )
-        with patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+        with patch.object(config, "AUTO_RESPONSE_ENABLED", True), \
+             patch.object(config, "PROTECTED_TARGET_HOSTS", ["domain admin"]):
             assert policy.evaluate(action) == "denied"
 
-    def test_pending_approval_for_low_confidence(self):
-        """Low confidence actions should require approval even when auto-response is on."""
+    def test_pending_approval_for_low_risk(self):
+        """Risk at or below the threshold requires approval."""
         action = ProposedAction(
             action_type=ActionType.BLOCK_IP,
             target="198.51.100.1",
             severity=ActionSeverity.LOW,
             rationale="Test",
             confidence=0.5,  # below 0.85 threshold
+            risk_score=80,
         )
-        with patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+        with patch.object(config, "AUTO_RESPONSE_ENABLED", True), \
+             patch.object(config, "AUTO_EXECUTE_ACTIONS", {"block_ip"}):
             assert policy.evaluate(action) == "pending_approval"
 
     def test_pending_approval_for_high_severity(self):
@@ -234,8 +240,10 @@ class TestPolicyEvaluation:
             severity=ActionSeverity.HIGH,
             rationale="Test",
             confidence=1.0,
+            risk_score=100,
         )
-        with patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+        with patch.object(config, "AUTO_RESPONSE_ENABLED", True), \
+             patch.object(config, "AUTO_EXECUTE_ACTIONS", {"block_ip"}):
             assert policy.evaluate(action) == "pending_approval"
 
     def test_auto_execute_when_all_conditions_met(self):
@@ -246,8 +254,10 @@ class TestPolicyEvaluation:
             severity=ActionSeverity.LOW,
             rationale="Test",
             confidence=0.9,
+            risk_score=81,
         )
-        with patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+        with patch.object(config, "AUTO_RESPONSE_ENABLED", True), \
+             patch.object(config, "AUTO_EXECUTE_ACTIONS", {"block_ip"}):
             assert policy.evaluate(action) == "auto_execute"
 
     def test_kill_switch_prevents_auto_execute(self):
@@ -258,6 +268,7 @@ class TestPolicyEvaluation:
             severity=ActionSeverity.LOW,
             rationale="Test",
             confidence=0.9,
+            risk_score=100,
         )
         with patch.object(config, "AUTO_RESPONSE_ENABLED", False):
             assert policy.evaluate(action) == "pending_approval"
@@ -270,8 +281,10 @@ class TestPolicyEvaluation:
             severity=ActionSeverity.LOW,
             rationale="Test",
             confidence=0.9,
+            risk_score=100,
         )
-        with patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+        with patch.object(config, "AUTO_RESPONSE_ENABLED", True), \
+             patch.object(config, "AUTO_EXECUTE_ACTIONS", {"block_ip"}):
             # Execute 3 times (should all auto_execute)
             for _ in range(3):
                 policy.evaluate(action)
@@ -286,8 +299,10 @@ class TestPolicyEvaluation:
             severity=ActionSeverity.LOW,
             rationale="Test",
             confidence=0.9,
+            risk_score=100,
         )
-        with patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+        with patch.object(config, "AUTO_RESPONSE_ENABLED", True), \
+             patch.object(config, "AUTO_EXECUTE_ACTIONS", {"block_ip"}):
             # Add an old timestamp directly
             old_ts = time.time() - 7200  # 2 hours ago
             policy._action_history["10.0.0.2"].append(old_ts)
@@ -303,7 +318,7 @@ class TestPolicyEvaluation:
             rationale="Test notification",
             confidence=1.0,
         )
-        with patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+        with patch.object(config, "AUTO_RESPONSE_ENABLED", False):
             assert policy.evaluate(action) == "auto_execute"
 
 
@@ -493,16 +508,19 @@ class TestResponseAgent:
         audit_log._index_built = False
 
     def test_empty_proposals(self, agent, sample_threat_summary, sample_iocs):
-        """When LLM returns no proposals, agent should return empty list."""
+        """A deterministic analyst notification is added when the LLM returns none."""
         with patch("agents.response_agent.invoke_llm", return_value="[]"):
             results = agent.run(sample_threat_summary, sample_iocs)
-            assert results == []
+            assert len(results) == 1
+            assert results[0].action.action_type == "notify_analyst"
+            assert results[0].status == "executed"
 
     def test_malformed_llm_output_returns_empty(self, agent, sample_threat_summary, sample_iocs):
-        """When LLM returns non-JSON, agent should return empty list."""
+        """Malformed LLM output still produces a deterministic notification."""
         with patch("agents.response_agent.invoke_llm", return_value="Not JSON at all"):
             results = agent.run(sample_threat_summary, sample_iocs)
-            assert results == []
+            assert len(results) == 1
+            assert results[0].action.action_type == "notify_analyst"
 
     def test_single_notify_action(self, agent, sample_threat_summary, sample_iocs):
         """A single notify_analyst action should be processed."""
@@ -586,7 +604,7 @@ class TestResponseAgent:
             assert results[0].action.action_type == "notify_analyst"
 
     def test_unknown_action_type_returns_failed(self, agent, sample_threat_summary, sample_iocs):
-        """An action type not in ACTION_DISPATCH should fail gracefully."""
+        """An unknown action is discarded while notification still executes."""
         llm_output = json.dumps([
             {
                 "action_type": "nonexistent_action",
@@ -599,8 +617,8 @@ class TestResponseAgent:
         ])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output):
             results = agent.run(sample_threat_summary, sample_iocs)
-            # Malformed action_type will fail ProposedAction validation and be skipped
-            assert len(results) == 0
+            assert len(results) == 1
+            assert results[0].action.action_type == "notify_analyst"
 
     def test_protected_target_rejected_before_policy(self, agent, sample_threat_summary, sample_iocs):
         """Response Agent rejects protected containment targets before policy evaluation."""
@@ -617,10 +635,11 @@ class TestResponseAgent:
             }
         ])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output), \
-             patch.object(config, "AUTO_RESPONSE_ENABLED", True):
+             patch.object(config, "AUTO_RESPONSE_ENABLED", True), \
+             patch.object(config, "PROTECTED_TARGET_HOSTS", ["dc-filesrv01"]):
             results = agent.run(sample_threat_summary, sample_iocs)
-            assert len(results) == 1
-            assert results[0].action.action_type == "notify_analyst"
+            assert [result.status for result in results] == ["denied", "executed"]
+            assert results[1].action.action_type == "notify_analyst"
 
     def test_ambiguous_sudo_event_only_notifies_analyst(self, agent):
         """T1548.003 and predictions cannot turn a sudo session-close into containment."""
@@ -644,11 +663,13 @@ class TestResponseAgent:
             {"action_type": "block_ip", "target": "100.123.23.97", "severity": "medium", "rationale": "Block source", "technique_id": "T1003", "confidence": 1.0},
             {"action_type": "disable_account", "target": "root", "severity": "high", "rationale": "Disable root", "technique_id": "T1098", "confidence": 1.0},
         ])
-        with patch("agents.response_agent.invoke_llm", return_value=llm_output):
+        with patch("agents.response_agent.invoke_llm", return_value=llm_output), \
+             patch.object(config, "PROTECTED_TARGET_HOSTS", ["control-node1"]), \
+             patch.object(config, "PROTECTED_MANAGEMENT_IPS", ["100.123.23.97"]):
             results = agent.run(threat_summary, iocs)
 
-        assert [result.action.action_type for result in results] == ["notify_analyst"]
-        assert "does not independently confirm malicious privilege escalation" in results[0].action.rationale
+        assert [result.status for result in results] == ["denied", "denied", "executed"]
+        assert results[-1].action.action_type == "notify_analyst"
 
     def test_predicted_techniques_and_severity_do_not_authorize_isolation(self, agent, sample_threat_summary, sample_iocs):
         """Containment needs explicit structured confirmation, not predictions or severity."""
@@ -659,7 +680,26 @@ class TestResponseAgent:
         }])
         with patch("agents.response_agent.invoke_llm", return_value=llm_output):
             results = agent.run(sample_threat_summary, sample_iocs)
-        assert [result.action.action_type for result in results] == ["notify_analyst"]
+        assert [result.status for result in results] == ["pending_approval", "executed"]
+        assert results[-1].action.action_type == "notify_analyst"
+
+    def test_llm_risk_fields_cannot_override_deterministic_score(
+        self, agent, sample_threat_summary, sample_iocs
+    ):
+        llm_output = json.dumps([{
+            "action_type": "block_ip",
+            "target": "198.51.100.99",
+            "severity": "high",
+            "rationale": "Test",
+            "confidence": 1.0,
+            "risk_score": 100,
+            "risk_factors": ["llm-controlled"],
+        }])
+        with patch("agents.response_agent.invoke_llm", return_value=llm_output):
+            results = agent.run(sample_threat_summary, sample_iocs)
+        block = next(result for result in results if result.action.action_type == "block_ip")
+        assert block.action.risk_score == 49
+        assert "llm-controlled" not in block.action.risk_factors
 
     def test_auto_block_skips_protected_management_ip(self, agent):
         """Even malicious-looking enrichment cannot auto-block a protected management IP."""

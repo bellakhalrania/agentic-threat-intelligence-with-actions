@@ -92,6 +92,39 @@ class Config:
     # Global kill switch. Default OFF: every action requires human approval
     # until you've tested the policy and connectors and explicitly opt in.
     AUTO_RESPONSE_ENABLED = os.getenv("AUTO_RESPONSE_ENABLED", "false").lower() == "true"
+    # Deterministic risk policy. Operational values live in .env so changing
+    # policy does not require source-code edits.
+    AUTO_RISK_THRESHOLD = int(os.getenv("AUTO_RISK_THRESHOLD", "80"))
+    AUTO_EXECUTE_ACTIONS = {
+        value.strip()
+        for value in os.getenv("AUTO_EXECUTE_ACTIONS", "").split(",")
+        if value.strip()
+    }
+    ANALYST_NOTIFICATION_TARGET = os.getenv(
+        "ANALYST_NOTIFICATION_TARGET", "SOC_analyst"
+    ).strip()
+    MAX_AUTO_ACTIONS_PER_TARGET_PER_HOUR = int(
+        os.getenv("MAX_AUTO_ACTIONS_PER_TARGET_PER_HOUR", "3")
+    )
+    RISK_SCORE_VERSION = os.getenv("RISK_SCORE_VERSION", "1.0")
+    RISK_WEIGHT_SEVERITY_LOW = int(os.getenv("RISK_WEIGHT_SEVERITY_LOW", "5"))
+    RISK_WEIGHT_SEVERITY_MEDIUM = int(os.getenv("RISK_WEIGHT_SEVERITY_MEDIUM", "15"))
+    RISK_WEIGHT_SEVERITY_HIGH = int(os.getenv("RISK_WEIGHT_SEVERITY_HIGH", "25"))
+    RISK_WEIGHT_TECHNIQUE_CONFIDENCE = int(
+        os.getenv("RISK_WEIGHT_TECHNIQUE_CONFIDENCE", "20")
+    )
+    RISK_POINTS_PER_FAILED_LOGIN = int(os.getenv("RISK_POINTS_PER_FAILED_LOGIN", "3"))
+    RISK_MAX_REPETITION_POINTS = int(os.getenv("RISK_MAX_REPETITION_POINTS", "15"))
+    RISK_WEIGHT_SUCCESS_AFTER_FAILURE = int(
+        os.getenv("RISK_WEIGHT_SUCCESS_AFTER_FAILURE", "20")
+    )
+    RISK_WEIGHT_MALICIOUS_IOC = int(os.getenv("RISK_WEIGHT_MALICIOUS_IOC", "15"))
+    RISK_MALICIOUS_IOC_MIN_CONFIDENCE = float(
+        os.getenv("RISK_MALICIOUS_IOC_MIN_CONFIDENCE", "0.8")
+    )
+    RISK_WEIGHT_CAMPAIGN_CONFIDENCE = int(
+        os.getenv("RISK_WEIGHT_CAMPAIGN_CONFIDENCE", "5")
+    )
     # Dry run: when true, connectors log what they WOULD do instead of
     # calling the real firewall/EDR/IAM API. Keep this true until connectors
     # are wired to your real infrastructure and you trust the policy.
@@ -101,7 +134,6 @@ class Config:
     # - notify_analyst can still auto-execute (low risk)
     # - isolate_host requires explicit approval by target allowlist
     SAFE_MODE_ENFORCED = os.getenv("SAFE_MODE_ENFORCED", "true").lower() == "true"
-    SAFE_MODE_NOTIFY_ANALYST_AUTO = os.getenv("SAFE_MODE_NOTIFY_ANALYST_AUTO", "true").lower() == "true"
     APPROVED_ISOLATION_TARGETS = {
         t.strip() for t in os.getenv("APPROVED_ISOLATION_TARGETS", "").split(",") if t.strip()
     }

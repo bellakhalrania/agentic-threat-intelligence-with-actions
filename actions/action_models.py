@@ -10,7 +10,7 @@ decides whether that action is allowed to run automatically.
 
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import List, Optional
 from uuid import uuid4
 
 
@@ -36,6 +36,9 @@ class ProposedAction(BaseModel):
     rationale: str
     technique_id: Optional[str] = None   # which ATT&CK technique triggered this
     confidence: float = 0.0
+    risk_score: int = Field(default=0, ge=0, le=100)
+    risk_factors: List[str] = Field(default_factory=list)
+    risk_version: str = ""
 
 
 class ActionResult(BaseModel):
