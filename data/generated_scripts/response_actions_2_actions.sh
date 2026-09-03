@@ -36,25 +36,25 @@ echo "",
 
 # =======================================
 # Action 1: isolate_host
-# Target: ip-172-31-19-70
-# ID: isolate_host_5dbb4552
-# Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000
+# Target: victim-endpoint-01
+# ID: isolate_host_8ae1987a
+# Expected: Isolate host victim-endpoint-01 while preserving manager access on port 9001 and SSH (port 22), plus webhook callback to manager:8000
 # =======================================
 action_1() {
-    echo "[ACTION 1] isolate_host -> ip-172-31-19-70"
-    echo "  Expected: Isolate host ip-172-31-19-70 while preserving manager access on port 9001 and webhook callback to manager:8000"
+    echo "[ACTION 1] isolate_host -> victim-endpoint-01"
+    echo "  Expected: Isolate host victim-endpoint-01 while preserving manager access on port 9001 and SSH (port 22), plus webhook callback to manager:8000"
     if [[ $EUID -ne 0 ]]; then
         echo "  ERROR: Requires root privileges" >&2
         return 1
     fi
 
-    # Isolate host ip-172-31-19-70 while preserving remote management channel
+    # Isolate host victim-endpoint-01 while preserving remote management channel
     # NOTE: Keep port 9001 reachable so the remote agent does not self-lock.
     MGMT_IP="${REMOTE_MANAGER_IP:-100.76.226.30}"
     REMOTE_PORT="${REMOTE_AGENT_PORT:-9001}"
     if command -v iptables &> /dev/null; then
         # Save current rules for rollback
-        iptables-save > /tmp/iptables_backup_5dbb4552.txt 2>/dev/null || true
+        iptables-save > /tmp/iptables_backup_8ae1987a.txt 2>/dev/null || true
         iptables -P INPUT DROP
         iptables -P OUTPUT DROP
         iptables -P FORWARD DROP
@@ -66,6 +66,8 @@ action_1() {
         iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
         # Keep control-plane reachable from manager
         iptables -A INPUT -p tcp --dport "$REMOTE_PORT" -s "$MGMT_IP" -j ACCEPT
+        # Keep SSH management reachable from manager
+        iptables -A INPUT -p tcp --dport 22 -s "$MGMT_IP" -j ACCEPT
         # Allow callback webhook traffic to manager
         iptables -A OUTPUT -p tcp -d "$MGMT_IP" --dport 8000 -j ACCEPT
     elif command -v nft &> /dev/null; then
@@ -77,20 +79,22 @@ action_1() {
         nft add rule inet isolate input ct state established,related accept
         nft add rule inet isolate output ct state established,related accept
         nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept
+        # Keep SSH management reachable from manager
+        nft add rule inet isolate input ip saddr $MGMT_IP tcp dport 22 accept
         nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept
     else
         echo 'ERROR: No firewall tool found' >&2
         exit 1
     fi
-    echo 'Host ip-172-31-19-70 isolated with management channel preserved'
+    echo 'Host victim-endpoint-01 isolated with management channel preserved'
     echo "  [OK] isolate_host completed"
 }
 
 rollback_1() {
-    echo "[ROLLBACK 1] isolate_host -> ip-172-31-19-70"
-    if [ -f /tmp/iptables_backup_5dbb4552.txt ]; then
-        iptables-restore < /tmp/iptables_backup_5dbb4552.txt
-        rm /tmp/iptables_backup_5dbb4552.txt
+    echo "[ROLLBACK 1] isolate_host -> victim-endpoint-01"
+    if [ -f /tmp/iptables_backup_8ae1987a.txt ]; then
+        iptables-restore < /tmp/iptables_backup_8ae1987a.txt
+        rm /tmp/iptables_backup_8ae1987a.txt
     fi
     # Fallback: set policies to ACCEPT
     iptables -P INPUT ACCEPT 2>/dev/null || true
@@ -100,45 +104,54 @@ rollback_1() {
 }
 
 verify_1() {
-    echo "[VERIFY 1] isolate_host -> ip-172-31-19-70"
+    echo "[VERIFY 1] isolate_host -> victim-endpoint-01"
     iptables -L -n 2>/dev/null | head -5
     ping -c 1 -W 2 8.8.8.8 2>&1 | grep -q '100% packet loss' && echo 'ISOLATED'
 }
 
 
 # =======================================
-# Action 2: notify_analyst
-# Target: SOC Team
-# ID: notify_analyst_bb9ebef1
-# Expected: Create analyst notification for SOC Team
+# Action 2: disable_account
+# Target: anna
+# ID: disable_account_7582a70f
+# Expected: Lock password and expire account anna
 # =======================================
 action_2() {
-    echo "[ACTION 2] notify_analyst -> SOC Team"
-    echo "  Expected: Create analyst notification for SOC Team"
+    echo "[ACTION 2] disable_account -> anna"
+    echo "  Expected: Lock password and expire account anna"
+    if [[ $EUID -ne 0 ]]; then
+        echo "  ERROR: Requires root privileges" >&2
+        return 1
+    fi
 
-    # Notify analyst about: SOC Team
-    # Creates an alert entry in the platform audit log.
-    # This is informational only; no disruptive action is taken.
-    #
-    # Related technique: T1110.001
-    # Confidence: 1.0
-    #
-    # Please review the following:
-    #   - SOC Team
-    #
-    # Manual investigation is required.
-    echo "  [OK] notify_analyst completed"
+    # Disable account anna
+    if id 'anna' &>/dev/null; then
+        # Lock the password (prevents login)
+        passwd -l 'anna'
+        # Force expire password
+        chage -E 0 'anna'
+        # Kill active sessions
+        pkill -u 'anna' 2>/dev/null || true
+        echo 'Account anna disabled'
+    else
+        echo 'ERROR: Account anna does not exist' >&2
+        exit 1
+    fi
+    echo "  [OK] disable_account completed"
 }
 
 rollback_2() {
-    echo "[ROLLBACK 2] notify_analyst -> SOC Team"
-    # No rollback needed for notification actions.
-    echo "  [OK] Rollback of notify_analyst completed"
+    echo "[ROLLBACK 2] disable_account -> anna"
+    passwd -u 'anna'
+    chage -E -1 'anna'
+    echo 'Account anna re-enabled'
+    echo "  [OK] Rollback of disable_account completed"
 }
 
 verify_2() {
-    echo "[VERIFY 2] notify_analyst -> SOC Team"
-    # Notification logged; verify via platform audit trail.
+    echo "[VERIFY 2] disable_account -> anna"
+    passwd -S 'anna' | grep -q ' L ' && echo 'DISABLED'
+    chage -l 'anna' | grep 'Account expires'
 }
 
 # =======================================

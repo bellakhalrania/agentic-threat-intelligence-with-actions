@@ -115,7 +115,7 @@ def main():
         [
             "journalctl",
             "-u",
-            "sshd",
+            "ssh.service",
             "-f",
             "-n",
             "0",

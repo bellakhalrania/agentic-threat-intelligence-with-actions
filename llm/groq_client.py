@@ -18,18 +18,22 @@ MODEL_TOKEN_LIMITS = {
     "llama-3.1-8b-instant": 6000,  # On-demand tier limit
     "llama-3.3-70b-versatile": 8000,  # On-demand tier limit
     "llama-3.1-70b-versatile": 8000,
+    "openai/gpt-oss-120b": 8000,  # On-demand tier limit
     "mixtral-8x7b-32768": 32000,
 }
 
 # Reserve tokens for system prompt and response
 RESERVED_TOKENS = 1000
-# Approximate characters per token (conservative estimate)
-CHARS_PER_TOKEN = 3.5
+# Leave headroom for tokenizer differences and request overhead.
+TOKEN_SAFETY_MARGIN = 500
+# Approximate characters per token for compact JSON prompts.
+CHARS_PER_TOKEN = 3.0
 
 llm = ChatGroq(
     api_key=config.GROQ_API_KEY,
     model=config.GROQ_MODEL,
     temperature=config.GROQ_TEMPERATURE,
+    max_tokens=RESERVED_TOKENS,
 )
 
 
@@ -107,7 +111,7 @@ def invoke_llm(system_prompt: str, user_prompt: str, max_retries: int = 3) -> st
     system_tokens = estimate_token_count(system_prompt)
     
     # Calculate available tokens for user prompt
-    available_tokens = token_limit - RESERVED_TOKENS - system_tokens
+    available_tokens = token_limit - RESERVED_TOKENS - TOKEN_SAFETY_MARGIN - system_tokens
     
     if available_tokens <= 0:
         raise ValueError(

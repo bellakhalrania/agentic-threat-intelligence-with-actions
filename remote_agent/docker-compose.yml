@@ -74,11 +74,13 @@ services:
     environment:
       - SSH_COLLECTOR_SPOOL=/app/remote_agent/spool/agent_events.jsonl
       - SSH_COLLECTOR_POLL_INTERVAL=2
-      - SSH_COLLECTOR_HOST=${REMOTE_AGENT_NODE_HOSTNAME:-control-node1}
+      - SSH_COLLECTOR_HOST=${REMOTE_AGENT_NODE_HOSTNAME:?REMOTE_AGENT_NODE_HOSTNAME is required}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:
       - remote_agent_spool:/app/remote_agent/spool
       - /run/log/journal:/run/log/journal:ro
+      - /var/log/journal:/var/log/journal:ro
+      - /etc/machine-id:/etc/machine-id:ro
     restart: unless-stopped
 
 volumes:
