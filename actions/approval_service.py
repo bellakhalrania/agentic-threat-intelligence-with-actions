@@ -7,7 +7,7 @@ from actions import audit_log, policy
 from actions.action_models import ActionResult, ActionSeverity, ActionType, ProposedAction
 from actions.approval_execution_service import execute_approved_action
 from actions.approval_notifications import notify_approval_outcome
-from config import config
+from config import config, is_protected_target
 
 
 class ApprovalError(ValueError):
@@ -75,7 +75,7 @@ def decide_pending_action(
         # Defense in depth: policy-denied targets cannot be resurrected through a
         # crafted or stale pending record. Other pending policy outcomes are the
         # explicit purpose of this human review step and may be approved.
-        if action.target in policy.PROTECTED_TARGETS:
+        if is_protected_target(action.target):
             detail = "Target is protected and cannot be approved."
             result = ActionResult(
                 action_id=action_id,
@@ -135,6 +135,9 @@ def _to_proposed_action(entry: Dict[str, Any]) -> ProposedAction:
             rationale=entry["rationale"],
             technique_id=entry.get("technique_id"),
             confidence=entry.get("confidence", 0.0),
+            risk_score=entry.get("risk_score", 0),
+            risk_factors=entry.get("risk_factors", []),
+            risk_version=entry.get("risk_version", ""),
         )
     except (KeyError, TypeError, ValueError) as exc:
         raise ApprovalError(f"stored action is invalid: {exc}") from exc

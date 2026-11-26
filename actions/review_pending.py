@@ -24,6 +24,7 @@ def main():
         print(f"Campaign:    {entry['campaign_id']}")
         print(f"Action:      {entry['action_type']} -> {entry['target']}")
         print(f"Severity:    {entry['severity']}  Confidence: {entry['confidence']}")
+        print(f"Risk score:  {entry.get('risk_score', 0)}/100")
         print(f"Rationale:   {entry['rationale']}")
 
         choice = input("Decision [approve/deny/skip]: ").strip().lower()

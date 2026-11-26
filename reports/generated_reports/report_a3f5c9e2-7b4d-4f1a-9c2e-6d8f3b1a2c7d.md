@@ -2,100 +2,67 @@
 
 **Campaign:** Unclassified Activity
 **Campaign ID:** a3f5c9e2-7b4d-4f1a-9c2e-6d8f3b1a2c7d
-**Generated:** 2026-08-13T16:44:21.658599+00:00
+**Generated:** 2026-09-03T16:12:30.357612+00:00
 
 ---
 
 **Threat Intelligence Report**  
-*Subject: SSH authentication activity on host **control‑node1***  
-*Date: 2026‑08‑13*  
+*Prepared on 2026‑09‑03*  
 
 ---  
 
-### Executive Summary
-Multiple SSH authentication failures for user **lanna** were observed on **control‑node1**, originating from a single external IP address **100.117.52.58**. After 11 consecutive failed attempts, a successful login was recorded from the same source. The activity maps to ATT&CK technique **T1110 – Brute Force** with high confidence (0.9 per event). The source IP is listed as *benign* by AbuseIPDB. The pattern indicates a credential‑guessing campaign that has achieved a valid credential on the target host.
+## Executive Summary
+A credential‑guessing campaign targeting the SSH service on **victim‑endpoint** was observed. The adversary repeatedly attempted to authenticate as user **anna** from source IP **100.81.172.118**. The activity generated multiple failed SSH login attempts and two successful logins, indicating at least one guessed credential was correct. All events map to ATT&CK technique **T1110 – Brute Force** with a deterministic rule confidence of 0.9.
 
----  
+## Timeline
+| Timestamp (UTC) | Event ID | Event Type | Username | Source IP | Notes |
+|-----------------|----------|------------|----------|-----------|-------|
+| 2026‑09‑03T16:11:03.111133 | c209a32d‑c5cb‑46b7‑b6ef‑e013b7677165 | authentication_failed | anna | 100.81.172.118 | SSH brute‑force attempt |
+| 2026‑09‑03T16:11:03.111519 | 7d2432b3‑f345‑4e9a‑a660‑2fd867aff411 | authentication_failed | anna | 100.81.172.118 | SSH brute‑force attempt |
+| 2026‑09‑03T16:11:03.111714 | e05e3bd8‑a859‑496c‑b35f‑bcf18678f9d7 | authentication_success | anna | 100.81.172.118 | First successful login |
+| 2026‑09‑03T16:11:04.611849 | 1d1a1f02‑d453‑4c5c‑bae8‑c3db746727dd | authentication_failed | anna | 100.81.172.118 | Continued brute‑force |
+| 2026‑09‑03T16:11:04.612176 | 14a6dafa‑3d52‑4eae‑b911‑d6cc4fa3025e | authentication_failed | anna | 100.81.172.118 | Continued brute‑force |
+| 2026‑09‑03T16:11:05.110828 | 35be58f6‑4875‑4d4e‑9427‑0a846fcc3d8a | authentication_failed | anna | 100.81.172.118 | Continued brute‑force |
+| 2026‑09‑03T16:11:05.111107 | 86d6f883‑4e85‑43e2‑81ed‑2b927cec3aca | authentication_failed | anna | 100.81.172.118 | Continued brute‑force |
+| 2026‑09‑03T16:11:05.111714* | 75dd38a5‑85f2‑4b2a‑86da‑181fca1103ca | authentication_success | anna | 100.81.172.118 | Second successful login |
+| *Additional failed attempts (event IDs 994a4b9f‑d445‑4daf‑bc55‑3da92bac0916, 232be548‑ee82‑4d58‑9e47‑933a822175c8, 245f010a‑a1db‑438e‑af20‑09ec93475d15, 3348e2dd‑ea3e‑4908‑83e7‑2a1cbe773d64) occurred shortly after the timestamps above, all with the same source IP and username.* |
 
-### Timeline  
+*Exact timestamps for the latter events were not provided; they are listed in the campaign timeline as “Unknown”.  
 
-| Timestamp (UTC) | Event ID | Event Type | Username | Source IP | Host |
-|-----------------|----------|------------|----------|-----------|------|
-| 2026‑08‑13T16:37:42.100273 | 0a57bb08-f889-4390-811e-8058a8e68470 | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:42.103826 | f3cf9934-123d-4483-a119-023213f750f2 | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:42.105497 | 1bea2efd-b909-4fef-aeb4-0a7581afbadf | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:42.106889 | 7849cd83-83d4-4a4c-99ab-9bef8ab52274 | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:42.108109 | 74249e5d-eff9-48c8-ae8e-081c698c20cc | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:42.109377 | d52f3b74-6f83-4eb3-b944-86f3aa92f38d | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| **2026‑08‑13T16:37:42.110602** | **4e2a1adf-b84c-4a69-ae3c-42453125824f** | **authentication_success** | **lanna** | **100.117.52.58** | **control‑node1** |
-| 2026‑08‑13T16:37:44.118267 | 07e5a56b-902e-4968-9ac2-8234b2ad19ba | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:44.119414 | ed745335-2efb-418d-a4fe-69bbb6e0c51b | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:44.120212 | a50cd00e-919c-4e08-afbb-1328db62cb0d | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:44.121258 | 7162847d-320d-44d1-b137-434b970c614e | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
-| 2026‑08‑13T16:37:44.122130 | 012a6cf9-480a-4892-a83c-90a613a3e94e | authentication_failed | lanna | 100.117.52.58 | control‑node1 |
+## IOCs
+| Type | Value | Reputation / Tags |
+|------|-------|-------------------|
+| IPv4 | **100.81.172.118** | Listed as **benign** on AbuseIPDB (0 % confidence of maliciousness) |
 
-*Total failed attempts: **11**; successful login: **1**.*
+No file hashes, URLs, or additional indicators were observed.
 
----  
+## ATT&CK Techniques
+| Technique ID | Technique Name | Confidence | Evidence Event IDs |
+|--------------|----------------|------------|--------------------|
+| **T1110** | Brute Force | 0.90 (deterministic rule) | c209a32d‑c5cb‑46b7‑b6ef‑e013b7677165, 7d2432b3‑f345‑4e9a‑a660‑2fd867aff411, 1d1a1f02‑d453‑4c5c‑bae8‑c3db746727dd, 14a6dafa‑3d52‑4eae‑b911‑d6cc4fa3025e, 35be58f6‑4875‑4d4e‑9427‑0a846fcc3d8a, 86d6f883‑4e85‑43e2‑81ed‑2b927cec3aca, 994a4b9f‑d445‑4daf‑bc55‑3da92bac0916, 232be548‑ee82‑4d58‑9e47‑933a822175c8, 245f010a‑a1db‑438e‑af20‑09ec93475d15, 3348e2dd‑ea3e‑4908‑83e7‑2a1cbe773d64 |
 
-### Indicators of Compromise (IOCs)  
+## Campaign Assessment
+The activity constitutes a **credential‑guessing (brute‑force) campaign** against SSH. The adversary repeatedly attempted the same username (“anna”) from a single external IP, eventually achieving two successful logins. Although the source IP is currently flagged as benign by AbuseIPDB, the observed behavior aligns with typical brute‑force attacks and warrants immediate attention.
 
-| Type | Value | Reputation | Source | Tags |
-|------|-------|------------|--------|------|
-| IP | 100.117.52.58 | benign | AbuseIPDB | non_public, reserved |
+## Predicted Next Steps
+*No probabilistic forecasts were supplied in the evidence.*  
 
----  
+## Recommendations
+Mitigations aligned with **T1110 – Brute Force**:
 
-### ATT&CK Techniques (Confirmed)  
+1. **Enforce strong, unique passwords** for all SSH accounts and consider password complexity policies.  
+2. **Implement account lockout** or throttling after a configurable number of failed attempts.  
+3. **Deploy multi‑factor authentication (MFA)** for SSH access where feasible.  
+4. **Restrict SSH access** by source IP using firewall rules or VPN‑only access.  
+5. **Prefer SSH key‑based authentication** and disable password authentication where possible.  
+6. **Enable detailed SSH logging** and forward logs to a centralized SIEM for real‑time monitoring.  
+7. **Conduct a post‑incident review** of the compromised account (“anna”) for any unauthorized actions.
 
-| ATT&CK ID | Technique Name | Confidence |
-|-----------|----------------|------------|
-| **T1110** | Brute Force | 0.90 (per event) |
-
----  
-
-### Campaign Assessment  
-- **Campaign ID:** a3f5c9e2-7b4d-4f1a-9c2e-6d8f3b1a2c7d  
-- **Confidence:** 0.7 (overall)  
-- **Objective:** Obtain valid credentials for **control‑node1** (evidenced by repeated failures followed by a successful login).  
-- **Source IP Reputation:** Benign (AbuseIPDB).  
-- **Related Techniques:** T1110 (Brute Force).  
-
-The activity represents a credential‑guessing campaign that successfully compromised an account on the target host. No additional malicious payloads or lateral movement have been observed to date.
-
----  
-
-### Predicted Next Steps (Probabilistic Forecast)  
-
-| Technique ID | Technique Name | Rationale |
-|--------------|----------------|-----------|
-| **T1078** | Valid Accounts | After gaining a valid login, adversaries typically use the account to access additional systems or services. |
-| **T1003** | OS Credential Dumping | Attackers often harvest password hashes or cached credentials from the compromised host to expand their foothold. |
-
-*Note: Forecasts are based on typical attacker behavior and have not been observed in the current data set.*
-
----  
-
-### Recommendations  
-
-All recommendations reference the confirmed technique **T1110 – Brute Force**.
-
-1. **Enforce account lockout** after a configurable number of failed SSH attempts.  
-2. **Implement SSH key‑based authentication** and disable password authentication where possible.  
-3. **Rate‑limit SSH connections** at the network perimeter and on the host.  
-4. **Monitor and alert** on repeated authentication failures for the same username or source IP.  
-5. **Conduct a post‑compromise review** of the account “lanna” for any unauthorized activity or privilege escalation.  
-6. **Review SSH daemon configuration** to ensure strong ciphers and logging are enabled.  
-
----  
-
-### Response Actions  
+## Response Actions
 
 | Action Type | Target | Status | Severity | Rationale |
-|-------------|--------|--------|----------|-----------|
-| *No data available* | *No response actions recorded in the evidence.* | – | – | – |
-
----  
-
-*Prepared by: Senior Threat Intelligence Analyst*  
-*Report generated automatically from the provided investigation data.*  
+|---|---|---|---|---|
+| ActionType.BLOCK_IP | 100.81.172.118 | executed | ActionSeverity.HIGH | The source IP is identified as the attacker’s address and is listed as a valid action target. High‑confidence brute‑force activity (T1110) with successful credential use indicates it is actively compromising the environment. |
+| ActionType.ISOLATE_HOST | victim-endpoint | pending_approval | ActionSeverity.HIGH | The compromised host is explicitly listed as a victim isolation target. Multiple high‑confidence techniques (brute force, valid accounts, credential dumping) suggest the host is being used for further malicious activity. |
+| ActionType.DISABLE_ACCOUNT | anna | executed | ActionSeverity.MEDIUM | User anna experienced numerous failed logins followed by a successful authentication, indicating the account may have been compromised and could be used for lateral movement (T1078). |
+| ActionType.NOTIFY_ANALYST | SOC_analyst | executed | ActionSeverity.LOW | High‑severity brute‑force campaign detected (T1110) with successful logins, source IP 100.81.172.118, and compromised user anna. Recommended actions: block IP, isolate victim-endpoint, and disable anna's account. |

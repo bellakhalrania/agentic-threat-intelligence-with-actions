@@ -32,7 +32,7 @@ services:
       - REMOTE_RESULT_WEBHOOK_BACKOFF=${REMOTE_RESULT_WEBHOOK_BACKOFF:-1.0}
       - REMOTE_RESULT_WEBHOOK_VERIFY_SSL=${REMOTE_RESULT_WEBHOOK_VERIFY_SSL:-true}
       - REMOTE_AGENT_NODE_IP=${REMOTE_AGENT_NODE_IP:-}
-      - REMOTE_MANAGER_IP=${REMOTE_MANAGER_IP:-100.76.226.30}
+      - REMOTE_MANAGER_IP=${REMOTE_MANAGER_IP:?REMOTE_MANAGER_IP is required}
     volumes:
       - remote_agent_scripts:/app/remote_agent/received_scripts
       - remote_agent_logs:/app/remote_agent/logs
@@ -74,11 +74,13 @@ services:
     environment:
       - SSH_COLLECTOR_SPOOL=/app/remote_agent/spool/agent_events.jsonl
       - SSH_COLLECTOR_POLL_INTERVAL=2
-      - SSH_COLLECTOR_HOST=${REMOTE_AGENT_NODE_HOSTNAME:-control-node1}
+      - SSH_COLLECTOR_HOST=${REMOTE_AGENT_NODE_HOSTNAME:?REMOTE_AGENT_NODE_HOSTNAME is required}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:
       - remote_agent_spool:/app/remote_agent/spool
       - /run/log/journal:/run/log/journal:ro
+      - /var/log/journal:/var/log/journal:ro
+      - /etc/machine-id:/etc/machine-id:ro
     restart: unless-stopped
 
 volumes:

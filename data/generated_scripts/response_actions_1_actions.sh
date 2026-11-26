@@ -36,15 +36,15 @@ echo "",
 
 # =======================================
 # Action 1: notify_analyst
-# Target: SOC Team
-# ID: notify_analyst_01ea56d3
-# Expected: Create analyst notification for SOC Team
+# Target: SOC_analyst
+# ID: notify_analyst_b532e692
+# Expected: Create analyst notification for SOC_analyst
 # =======================================
 action_1() {
-    echo "[ACTION 1] notify_analyst -> SOC Team"
-    echo "  Expected: Create analyst notification for SOC Team"
+    echo "[ACTION 1] notify_analyst -> SOC_analyst"
+    echo "  Expected: Create analyst notification for SOC_analyst"
 
-    # Notify analyst about: SOC Team
+    # Notify analyst about: SOC_analyst
     # Creates an alert entry in the platform audit log.
     # This is informational only; no disruptive action is taken.
     #
@@ -52,20 +52,20 @@ action_1() {
     # Confidence: 0.9
     #
     # Please review the following:
-    #   - SOC Team
+    #   - SOC_analyst
     #
     # Manual investigation is required.
     echo "  [OK] notify_analyst completed"
 }
 
 rollback_1() {
-    echo "[ROLLBACK 1] notify_analyst -> SOC Team"
+    echo "[ROLLBACK 1] notify_analyst -> SOC_analyst"
     # No rollback needed for notification actions.
     echo "  [OK] Rollback of notify_analyst completed"
 }
 
 verify_1() {
-    echo "[VERIFY 1] notify_analyst -> SOC Team"
+    echo "[VERIFY 1] notify_analyst -> SOC_analyst"
     # Notification logged; verify via platform audit trail.
 }
 

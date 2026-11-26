@@ -13,10 +13,11 @@ import json
 from typing import Any, List, Dict, Set
 from llm.groq_client import invoke_llm
 from llm.output_parsers import extract_json
-from actions.action_models import ProposedAction, ActionResult
+from actions.action_models import ActionType, ProposedAction, ActionResult
 from actions.connectors import ACTION_DISPATCH
+from actions.risk_scoring import calculate_risk_score
 from actions import policy, audit_log
-from config import config
+from config import config, is_protected_target
 
 RESPONSE_SYSTEM_PROMPT = """You are an incident response analyst. Given a
 compact threat summary with mapped ATT&CK techniques and predictions, propose
@@ -35,10 +36,6 @@ strong. Thresholds:
 
 
 class ResponseAgent:
-    # Confidence threshold above which a malicious IOC automatically triggers
-    # a block_ip proposal without waiting for the LLM.
-    BLOCK_IP_AUTO_THRESHOLD = 0.8
-
     def run(self, threat_summary: Dict[str, Any], iocs: List[Dict]) -> List[ActionResult]:
         """Propose actions from bounded threat context, never raw events.
 
@@ -50,6 +47,9 @@ class ResponseAgent:
         threat_summary = threat_summary or {}
         campaign = threat_summary.get("campaign") or {}
         techniques = threat_summary.get("top_mitre_techniques") or []
+        risk = calculate_risk_score(threat_summary, iocs)
+        print(f"Risk Score: {risk.score}/100 (version {risk.version})")
+        print(f"Risk Factors: {', '.join(risk.factors)}")
 
         # --- Extract valid targets to prevent LLM hallucination ---
         valid_targets = self._extract_valid_targets(threat_summary, iocs)
@@ -97,6 +97,8 @@ class ResponseAgent:
             llm_proposals = []
             print("LLM failed to return valid JSON")
 
+        llm_proposals = self._ensure_analyst_notification(llm_proposals, campaign)
+
         if llm_proposals:
             print(f"\n--- LLM-Proposed Actions ---")
             for i, proposal in enumerate(llm_proposals, 1):
@@ -126,9 +128,18 @@ class ResponseAgent:
                 print(f"❌ Action {i}: Malformed proposal, skipping")
                 continue  # skip malformed proposals rather than crash the run
 
+            # Risk is derived from trusted evidence. Any LLM-supplied risk
+            # fields are overwritten and can never authorize execution.
+            action = action.model_copy(update={
+                "risk_score": risk.score,
+                "risk_factors": risk.factors,
+                "risk_version": risk.version,
+            })
+
             print(f"--- Action {i}: {action.action_type} on {action.target} ---")
             print(f"  Rationale: {action.rationale}")
             print(f"  Severity: {action.severity}")
+            print(f"  Risk Score: {action.risk_score}/100")
             print(f"  Related Technique: {action.technique_id or 'N/A'}")
             
             # Show relation to events/IOCs
@@ -145,7 +156,15 @@ class ResponseAgent:
             decision = policy.evaluate(action)
             print(f"  Policy Decision: {decision}")
             
-            result = self._handle_decision(action, decision)
+            if action.action_type == ActionType.NOTIFY_ANALYST and decision == "auto_execute":
+                result = ActionResult(
+                    action=action,
+                    status="executed",
+                    detail="Included in the final response-actions summary email.",
+                    dry_run=config.DRY_RUN,
+                )
+            else:
+                result = self._handle_decision(action, decision)
             
             print(f"  Final Status: {result.status}")
             print(f"  Detail: {result.detail}")
@@ -154,6 +173,15 @@ class ResponseAgent:
             audit_log.record(result, campaign_id=campaign.get("campaign_id", ""))
             results.append(result)
             print()
+
+        if results and not config.DRY_RUN:
+            from actions.notifier_email import send_action_results_email
+
+            email_result = send_action_results_email(
+                [result.model_dump() for result in results],
+                risk_assessment=risk,
+            )
+            print(f"Post-execution email: {email_result['detail']}")
         
         print(f"--- Summary ---")
         print(f"Total actions proposed: {len(all_proposals)}")
@@ -179,8 +207,9 @@ class ResponseAgent:
             if value:
                 targets.add(str(value))
 
-        # Notification endpoints are always valid.
-        targets.update({"SOC_analyst", "SOC Team", "SOC_Team"})
+        # Notification target comes from deployment configuration.
+        if config.ANALYST_NOTIFICATION_TARGET:
+            targets.add(config.ANALYST_NOTIFICATION_TARGET)
 
         return sorted(t for t in targets if t)
 
@@ -208,9 +237,8 @@ class ResponseAgent:
             target = proposal.get("target")
 
             if action_type == "notify_analyst":
-                # Keep notify actions even if LLM used slight target variation.
-                if not target or str(target).strip() not in allowed:
-                    proposal["target"] = "SOC_analyst"
+                # Notification delivery is deployment-configured, not LLM-selected.
+                proposal["target"] = config.ANALYST_NOTIFICATION_TARGET
                 sanitized.append(proposal)
                 continue
 
@@ -239,7 +267,7 @@ class ResponseAgent:
 
             if normalized_target not in allowed:
                 # Keep protected targets so deterministic policy can explicitly deny them.
-                if normalized_target in policy.PROTECTED_TARGETS:
+                if is_protected_target(normalized_target):
                     sanitized.append(proposal)
                     continue
                 print(f"Discarding LLM action with ungrounded target: {target}")
@@ -250,12 +278,32 @@ class ResponseAgent:
         return sanitized
 
     @staticmethod
+    def _ensure_analyst_notification(
+        proposals: List[Dict], campaign: Dict[str, Any]
+    ) -> List[Dict]:
+        """Always add one deterministic notification when the LLM omits it."""
+        if any(item.get("action_type") == "notify_analyst" for item in proposals):
+            return proposals
+        campaign_name = str(campaign.get("name") or "Unclassified Activity")
+        return [
+            *proposals,
+            {
+                "action_type": "notify_analyst",
+                "target": config.ANALYST_NOTIFICATION_TARGET,
+                "severity": str(campaign.get("severity") or "medium"),
+                "rationale": f"Response review required for campaign {campaign_name}.",
+                "technique_id": "",
+                "confidence": float(campaign.get("confidence") or 0.0),
+            },
+        ]
+
+    @staticmethod
     def _extract_victim_isolation_targets(threat_summary: Dict[str, Any]) -> List[str]:
         """Use only response-safe victim endpoints selected by the summary."""
         return [
             str(target).strip()
             for target in threat_summary.get("victim_isolation_targets", []) or []
-            if str(target).strip() not in {"SOC Team", "SOC_Team", "SOC_analyst"}
+            if str(target).strip() != config.ANALYST_NOTIFICATION_TARGET
         ]
 
     @staticmethod
@@ -273,7 +321,7 @@ class ResponseAgent:
         This runs BEFORE the LLM so critical blocking actions are never omitted
         due to LLM conservatism. Only fires when:
         - IOC reputation == 'malicious'
-        - IOC confidence >= BLOCK_IP_AUTO_THRESHOLD (default 0.8)
+        - IOC confidence >= configured malicious-IOC threshold
         - IOC type is 'ip' or 'ipv4'
 
         Returns a list of raw proposal dicts suitable for ProposedAction(**raw).
@@ -287,9 +335,10 @@ class ResponseAgent:
 
             if (
                 reputation == "malicious"
-                and confidence >= self.BLOCK_IP_AUTO_THRESHOLD
+                and confidence >= config.RISK_MALICIOUS_IOC_MIN_CONFIDENCE
                 and ioc_type.lower() in ("ip", "ipv4", "ip_address")
                 and value
+                and not is_protected_target(str(value))
             ):
                 proposals.append({
                     "action_type": "block_ip",
@@ -298,7 +347,7 @@ class ResponseAgent:
                     "rationale": (
                         f"IP {value} has AbuseIPDB confidence {confidence:.2f} with "
                         f"reputation '{reputation}'. Automatic block proposed per "
-                        f"policy threshold (>= {self.BLOCK_IP_AUTO_THRESHOLD})."
+                        "configured malicious-IOC proposal threshold."
                     ),
                     "technique_id": "",
                     "confidence": confidence,
@@ -342,8 +391,17 @@ class ResponseAgent:
             try:
                 parsed = json.loads(raw_output)
                 detail = parsed.get("detail", raw_output)
+                connector_status = parsed.get("status")
             except (json.JSONDecodeError, TypeError):
                 detail = raw_output
+                connector_status = None
+            if connector_status == "failed":
+                return ActionResult(
+                    action=action,
+                    status="failed",
+                    detail=detail,
+                    dry_run=config.DRY_RUN,
+                )
             return ActionResult(action=action, status="executed", detail=detail, dry_run=config.DRY_RUN)
         except Exception as e:
             return ActionResult(action=action, status="failed", detail=str(e), dry_run=config.DRY_RUN)

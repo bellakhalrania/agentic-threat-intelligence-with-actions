@@ -31,6 +31,7 @@ def test_build_threat_summary_is_compact_and_deterministic():
     assert summary["campaign"]["severity"] == "high"
     assert summary["event_count"] == 2
     assert summary["failed_login_count"] == 2
+    assert summary["successful_authentication_after_failures"] is False
     assert summary["affected_hosts"] == ["web-01"]
     assert summary["affected_users"] == ["alice"]
     assert summary["top_mitre_techniques"] == [
@@ -38,3 +39,20 @@ def test_build_threat_summary_is_compact_and_deterministic():
     ]
     assert "raw" not in str(summary)
     assert len(str(summary)) < 3_000
+
+
+def test_detects_success_after_failure_for_same_source_and_account():
+    events = [
+        {
+            "event_type": "authentication_failed",
+            "src_ip": "198.51.100.10",
+            "username": "alice",
+        },
+        {
+            "event_type": "authentication_success",
+            "src_ip": "198.51.100.10",
+            "username": "alice",
+        },
+    ]
+    summary = build_threat_summary({}, [], {}, events)
+    assert summary["successful_authentication_after_failures"] is True

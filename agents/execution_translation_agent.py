@@ -562,7 +562,7 @@ class ExecutionTranslationAgent:
                 f"#!/bin/bash\n"
                 f"# Isolate host {target} while preserving remote management channel\n"
                 f"# NOTE: Keep port 9001 reachable so the remote agent does not self-lock.\n"
-                f"MGMT_IP=\"${{REMOTE_MANAGER_IP:-100.76.226.30}}\"\n"
+                f"MGMT_IP=\"${{REMOTE_MANAGER_IP:?REMOTE_MANAGER_IP is required}}\"\n"
                 f"REMOTE_PORT=\"${{REMOTE_AGENT_PORT:-9001}}\"\n"
                 f"if command -v iptables &> /dev/null; then\n"
                 f"    # Save current rules for rollback\n"
@@ -578,6 +578,8 @@ class ExecutionTranslationAgent:
                 f"    iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\n"
                 f"    # Keep control-plane reachable from manager\n"
                 f"    iptables -A INPUT -p tcp --dport \"$REMOTE_PORT\" -s \"$MGMT_IP\" -j ACCEPT\n"
+                f"    # Keep SSH management reachable from manager\n"
+                f"    iptables -A INPUT -p tcp --dport 22 -s \"$MGMT_IP\" -j ACCEPT\n"
                 f"    # Allow callback webhook traffic to manager\n"
                 f"    iptables -A OUTPUT -p tcp -d \"$MGMT_IP\" --dport 8000 -j ACCEPT\n"
                 f"elif command -v nft &> /dev/null; then\n"
@@ -589,6 +591,8 @@ class ExecutionTranslationAgent:
                 f"    nft add rule inet isolate input ct state established,related accept\n"
                 f"    nft add rule inet isolate output ct state established,related accept\n"
                 f"    nft add rule inet isolate input ip saddr $MGMT_IP tcp dport $REMOTE_PORT accept\n"
+                f"    # Keep SSH management reachable from manager\n"
+                f"    nft add rule inet isolate input ip saddr $MGMT_IP tcp dport 22 accept\n"
                 f"    nft add rule inet isolate output ip daddr $MGMT_IP tcp dport 8000 accept\n"
                 f"else\n"
                 f"    echo 'ERROR: No firewall tool found' >&2\n"
@@ -600,7 +604,7 @@ class ExecutionTranslationAgent:
             admin_required = True
             expected = (
                 f"Isolate host {target} while preserving manager access on port 9001 "
-                f"and webhook callback to manager:8000"
+                f"and SSH (port 22), plus webhook callback to manager:8000"
             )
             rollback = (
                 f"# Rollback isolation\n"

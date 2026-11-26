@@ -1,0 +1,15 @@
+services:
+  attack-simulation-agent:
+    build: .
+    container_name: attack-simulation-agent
+    ports:
+      - "127.0.0.1:9010:9010"
+    env_file: .env
+    volumes:
+      - ./logs:/app/attack_simulation_agent/logs
+      # Mount a lab-only candidate file read-only for live runs.
+      - ${ATTACK_PASSWORD_FILE_HOST:-./passwords.txt}:/run/secrets/lab_passwords.txt:ro
+    environment:
+      - ATTACK_EVENT_LOG=/app/attack_simulation_agent/logs/attack_events.jsonl
+      - ATTACK_PASSWORD_FILE=/run/secrets/lab_passwords.txt
+    restart: unless-stopped
